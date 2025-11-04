@@ -16,7 +16,6 @@
       --badge-gold: #FFD357;
     }
 
-    /* Page background */
     body {
       margin: 0;
       min-height: 100vh;
@@ -36,7 +35,6 @@
       align-items: stretch; 
     }
 
-    /* Left fixed content */
     .sidebar {
       max-width: 420px; 
       position: relative;
@@ -104,7 +102,7 @@
       box-shadow: 0 8px 32px rgba(16, 24, 40, 0.15);
       overflow: hidden;
       display: grid;
-      place-items: center; /* centers placeholder label; remove when embedding real player */
+      place-items: center;
     }
 
 
@@ -142,7 +140,7 @@
 </head>
 <body>
   <main class="header">
-    <!-- Fixed-size text content area (left) -->
+
     <aside class="sidebar" aria-label="Introductory content">
       <div class="logo" aria-label="Kaltura">
         <img src="logo.svg" alt="Kaltura" />
@@ -150,8 +148,8 @@
 
       <h1>
         Talk live with<br />
-        Kaltura’s immersive<br />
-        <span class="accent">virtual agent</span>
+        Kaltura’s <br />
+        <span class="accent">immersive virtual agent</span>
       </h1>
 
       <div class="ask">Meet Zoey, Kaltura’s AI agent currently in beta. Not sure where to start? Try asking: </div>
@@ -190,12 +188,12 @@
       </ul>
     </aside>
 
-    <!-- Fully flexible player area (right) -->
+
     <section class="player-pane" aria-label="Player area">
       <div class="player" role="region" aria-label="Video or agent container">
 
 
-        <!-- Responsive embed (adjust --frame-h as you like) -->
+
 
         <iframe id="eself-iframe"
         src="https://meet.eself.ai/68c9684d5f4712a1b91dca04/talk-to-agent?aiclid=OzhAEa6O&flow_id=agent-3"
