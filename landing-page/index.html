@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kaltura – Immersive Virtual Agent (Layout)</title>
+  <style>
+    :root {
+      --brand: #0a66ff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --badge-green: #5BC686;
+      --badge-pink: #FF9DFF;
+      --badge-red: #FF3D23;
+      --badge-blue: #006efa;
+      --badge-gold: #FFD357;
+    }
+
+    /* Page background */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #8ec5ff 0%, #c8e0ff 18%, #f5f7fb 55%, #ffffff 100%);
+    }
+
+
+    .header {
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 32px;
+      min-height: 100vh;
+      padding: 48px 48px 48px 32px;
+      align-items: stretch; 
+    }
+
+    /* Left fixed content */
+    .sidebar {
+      max-width: 420px; 
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .logo svg { height: 22px; width: 22px; }
+
+    h1 {
+      line-height: 1.1;
+      font-size: 40px;
+      font-weight: 800;
+    }
+    .accent { color: var(--brand); }
+
+    .lead {
+      font-size: 18px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .ask {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .bullets { list-style: none; padding: 0; margin: 12px 0 0; }
+    .bullets li {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      gap: 8px;
+      padding: 10px 0;
+    }
+    .bullets li:last-child { border-bottom: none; }
+
+    .dot.green { fill: var(--badge-green); }
+    .dot.pink { fill: var(--badge-pink); }
+    .dot.red { fill: var(--badge-red); }
+    .dot.blue { fill: var(--badge-blue); }
+    .dot.gold { fill: var(--badge-gold); }
+
+    .player-pane {
+      display: grid;
+      grid-template-rows: 1fr; 
+      align-items: stretch;
+      min-height: 0; 
+    }
+
+    .player {
+      width: 100%;
+      height: 100%; 
+      background: #e6e8eb; /* grey placeholder */
+      border-radius: var(--panel-radius);
+      box-shadow: 0 8px 32px rgba(16, 24, 40, 0.15);
+      overflow: hidden;
+      display: grid;
+      place-items: center; /* centers placeholder label; remove when embedding real player */
+    }
+
+
+    .player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .placeholder-label {
+      font-size: 15px;
+      color: #64748b;
+      letter-spacing: 0.3px;
+      user-select: none;
+    }
+
+    /* Responsive stack: on narrow screens, text sits on top and player remains flexible */
+    @media (max-width: 960px) {
+      .header {
+        grid-template-columns: 1fr; /* stack */
+        min-height: auto;
+      }
+      .sidebar {
+        max-width: 700px;
+        gap: 16px;
+      }
+      h1 { font-size: 34px; }
+      .player {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="header">
+    <!-- Fixed-size text content area (left) -->
+    <aside class="sidebar" aria-label="Introductory content">
+      <div class="logo" aria-label="Kaltura">
+        <img src="logo.svg" alt="Kaltura" />
+      </div>
+
+      <h1>
+        Talk live with<br />
+        Kaltura’s immersive<br />
+        <span class="accent">virtual agent</span>
+      </h1>
+
+      <div class="ask">Meet Zoey, Kaltura’s AI agent currently in beta. Not sure where to start? Try asking: </div>
+
+      <ul class="bullets">
+        <li>
+          <span class="dot green">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4188 31.7259C16.2522 32.0914 15.7478 32.0914 15.5812 31.7259L10.8593 21.3633C10.8118 21.259 10.7292 21.176 10.6269 21.1296L0.276291 16.4363C-0.0920971 16.2693 -0.0920968 15.7307 0.276291 15.5637L10.6269 10.8704C10.7292 10.824 10.8118 10.741 10.8593 10.6367L15.5812 0.274093C15.7478 -0.0913644 16.2522 -0.0913642 16.4188 0.274093L21.1407 10.6367C21.1882 10.741 21.2708 10.824 21.3731 10.8704L31.7237 15.5637C32.0921 15.7307 32.0921 16.2693 31.7237 16.4363L21.3731 21.1296C21.2708 21.176 21.1882 21.259 21.1407 21.3633L16.4188 31.7259Z" fill="#5BC686"/></svg>              
+          </span>
+          <span>What can Kaltura’s immersive agents actually do?</span>
+        </li>
+        <li>
+          <span class="dot pink">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4188 31.7259C16.2522 32.0914 15.7478 32.0914 15.5812 31.7259L10.8593 21.3633C10.8118 21.259 10.7292 21.176 10.6269 21.1296L0.276291 16.4363C-0.0920971 16.2693 -0.0920968 15.7307 0.276291 15.5637L10.6269 10.8704C10.7292 10.824 10.8118 10.741 10.8593 10.6367L15.5812 0.274093C15.7478 -0.0913644 16.2522 -0.0913642 16.4188 0.274093L21.1407 10.6367C21.1882 10.741 21.2708 10.824 21.3731 10.8704L31.7237 15.5637C32.0921 15.7307 32.0921 16.2693 31.7237 16.4363L21.3731 21.1296C21.2708 21.176 21.1882 21.259 21.1407 21.3633L16.4188 31.7259Z" fill="#E05CFF"/></svg>              
+          </span>
+          <span>How are they different from chatbots or AI assistants?</span>
+        </li>
+        <li>
+          <span class="dot red">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4188 31.7259C16.2522 32.0914 15.7478 32.0914 15.5812 31.7259L10.8593 21.3633C10.8118 21.259 10.7292 21.176 10.6269 21.1296L0.276291 16.4363C-0.0920971 16.2693 -0.0920968 15.7307 0.276291 15.5637L10.6269 10.8704C10.7292 10.824 10.8118 10.741 10.8593 10.6367L15.5812 0.274093C15.7478 -0.0913644 16.2522 -0.0913642 16.4188 0.274093L21.1407 10.6367C21.1882 10.741 21.2708 10.824 21.3731 10.8704L31.7237 15.5637C32.0921 15.7307 32.0921 16.2693 31.7237 16.4363L21.3731 21.1296C21.2708 21.176 21.1882 21.259 21.1407 21.3633L16.4188 31.7259Z" fill="#FF3B30"/></svg>              
+          </span>
+          <span>How could an agent like you support employees or customers?</span>
+        </li>
+        <li>
+          <span class="dot blue">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4188 31.7259C16.2522 32.0914 15.7478 32.0914 15.5812 31.7259L10.8593 21.3633C10.8118 21.259 10.7292 21.176 10.6269 21.1296L0.276291 16.4363C-0.0920971 16.2693 -0.0920968 15.7307 0.276291 15.5637L10.6269 10.8704C10.7292 10.824 10.8118 10.741 10.8593 10.6367L15.5812 0.274093C15.7478 -0.0913644 16.2522 -0.0913642 16.4188 0.274093L21.1407 10.6367C21.1882 10.741 21.2708 10.824 21.3731 10.8704L31.7237 15.5637C32.0921 15.7307 32.0921 16.2693 31.7237 16.4363L21.3731 21.1296C21.2708 21.176 21.1882 21.259 21.1407 21.3633L16.4188 31.7259Z" fill="#2AA6FF"/></svg>              
+          </span>
+          <span>How do these agents connect to Kaltura’s broader platform?</span>
+        </li>
+        <li>
+          <span class="dot gold">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4188 31.7259C16.2522 32.0914 15.7478 32.0914 15.5812 31.7259L10.8593 21.3633C10.8118 21.259 10.7292 21.176 10.6269 21.1296L0.276291 16.4363C-0.0920971 16.2693 -0.0920968 15.7307 0.276291 15.5637L10.6269 10.8704C10.7292 10.824 10.8118 10.741 10.8593 10.6367L15.5812 0.274093C15.7478 -0.0913644 16.2522 -0.0913642 16.4188 0.274093L21.1407 10.6367C21.1882 10.741 21.2708 10.824 21.3731 10.8704L31.7237 15.5637C32.0921 15.7307 32.0921 16.2693 31.7237 16.4363L21.3731 21.1296C21.2708 21.176 21.1882 21.259 21.1407 21.3633L16.4188 31.7259Z" fill="#FFB020"/></svg>              
+          </span>
+          <span>If I share my screen, can you walk me through what I’m looking at?</span>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Fully flexible player area (right) -->
+    <section class="player-pane" aria-label="Player area">
+      <div class="player" role="region" aria-label="Video or agent container">
+
+
+        <!-- Responsive embed (adjust --frame-h as you like) -->
+
+  <iframe src="https://meet.eself.ai/68c9684d5f4712a1b91dca04/talk-to-agent?aiclid=OzhAEa6O&flow_id=agent-2" title="eSelf AI – Talk to Agent" allow="camera; microphone; clipboard-write; autoplay; fullscreen; display-capture" allowfullscreen loading="lazy" referrerpolicy="origin-when-cross-origin"></iframe>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
