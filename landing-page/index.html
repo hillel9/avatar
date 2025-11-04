@@ -6,7 +6,7 @@
   <title>Kaltura – Immersive Virtual Agent (Layout)</title>
   <style>
     :root {
-      --brand: #0a66ff;
+      --brand: #006efa;
       --ink: #0f172a;
       --muted: #475569;
       --badge-green: #5BC686;
@@ -196,7 +196,41 @@
 
         <!-- Responsive embed (adjust --frame-h as you like) -->
 
-  <iframe src="https://meet.eself.ai/68c9684d5f4712a1b91dca04/talk-to-agent?aiclid=OzhAEa6O&flow_id=agent-2" title="eSelf AI – Talk to Agent" allow="camera; microphone; clipboard-write; autoplay; fullscreen; display-capture" allowfullscreen loading="lazy" referrerpolicy="origin-when-cross-origin"></iframe>
+        <iframe id="eself-iframe"
+        src="https://meet.eself.ai/68c9684d5f4712a1b91dca04/talk-to-agent?aiclid=OzhAEa6O&flow_id=agent-3"
+        title="eSelf AI – Talk to Agent"
+        allow="camera; microphone; clipboard-write; autoplay; fullscreen; display-capture" allowfullscreen loading="lazy"
+        referrerpolicy="origin-when-cross-origin">
+      </iframe>
+
+      <script>
+        const iframe = document.getElementById('eself-iframe');
+        const initialSrc = iframe.src;
+
+        window.addEventListener('message', (event) => {
+          // Only listen to events from eSelf
+          if (!event.origin.includes('eself.ai')) return;
+
+          // Check if the event is "conversation-ended"
+          if (event.data && event.data.event === 'conversation-ended') {
+            // Reset iframe
+            iframe.src = initialSrc;
+
+            // Smoothly scroll to the anchor section
+            const targetUrl = 'https:///corp.kaltura.com/landing_pages/general/avatar-lp-freestyle-version/#rad';
+            const anchor = targetUrl.split('#')[1];
+            const targetElement = document.getElementById(anchor);
+
+            if (targetElement) {
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              // fallback: navigate directly to anchor
+              window.location.href = targetUrl;
+            }
+          }
+        });
+      </script>
+
       </div>
     </section>
   </main>
