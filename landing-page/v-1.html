@@ -328,6 +328,14 @@
         <script>
           const iframe = document.getElementById('eself-iframe');
           const initialSrc = iframe.src;
+          let hasInteracted = false;
+
+          // Track when iframe has loaded and user might have interacted
+          iframe.addEventListener('load', () => {
+            setTimeout(() => {
+              hasInteracted = true;
+            }, 2000); // Wait 2 seconds after load before allowing scroll
+          });
 
           window.addEventListener('message', (event) => {
             // Only listen to events from eSelf
@@ -335,8 +343,12 @@
 
             // Check if the event is "conversation-ended"
             if (event.data && event.data.event === 'conversation-ended') {
+              // Only proceed if user has had time to interact
+              if (!hasInteracted) return;
+
               // Reset iframe
               iframe.src = initialSrc;
+              hasInteracted = false; // Reset for next conversation
 
               // Smoothly scroll to the anchor section
               const targetElement = document.getElementById('rad');
