@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #121212;
+    --surface: #181818;
+    --surface2: #282828;
+    --border: #333;
+    --accent: #006efa;
+    --accent-hover: #1a7ffb;
+    --accent-glow: rgba(0,110,250,0.25);
+    --text: #fff;
+    --text-secondary: #b3b3b3;
+    --muted: #727272;
+    --success: #1db954;
+    --error: #e25a5a;
+    --radius: 8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mark svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+
+  .header-text h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .header-text p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: fadeUp 0.4s 0.08s ease both;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  /* Source tabs */
+  .source-tabs {
+    display: flex;
+    gap: 3px;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 3px;
+  }
+
+  .source-tab {
+    flex: 1;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 0.45rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .source-tab.active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+
+  /* Avatar library grid */
+  .avatar-library {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+  }
+
+  .avatar-card {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .avatar-card:hover { border-color: var(--accent); background: rgba(0,110,250,0.06); }
+
+  .avatar-card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .avatar-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  .avatar-card-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.4rem 0.5rem;
+  }
+
+  .avatar-card.selected .avatar-card-name { color: var(--accent); }
+
+  .avatar-check {
+    display: none;
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-card.selected .avatar-check { display: flex; }
+
+  .avatar-check svg { width: 11px; height: 11px; stroke: white; fill: none; }
+
+  /* Drop zone */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    background: var(--surface2);
+  }
+
+  .drop-zone:hover, .drop-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(0,110,250,0.06);
+  }
+
+  .drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .drop-icon-wrap {
+    width: 48px;
+    height: 48px;
+    background: var(--surface);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+    transition: background 0.2s;
+  }
+
+  .drop-zone:hover .drop-icon-wrap {
+    background: rgba(0,110,250,0.15);
+  }
+
+  .drop-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--text-secondary);
+    fill: none;
+    transition: stroke 0.2s;
+  }
+
+  .drop-zone:hover .drop-icon-wrap svg {
+    stroke: var(--accent);
+  }
+
+  .drop-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .drop-subtitle {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .drop-subtitle span {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* File selected pill */
+  .file-selected {
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(0,110,250,0.08);
+    border: 1px solid rgba(0,110,250,0.25);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+  }
+
+  .file-selected.visible { display: flex; }
+
+  .file-thumb {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .file-thumb svg { width: 16px; height: 16px; fill: white; }
+  .file-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 0.85rem; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+
+  .file-clear {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .file-clear:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+  .file-clear svg { width: 14px; height: 14px; stroke: currentColor; fill: none; }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--border); }
+
+  /* Advanced toggle */
+  .advanced-toggle {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0;
+    transition: color 0.15s;
+  }
+  .advanced-toggle:hover { color: var(--text-secondary); }
+  .advanced-toggle svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    fill: none;
+    transition: transform 0.2s;
+  }
+  .advanced-toggle.open svg { transform: rotate(180deg); }
+
+  .advanced-body {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 0.25rem;
+  }
+  .advanced-body.open { display: flex; }
+
+  /* Text/select inputs */
+  .select-wrap { position: relative; }
+  .select-wrap::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--text-secondary);
+    pointer-events: none;
+  }
+
+  select, input[type="text"], input[type="number"] {
+    appearance: none;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.7rem 1rem;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  select { padding-right: 2.5rem; }
+  select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--accent); }
+  select option { background: #282828; }
+
+  /* Audio library */
+  .audio-library { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .audio-card {
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .audio-card:hover { border-color: var(--accent); background: rgba(0,110,250,0.06); }
+  .audio-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+  .audio-card-icon {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .audio-card-icon svg { width: 18px; height: 18px; fill: white; }
+
+  .audio-card-info { flex: 1; min-width: 0; }
+  .audio-card-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .audio-card-meta { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+  .audio-card.selected .audio-card-name { color: var(--accent); }
+
+  .audio-play-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .audio-play-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .audio-play-btn svg { width: 13px; height: 13px; fill: currentColor; }
+
+  .audio-card-check {
+    display: none;
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .audio-card.selected .audio-card-check { display: flex; }
+  .audio-card-check svg { width: 11px; height: 11px; stroke: white; fill: none; }
+
+  /* Progress */
+  .progress-wrap { display: none; flex-direction: column; gap: 0.5rem; }
+  .progress-wrap.visible { display: flex; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .progress-bar-bg {
+    background: var(--surface2);
+    border-radius: 999px;
+    height: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* Status */
+  .status { display: none; border-radius: var(--radius); padding: 0.85rem 1rem; font-size: 0.82rem; align-items: center; gap: 0.65rem; line-height: 1.4; }
+  .status.visible { display: flex; }
+  .status.loading { background: rgba(0,110,250,0.08); border: 1px solid rgba(0,110,250,0.2); color: #6eaaff; }
+  .status.error { background: rgba(226,90,90,0.08); border: 1px solid rgba(226,90,90,0.2); color: var(--error); }
+  .status.success { background: rgba(29,185,84,0.08); border: 1px solid rgba(29,185,84,0.2); color: var(--success); }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,110,250,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .status.error .status-dot { background: var(--error); }
+  .status.success .status-dot { background: var(--success); }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Generate button */
+  .btn-generate {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 500px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s ease;
+  }
+
+  .btn-generate:hover:not(:disabled) {
+    background: var(--accent-hover);
+    transform: scale(1.02);
+    box-shadow: 0 6px 24px var(--accent-glow);
+  }
+
+  .btn-generate:active:not(:disabled) { transform: scale(0.99); }
+
+  .btn-generate:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Download button */
+  .btn-download {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--success);
+    color: var(--success);
+    border-radius: 500px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.9rem 2rem;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .btn-download:hover { background: rgba(29,185,84,0.1); }
+  .btn-download.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Avatar Studio</h1>
+      <p>Turn your image &amp; audio into a talking avatar video</p>
+    </div>
+  </header>
+
+  <div class="card">
+
+    <!-- Image Field -->
+    <div class="field">
+      <label>Avatar Image</label>
+
+      <!-- Library / Upload tabs -->
+      <div class="source-tabs">
+        <button class="source-tab active" id="tabLibrary" type="button">Library</button>
+        <button class="source-tab" id="tabUpload" type="button">Upload my own</button>
+      </div>
+
+      <!-- Library grid -->
+      <div id="librarySection">
+        <div class="avatar-library">
+          <div class="avatar-card" data-src="/avatars/Jane.png" data-name="Jane">
+            <img src="/avatars/Jane.png" alt="Jane">
+            <div class="avatar-card-name">Jane</div>
+            <div class="avatar-check"><svg viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+          </div>
+          <div class="avatar-card" data-src="/avatars/Larry.png" data-name="Larry">
+            <img src="/avatars/Larry.png" alt="Larry">
+            <div class="avatar-card-name">Larry</div>
+            <div class="avatar-check"><svg viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+          </div>
+          <div class="avatar-card" data-src="/avatars/Lisa.png" data-name="Lisa">
+            <img src="/avatars/Lisa.png" alt="Lisa">
+            <div class="avatar-card-name">Lisa</div>
+            <div class="avatar-check"><svg viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload drop zone -->
+      <div id="uploadSection" style="display:none">
+        <div class="drop-zone" id="imageDropZone">
+          <input type="file" id="imageFile" accept="image/*,.png,.jpg,.jpeg">
+          <div class="drop-icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 20.25h18M3.75 4.5h16.5A.75.75 0 0121 5.25v13.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V5.25A.75.75 0 013.75 4.5z"/>
+            </svg>
+          </div>
+          <div class="drop-title">Drop your image here</div>
+          <div class="drop-subtitle"><span>Click to browse</span> · PNG, JPG, JPEG</div>
+        </div>
+        <div class="file-selected" id="imageFileSelected">
+          <div class="file-thumb" id="imageThumb">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+          <div class="file-info">
+            <div class="file-name" id="imageFileName">—</div>
+            <div class="file-size" id="imageFileSize"></div>
+          </div>
+          <button class="file-clear" id="imageFileClear" title="Remove file">
+            <svg viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Audio Field -->
+    <div class="field">
+      <label>Audio File</label>
+
+      <div class="source-tabs">
+        <button class="source-tab active" id="tabAudioLibrary" type="button">Library</button>
+        <button class="source-tab" id="tabAudioUpload" type="button">Upload my own</button>
+      </div>
+
+      <!-- Audio library -->
+      <div id="audioLibrarySection">
+        <audio id="audioPreviewEl" src="/audio/audio.mp3" preload="none"></audio>
+        <div class="audio-library">
+          <div class="audio-card" data-src="/audio/audio.mp3" data-name="Sample Audio">
+            <div class="audio-card-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <div class="audio-card-info">
+              <div class="audio-card-name">Sample Audio</div>
+              <div class="audio-card-meta">audio.mp3</div>
+            </div>
+            <button class="audio-play-btn" id="audioPlayBtn" type="button" title="Preview">
+              <svg id="audioPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <div class="audio-card-check">
+              <svg viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio upload -->
+      <div id="audioUploadSection" style="display:none">
+        <div class="drop-zone" id="audioDropZone">
+          <input type="file" id="audioFile" accept="audio/*,.mp3,.wav,.m4a,.ogg">
+          <div class="drop-icon-wrap">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5v-9m0 0l-3 3m3-3l3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 5.75 5.75 0 011.023 11.095"/>
+            </svg>
+          </div>
+          <div class="drop-title">Drop your audio here</div>
+          <div class="drop-subtitle"><span>Click to browse</span> · MP3, WAV, M4A, OGG</div>
+        </div>
+        <div class="file-selected" id="audioFileSelected">
+          <div class="file-thumb">
+            <svg viewBox="0 0 24 24"><path fill="white" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          </div>
+          <div class="file-info">
+            <div class="file-name" id="audioFileName">—</div>
+            <div class="file-size" id="audioFileSize"></div>
+          </div>
+          <button class="file-clear" id="audioFileClear" title="Remove file">
+            <svg viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Advanced Settings -->
+    <div class="field">
+      <button class="advanced-toggle" id="advancedToggle" type="button">
+        <svg viewBox="0 0 24 24" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+        </svg>
+        Advanced Settings
+      </button>
+      <div class="advanced-body" id="advancedBody">
+        <div class="field">
+          <label>Resolution</label>
+          <div class="select-wrap">
+            <select id="resolutionSelect">
+              <option value="avatar-512">512p</option>
+              <option value="avatar-720">720p</option>
+              <option value="avatar-1080" selected>1080p</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Prompt</label>
+          <input type="text" id="promptInput" value="A person talking" placeholder="Describe the talking style…">
+        </div>
+        <div class="field">
+          <label>Sample Steps <span style="color:var(--muted);font-weight:400;letter-spacing:0">(quality vs speed)</span></label>
+          <input type="number" id="sampleSteps" value="6" min="1" max="50" style="cursor:text">
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-label">
+        <span id="progressLabel">Generating video…</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="status" id="status">
+      <div class="spinner" id="statusSpinner"></div>
+      <div class="status-dot" id="statusDot" style="display:none"></div>
+      <span id="statusText"></span>
+    </div>
+
+    <!-- Generate -->
+    <button class="btn-generate" id="btnGenerate" disabled>Generate Video</button>
+
+    <!-- Download -->
+    <a class="btn-download" id="btnDownload" download="avatar-video.mp4">↓ Download Video</a>
+
+  </div>
+</div>
+
+<script>
+  const tabLibrary        = document.getElementById('tabLibrary');
+  const tabUpload         = document.getElementById('tabUpload');
+  const librarySection    = document.getElementById('librarySection');
+  const uploadSection     = document.getElementById('uploadSection');
+  const avatarCards       = document.querySelectorAll('.avatar-card');
+
+  const imageFileInput    = document.getElementById('imageFile');
+  const imageDropZone     = document.getElementById('imageDropZone');
+  const imageFileSelected = document.getElementById('imageFileSelected');
+  const imageFileName     = document.getElementById('imageFileName');
+  const imageFileSize     = document.getElementById('imageFileSize');
+  const imageThumb        = document.getElementById('imageThumb');
+  const imageFileClear    = document.getElementById('imageFileClear');
+
+  const tabAudioLibrary      = document.getElementById('tabAudioLibrary');
+  const tabAudioUpload       = document.getElementById('tabAudioUpload');
+  const audioLibrarySection  = document.getElementById('audioLibrarySection');
+  const audioUploadSection   = document.getElementById('audioUploadSection');
+  const audioCards           = document.querySelectorAll('.audio-card');
+  const audioPreviewEl       = document.getElementById('audioPreviewEl');
+  const audioPlayBtn         = document.getElementById('audioPlayBtn');
+  const audioPlayIcon        = document.getElementById('audioPlayIcon');
+
+  const audioFileInput    = document.getElementById('audioFile');
+  const audioDropZone     = document.getElementById('audioDropZone');
+  const audioFileSelected = document.getElementById('audioFileSelected');
+  const audioFileName     = document.getElementById('audioFileName');
+  const audioFileSize     = document.getElementById('audioFileSize');
+  const audioFileClear    = document.getElementById('audioFileClear');
+
+  const btnGenerate    = document.getElementById('btnGenerate');
+  const btnDownload    = document.getElementById('btnDownload');
+  const statusEl       = document.getElementById('status');
+  const statusText     = document.getElementById('statusText');
+  const statusSpinner  = document.getElementById('statusSpinner');
+  const statusDot      = document.getElementById('statusDot');
+  const progressWrap   = document.getElementById('progressWrap');
+  const progressFill   = document.getElementById('progressFill');
+  const progressPct    = document.getElementById('progressPct');
+
+  const advancedToggle = document.getElementById('advancedToggle');
+  const advancedBody   = document.getElementById('advancedBody');
+  const resolutionSelect = document.getElementById('resolutionSelect');
+  const promptInput    = document.getElementById('promptInput');
+  const sampleSteps    = document.getElementById('sampleSteps');
+
+  let selectedImageFile = null;
+  let selectedAudioFile = null;
+
+  // --- Source tabs ---
+  tabLibrary.addEventListener('click', () => {
+    tabLibrary.classList.add('active');
+    tabUpload.classList.remove('active');
+    librarySection.style.display = '';
+    uploadSection.style.display = 'none';
+    // Clear upload selection when switching to library
+    selectedImageFile = null;
+    imageFileInput.value = '';
+    imageFileSelected.classList.remove('visible');
+    imageDropZone.style.display = '';
+    checkReady();
+  });
+
+  tabUpload.addEventListener('click', () => {
+    tabUpload.classList.add('active');
+    tabLibrary.classList.remove('active');
+    uploadSection.style.display = '';
+    librarySection.style.display = 'none';
+    // Clear library selection when switching to upload
+    selectedImageFile = null;
+    avatarCards.forEach(c => c.classList.remove('selected'));
+    checkReady();
+  });
+
+  // --- Library card selection ---
+  avatarCards.forEach(card => {
+    card.addEventListener('click', async () => {
+      avatarCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const src = card.dataset.src;
+      const name = card.dataset.name;
+      try {
+        const res = await fetch(src);
+        const blob = await res.blob();
+        selectedImageFile = new File([blob], `${name}.png`, { type: blob.type || 'image/png' });
+        checkReady();
+      } catch {
+        showStatus('error', `Could not load ${name} from library.`);
+        card.classList.remove('selected');
+        selectedImageFile = null;
+        checkReady();
+      }
+    });
+  });
+
+  // --- Audio source tabs ---
+  tabAudioLibrary.addEventListener('click', () => {
+    tabAudioLibrary.classList.add('active');
+    tabAudioUpload.classList.remove('active');
+    audioLibrarySection.style.display = '';
+    audioUploadSection.style.display = 'none';
+    selectedAudioFile = null;
+    audioFileInput.value = '';
+    audioFileSelected.classList.remove('visible');
+    audioDropZone.style.display = '';
+    audioCards.forEach(c => c.classList.remove('selected'));
+    stopAudioPreview();
+    checkReady();
+  });
+
+  tabAudioUpload.addEventListener('click', () => {
+    tabAudioUpload.classList.add('active');
+    tabAudioLibrary.classList.remove('active');
+    audioUploadSection.style.display = '';
+    audioLibrarySection.style.display = 'none';
+    selectedAudioFile = null;
+    stopAudioPreview();
+    checkReady();
+  });
+
+  // --- Audio card selection ---
+  audioCards.forEach(card => {
+    card.addEventListener('click', async (e) => {
+      if (e.target.closest('.audio-play-btn')) return;
+      audioCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const src = card.dataset.src;
+      const name = card.dataset.name;
+      try {
+        const res = await fetch(src);
+        const blob = await res.blob();
+        selectedAudioFile = new File([blob], `${name}.mp3`, { type: blob.type || 'audio/mpeg' });
+        checkReady();
+      } catch {
+        showStatus('error', `Could not load ${name} from library.`);
+        card.classList.remove('selected');
+        selectedAudioFile = null;
+        checkReady();
+      }
+    });
+  });
+
+  // --- Audio preview play/pause ---
+  const PLAY_ICON  = '<path d="M8 5v14l11-7z"/>';
+  const PAUSE_ICON = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+
+  audioPlayBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (audioPreviewEl.paused) {
+      audioPreviewEl.play();
+      audioPlayIcon.innerHTML = PAUSE_ICON;
+    } else {
+      audioPreviewEl.pause();
+      audioPreviewEl.currentTime = 0;
+      audioPlayIcon.innerHTML = PLAY_ICON;
+    }
+  });
+
+  audioPreviewEl.addEventListener('ended', () => {
+    audioPlayIcon.innerHTML = PLAY_ICON;
+  });
+
+  function stopAudioPreview() {
+    if (!audioPreviewEl.paused) {
+      audioPreviewEl.pause();
+      audioPreviewEl.currentTime = 0;
+      audioPlayIcon.innerHTML = PLAY_ICON;
+    }
+  }
+
+  // --- Advanced toggle ---
+  advancedToggle.addEventListener('click', () => {
+    advancedToggle.classList.toggle('open');
+    advancedBody.classList.toggle('open');
+  });
+
+  // --- Image upload ---
+  function handleImageFile(file) {
+    if (!file || !file.type.startsWith('image/')) {
+      showStatus('error', 'Please select a valid image file (PNG, JPG, JPEG).');
+      return;
+    }
+    selectedImageFile = file;
+    imageFileName.textContent = file.name;
+    imageFileSize.textContent = formatBytes(file.size);
+    imageDropZone.style.display = 'none';
+    imageFileSelected.classList.add('visible');
+
+    // Show thumbnail preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      imageThumb.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+    };
+    reader.readAsDataURL(file);
+
+    clearStatus();
+    checkReady();
+  }
+
+  imageFileInput.addEventListener('change', e => { if (e.target.files[0]) handleImageFile(e.target.files[0]); });
+  imageDropZone.addEventListener('dragover', e => { e.preventDefault(); imageDropZone.classList.add('dragover'); });
+  imageDropZone.addEventListener('dragleave', () => imageDropZone.classList.remove('dragover'));
+  imageDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    imageDropZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) handleImageFile(e.dataTransfer.files[0]);
+  });
+  imageFileClear.addEventListener('click', () => {
+    selectedImageFile = null;
+    imageFileInput.value = '';
+    imageFileSelected.classList.remove('visible');
+    imageDropZone.style.display = '';
+    const defaultSvg = `<svg viewBox="0 0 24 24"><path fill="white" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
+    imageThumb.innerHTML = defaultSvg;
+    clearStatus();
+    checkReady();
+  });
+
+  // --- Audio upload ---
+  function handleAudioFile(file) {
+    if (!file || !file.type.startsWith('audio/')) {
+      showStatus('error', 'Please select a valid audio file (MP3, WAV, M4A, OGG).');
+      return;
+    }
+    selectedAudioFile = file;
+    audioFileName.textContent = file.name;
+    audioFileSize.textContent = formatBytes(file.size);
+    audioDropZone.style.display = 'none';
+    audioFileSelected.classList.add('visible');
+    clearStatus();
+    checkReady();
+  }
+
+  audioFileInput.addEventListener('change', e => { if (e.target.files[0]) handleAudioFile(e.target.files[0]); });
+  audioDropZone.addEventListener('dragover', e => { e.preventDefault(); audioDropZone.classList.add('dragover'); });
+  audioDropZone.addEventListener('dragleave', () => audioDropZone.classList.remove('dragover'));
+  audioDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    audioDropZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) handleAudioFile(e.dataTransfer.files[0]);
+  });
+  audioFileClear.addEventListener('click', () => {
+    selectedAudioFile = null;
+    audioFileInput.value = '';
+    audioFileSelected.classList.remove('visible');
+    audioDropZone.style.display = '';
+    stopAudioPreview();
+    clearStatus();
+    checkReady();
+  });
+
+  function checkReady() {
+    btnGenerate.disabled = !(selectedImageFile && selectedAudioFile);
+  }
+
+  // --- Generate ---
+  btnGenerate.addEventListener('click', async () => {
+    if (!selectedImageFile || !selectedAudioFile) return;
+
+    btnGenerate.disabled = true;
+    btnDownload.classList.remove('visible');
+    showProgress(5, 'Uploading files…');
+    showStatus('loading', 'Uploading image and audio…');
+
+    const formData = new FormData();
+    formData.append('image', selectedImageFile);
+    formData.append('audio', selectedAudioFile);
+    formData.append('sample_steps', sampleSteps.value || '6');
+    formData.append('resolution', resolutionSelect.value);
+    formData.append('prompt', promptInput.value || 'A person talking');
+    formData.append('max_frame_num', '100000');
+    formData.append('frame_num', '33');
+    formData.append('motion_frame', '5');
+
+    try {
+      // Step 1: Submit job
+      const submitRes = await fetch('http://localhost:3000/generate', { method: 'POST', body: formData });
+      if (!submitRes.ok) {
+        const errText = await submitRes.text().catch(() => '');
+        throw new Error(`Server returned ${submitRes.status}: ${errText || submitRes.statusText}`);
+      }
+      const { request_id } = await submitRes.json();
+      if (!request_id) throw new Error('No request ID returned from server.');
+
+      showProgress(15, 'Job queued…');
+      showStatus('loading', `Job queued (ID: ${request_id.slice(0, 8)}…). Waiting for processing…`);
+
+      // Step 2: Poll status
+      let elapsed = 0;
+      while (true) {
+        await sleep(2000);
+        elapsed += 2;
+
+        const statusRes = await fetch(`http://localhost:3000/queue/status/${request_id}`);
+        if (!statusRes.ok) throw new Error(`Status check failed: ${statusRes.status}`);
+        const { status } = await statusRes.json();
+
+        if (status === 'completed') {
+          break;
+        }
+        if (status === 'failed') {
+          throw new Error('Generation failed on the server.');
+        }
+
+        // Animate progress bar while waiting (cap at 90%)
+        const fakeProgress = Math.min(15 + (elapsed / 120) * 75, 90);
+        showProgress(fakeProgress, `Processing… (${status})`);
+        showStatus('loading', `Processing… status: ${status} (${elapsed}s elapsed)`);
+      }
+
+      // Step 3: Fetch result as blob
+      showProgress(95, 'Downloading result…');
+      showStatus('loading', 'Downloading video…');
+      const resultRes = await fetch(`http://localhost:3000/queue/result/${request_id}`);
+      if (!resultRes.ok) throw new Error(`Failed to download result: ${resultRes.status}`);
+      const blob = await resultRes.blob();
+      if (blob.size === 0) throw new Error('Server returned an empty file.');
+
+      showProgress(100, 'Done!');
+      const objectUrl = URL.createObjectURL(blob);
+      btnDownload.href = objectUrl;
+      btnDownload.classList.add('visible');
+      showStatus('success', 'Your avatar video is ready — click below to download.');
+
+    } catch (err) {
+      let msg = err.message;
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+        msg = 'Could not reach the API server. Make sure the proxy is running (node proxy.js).';
+      }
+      showStatus('error', msg);
+      progressWrap.classList.remove('visible');
+    } finally {
+      btnGenerate.disabled = !(selectedImageFile && selectedAudioFile);
+    }
+  });
+
+  // --- Helpers ---
+  function showStatus(type, text) {
+    statusEl.className = `status visible ${type}`;
+    statusText.textContent = text;
+    if (type === 'loading') {
+      statusSpinner.style.display = '';
+      statusDot.style.display = 'none';
+    } else {
+      statusSpinner.style.display = 'none';
+      statusDot.style.display = '';
+    }
+  }
+
+  function clearStatus() {
+    statusEl.className = 'status';
+    progressWrap.classList.remove('visible');
+  }
+
+  function showProgress(pct, label) {
+    progressWrap.classList.add('visible');
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = Math.round(pct) + '%';
+    document.getElementById('progressLabel').textContent = label;
+  }
+
+  function formatBytes(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // --- Auto-select defaults on load ---
+  async function autoSelect() {
+    // First avatar (Jane)
+    const firstCard = document.querySelector('.avatar-card');
+    if (firstCard) firstCard.click();
+
+    // Sample audio card
+    const firstAudioCard = document.querySelector('.audio-card');
+    if (firstAudioCard) firstAudioCard.click();
+  }
+
+  autoSelect();
+</script>
+</body>
+</html>
