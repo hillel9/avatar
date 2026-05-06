@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar Video Gallery</title>
+    <style>
+        @font-face {
+            font-family: 'Centra No1';
+            src: url('font/CentraNo1-Book.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Centra No1';
+            src: url('font/CentraNo1-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Centra No1';
+            src: url('font/CentraNo1-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Centra No1', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .hashtag {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            background: linear-gradient(to right, #006efa, #FF9DFF, #5BC686);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-wrapper > div {
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #e8e8e8;
+            color: #555;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 500px) {
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p class="hashtag">#MadeWithKalturaAvatarVideos</p>
+        <h1>Avatar Video Showcase</h1>
+        <p>Explore what's possible with AI-powered avatar videos</p>
+    </div>
+
+    <div class="gallery">
+        <div class="video-card">
+            <div class="video-wrapper">
+                <div id="kaltura_player_398520588"></div>
+            </div>
+            <div class="video-info">
+                <h3>AWS re:Invent 2025 – AI in Software Development</h3>
+                <div class="tags">
+                    <span class="tag">Session Highlights</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-card">
+            <div class="video-wrapper">
+                <div id="kaltura_player_80219576"></div>
+            </div>
+            <div class="video-info">
+                <h3>The Basics of Calculus – Mini Course</h3>
+                <div class="tags">
+                    <span class="tag">Explainer Video</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-card">
+            <div class="video-wrapper">
+                <div id="kaltura_player_687759323"></div>
+            </div>
+            <div class="video-info">
+                <h3>Quick Tour of the V7 Video Player</h3>
+                <div class="tags">
+                    <span class="tag">Explainer Video</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-card">
+            <div class="video-wrapper">
+                <div id="kaltura_player_368554207"></div>
+            </div>
+            <div class="video-info">
+                <h3>Mayo Clinic Arizona International Patient Journey</h3>
+                <div class="tags">
+                    <span class="tag">Explainer Video</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdnapisec.kaltura.com/p/6478632/embedPlaykitJs/uiconf_id/57816032"></script>
+    <script type="text/javascript">
+        try {
+            var player1 = KalturaPlayer.setup({
+                targetId: "kaltura_player_398520588",
+                provider: {
+                    partnerId: 6478632,
+                    uiConfId: 57816032
+                },
+                playback: {
+                    autoplay: false
+                }
+            });
+            player1.loadMedia({entryId: '1_4c38zev7'});
+        } catch (e) {
+            console.error(e.message);
+        }
+
+        try {
+            var player2 = KalturaPlayer.setup({
+                targetId: "kaltura_player_80219576",
+                provider: {
+                    partnerId: 6478632,
+                    uiConfId: 57816032
+                },
+                playback: {
+                    autoplay: false
+                }
+            });
+            player2.loadMedia({entryId: '1_akac30mh'});
+        } catch (e) {
+            console.error(e.message);
+        }
+
+        try {
+            var player3 = KalturaPlayer.setup({
+                targetId: "kaltura_player_687759323",
+                provider: {
+                    partnerId: 6478632,
+                    uiConfId: 57816032
+                },
+                playback: {
+                    autoplay: false
+                }
+            });
+            player3.loadMedia({entryId: '1_mip0hkmc'});
+        } catch (e) {
+            console.error(e.message);
+        }
+
+        try {
+            var player4 = KalturaPlayer.setup({
+                targetId: "kaltura_player_368554207",
+                provider: {
+                    partnerId: 6478632,
+                    uiConfId: 57816032
+                },
+                playback: {
+                    autoplay: false
+                }
+            });
+            player4.loadMedia({entryId: '1_5dm5g3yx'});
+        } catch (e) {
+            console.error(e.message);
+        }
+    </script>
+</body>
+</html>
