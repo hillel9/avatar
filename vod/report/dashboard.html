@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -301,54 +300,25 @@
     color: #757575;
   }
 
-  .beta-updates-section {
-    margin-top: 24px;
-  }
-
-  .beta-updates-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1565c0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 14px;
-    display: inline-block;
-  }
-
-  .beta-updates-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-  }
-
-  .beta-update-card {
-    padding: 16px 20px;
-    background: #f8fbff;
+  .beta-update {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: #e3f2fd;
     border-radius: 10px;
-    border: 1px solid #e3f2fd;
-    border-left: 3px solid #1565c0;
+    border: 1px solid #bbdefb;
   }
 
-  .beta-update-card-title {
+  .beta-update-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .beta-update-text {
     font-size: 14px;
-    font-weight: 600;
-    color: #212121;
-    margin-bottom: 6px;
-  }
-
-  .beta-update-card-detail {
-    font-size: 15px;
-    color: #616161;
-    line-height: 1.6;
-  }
-
-  .beta-update-accounts {
-    font-size: 12px;
-    color: #757575;
-    line-height: 1.7;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid #e3f2fd;
+    color: #1565c0;
   }
 
   /* Opportunities */
@@ -575,26 +545,77 @@
   <!-- Header -->
   <div class="header">
     <h1>Avatar Videos Report</h1>
-    <span class="badge">Snapshot: Apr 15 – May 1, 2026</span>
+    <span class="badge">Snapshot: Apr 18 – May 18, 2026 (Last month)</span>
   </div>
 
   <!-- KPI Cards -->
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="label">Total Unique Users</div>
-      <div class="value">47</div>
+      <div class="label">Monthly Unique Users</div>
+      <div class="value">87</div>
     </div>
     <div class="kpi-card">
-      <div class="label">Total Unique Avatar Videos</div>
-      <div class="value">173</div>
+      <div class="label">Monthly Avatar Videos</div>
+      <div class="value">498</div>
     </div>
     <div class="kpi-card">
       <div class="label">Avg. Videos per User</div>
-      <div class="value">3.7</div>
+      <div class="value">5.7</div>
     </div>
     <div class="kpi-card">
       <div class="label">Returning Users</div>
-      <div class="value">42%</div>
+      <div class="value">48%</div>
+    </div>
+  </div>
+
+  <!-- Customers with App Enabled -->
+  <div class="panel" style="margin-bottom:24px;">
+    <h2>
+      <span class="dot" style="background:#1565c0"></span>
+      Customers with App Enabled
+      <span style="background:#e3f2fd;color:#1565c0;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-left:auto;">5</span>
+    </h2>
+    <div class="opportunities-list">
+      <div class="opp-card">
+        <div class="opp-logo" style="background:#e3f2fd;color:#1565c0;">UM</div>
+        <div class="opp-info">
+          <div class="opp-name">Umich</div>
+          <div class="opp-industry">Education</div>
+        </div>
+        <div class="opp-status poc">Staging</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-logo" style="background:#e8f5e9;color:#2e7d32;">RO</div>
+        <div class="opp-info">
+          <div class="opp-name">Roche</div>
+          <div class="opp-industry">Healthcare</div>
+        </div>
+        <div class="opp-status poc">Staging</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-logo" style="background:#fff3e0;color:#e65100;">AH</div>
+        <div class="opp-info">
+          <div class="opp-name">Amsterdam School of Arts (AHK)</div>
+          <div class="opp-industry">Education</div>
+        </div>
+        <div class="opp-status beta-req">Production / Tester group</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-logo" style="background:#fce4ec;color:#c62828;">MD</div>
+        <div class="opp-info">
+          <div class="opp-name">McDonald's</div>
+          <div class="opp-industry">Food & Retail</div>
+        </div>
+        <div class="opp-status poc">Staging</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-logo" style="background:#ede7f6;color:#4527a0;">EL</div>
+        <div class="opp-info">
+          <div class="opp-name">eLearning Media</div>
+          <div class="opp-industry">Education</div>
+        </div>
+        <div class="opp-status poc">Staging</div>
+      </div>
     </div>
   </div>
 
@@ -624,7 +645,7 @@
           </div>
           <div class="node-content">
             <div class="node-label">Cohort 1 <span class="node-tag current">Current</span></div>
-            <div class="node-detail">Launching first week of May</div>
+            <div class="node-detail">10 accounts &middot; Launching first week of June</div>
           </div>
         </div>
 
@@ -653,34 +674,24 @@
         </div>
       </div>
 
-      <div class="beta-updates-section">
-        <div class="beta-updates-title">First Cohort Preps Updates</div>
-        <div class="beta-updates-grid">
-          <div class="beta-update-card">
-            <div class="beta-update-card-title">EDU Accounts</div>
-            <div class="beta-update-card-detail">37 accounts were selected by the North America EDU team, amongst them 10 were handpicked to participate in the first cohort.</div>
-            <div class="beta-update-accounts">University of Michigan, Nova Southeastern University, Georgia Tech, Liberty University, Keiser University, Tallahassee State, Palm Beach State College, Syracuse, EBSCO, Continued, Everspring, Chegg, Surgent, Outlier / Saavas, Walden, Chamberlain, Strayer, UMaine System, Virginia, University of Oklahoma, University of Utah, Mohawk College, Fanshawe College</div>
-          </div>
-          <div class="beta-update-card">
-            <div class="beta-update-card-title">Enterprise Accounts</div>
-            <div class="beta-update-card-detail">Enterprise accounts were selected from the Genie Freemium accounts list to participate in the beta program.</div>
-          </div>
-        </div>
+      <div class="beta-update">
+        <div class="beta-update-icon">&#x1F6A7;</div>
+        <div class="beta-update-text"><strong>Update:</strong> Beta Program paused for infra improvement. Process expected to end in 10 days.</div>
+      </div>
+      <div class="beta-update">
+        <div class="beta-update-icon">&#x1F4E2;</div>
+        <div class="beta-update-text"><strong>Update:</strong> 37 EDU accounts curated by Sales and CSM team.</div>
+      </div>
+      <div class="beta-update">
+        <div class="beta-update-icon">&#x1F4E2;</div>
+        <div class="beta-update-text"><strong>Update:</strong> Keren selected a small group of 4 Enterprise accounts for the first cohort.</div>
       </div>
     </div>
 
     <!-- Open Opportunities Panel -->
     <div class="panel table-panel">
-      <h2><span class="dot" style="background:#2e7d32"></span>Open Opportunities <span style="background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-left:auto;">7</span></h2>
+      <h2><span class="dot" style="background:#2e7d32"></span>Open Opportunities <span style="background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-left:auto;">9</span></h2>
       <div class="opportunities-list">
-        <div class="opp-card">
-          <div class="opp-logo" style="background:#e8f5e9;color:#2e7d32;">NV</div>
-          <div class="opp-info">
-            <div class="opp-name">Nvidia</div>
-            <div class="opp-industry">Technology</div>
-          </div>
-          <div class="opp-status poc">Planned POC</div>
-        </div>
         <div class="opp-card">
           <div class="opp-logo" style="background:#e3f2fd;color:#1565c0;">MC</div>
           <div class="opp-info">
@@ -695,7 +706,7 @@
             <div class="opp-name">McDonald's</div>
             <div class="opp-industry">Food & Retail</div>
           </div>
-          <div class="opp-status open">Active POC on staging</div>
+          <div class="opp-status poc">POC on staging video portal</div>
         </div>
         <div class="opp-card">
           <div class="opp-logo" style="background:#e8f5e9;color:#2e7d32;">AA</div>
@@ -703,7 +714,7 @@
             <div class="opp-name">ABN Amro</div>
             <div class="opp-industry">Financial Services</div>
           </div>
-          <div class="opp-status poc">Request a POC</div>
+          <div class="opp-status beta-req">Request to enroll to beta</div>
         </div>
         <div class="opp-card">
           <div class="opp-logo" style="background:#fff3e0;color:#e65100;">AW</div>
@@ -729,9 +740,182 @@
           </div>
           <div class="opp-status scheduling">Meeting to be scheduled</div>
         </div>
+        <div class="opp-card">
+          <div class="opp-logo" style="background:#e3f2fd;color:#1565c0;">UM</div>
+          <div class="opp-info">
+            <div class="opp-name">Umich</div>
+            <div class="opp-industry">Education</div>
+          </div>
+          <div class="opp-status poc">On staging</div>
+        </div>
+        <div class="opp-card">
+          <div class="opp-logo" style="background:#ede7f6;color:#4527a0;">EL</div>
+          <div class="opp-info">
+            <div class="opp-name">eLearning Media</div>
+            <div class="opp-industry">Education</div>
+          </div>
+          <div class="opp-status poc">On staging</div>
+        </div>
+        <div class="opp-card">
+          <div class="opp-logo" style="background:#fff3e0;color:#e65100;">AH</div>
+          <div class="opp-info">
+            <div class="opp-name">Amsterdam School of Arts (AHK)</div>
+            <div class="opp-industry">Education</div>
+          </div>
+          <div class="opp-status beta-req">Production / Tester group</div>
+        </div>
       </div>
     </div>
 
+  </div>
+
+  <!-- Unique Users Over Time -->
+  <div class="panel table-panel" style="margin-top: 24px;">
+    <h2><span class="dot" style="background:#1565c0"></span>Unique Users Over Time in Last Month</h2>
+    <div style="width:100%;overflow-x:auto;">
+      <canvas id="usersChart" style="width:100%;height:300px;"></canvas>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    const canvas = document.getElementById('usersChart');
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    const data = [
+      {date:'Apr 18',value:3},{date:'Apr 19',value:5},{date:'Apr 20',value:14},{date:'Apr 21',value:12},
+      {date:'Apr 22',value:11},{date:'Apr 23',value:12},{date:'Apr 24',value:9},{date:'Apr 25',value:3},
+      {date:'Apr 26',value:9},{date:'Apr 27',value:19},{date:'Apr 28',value:9},{date:'Apr 29',value:15},
+      {date:'Apr 30',value:8},{date:'May 1',value:9},{date:'May 2',value:2},{date:'May 3',value:8},
+      {date:'May 4',value:9},{date:'May 5',value:18},{date:'May 6',value:19},{date:'May 7',value:13},
+      {date:'May 8',value:5},{date:'May 10',value:4},{date:'May 11',value:19},{date:'May 12',value:11},
+      {date:'May 13',value:13},{date:'May 14',value:15},{date:'May 15',value:9},{date:'May 16',value:3},
+      {date:'May 17',value:5},{date:'May 18',value:10}
+    ];
+
+    function draw() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width;
+      const h = rect.height;
+      const pad = {top:20, right:20, bottom:50, left:40};
+      const chartW = w - pad.left - pad.right;
+      const chartH = h - pad.top - pad.bottom;
+
+      const maxVal = 20;
+      const stepX = chartW / (data.length - 1);
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.strokeStyle = '#eee';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + chartH - (chartH * (i * 5) / maxVal);
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(pad.left + chartW, y);
+        ctx.stroke();
+        ctx.fillStyle = '#999';
+        ctx.font = '11px -apple-system, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(i * 5, pad.left - 8, y + 4);
+      }
+
+      // Area fill
+      ctx.beginPath();
+      data.forEach((d, i) => {
+        const x = pad.left + i * stepX;
+        const y = pad.top + chartH - (chartH * d.value / maxVal);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(pad.left + (data.length - 1) * stepX, pad.top + chartH);
+      ctx.lineTo(pad.left, pad.top + chartH);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(21, 101, 192, 0.08)';
+      ctx.fill();
+
+      // Line
+      ctx.beginPath();
+      data.forEach((d, i) => {
+        const x = pad.left + i * stepX;
+        const y = pad.top + chartH - (chartH * d.value / maxVal);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#1565c0';
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // Dots
+      data.forEach((d, i) => {
+        const x = pad.left + i * stepX;
+        const y = pad.top + chartH - (chartH * d.value / maxVal);
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#1565c0';
+        ctx.fill();
+      });
+
+      // X-axis labels
+      ctx.fillStyle = '#999';
+      ctx.font = '10px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      data.forEach((d, i) => {
+        if (i % 5 === 0 || i === data.length - 1) {
+          const x = pad.left + i * stepX;
+          ctx.save();
+          ctx.translate(x, pad.top + chartH + 16);
+          ctx.rotate(-0.4);
+          ctx.fillText(d.date, 0, 0);
+          ctx.restore();
+        }
+      });
+    }
+
+    draw();
+    window.addEventListener('resize', draw);
+  })();
+  </script>
+
+  <!-- Video Creation Methods -->
+  <div class="panel table-panel" style="margin-top: 24px;">
+    <h2><span class="dot" style="background:#1565c0"></span>Video Creation Methods</h2>
+    <div style="display:flex;flex-direction:column;gap:16px;padding:10px 0;">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:14px;font-weight:500;color:#212121;">Generate a video on any topic</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">442</span>
+        </div>
+        <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
+          <div style="background:#1565c0;height:100%;border-radius:6px;width:100%;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:14px;font-weight:500;color:#212121;">Create session highlights</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">356</span>
+        </div>
+        <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
+          <div style="background:#1565c0;height:100%;border-radius:6px;width:80.5%;"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:14px;font-weight:500;color:#212121;">Start from scratch</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">232</span>
+        </div>
+        <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
+          <div style="background:#1565c0;height:100%;border-radius:6px;width:52.5%;"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- User Feedback Survey -->
@@ -862,7 +1046,7 @@
   </div>
 
   <div class="footer">
-    Generated on May 1, 2026 &middot; Data from Wed Apr 15 – Fri May 1, 2026
+    Generated on May 1, 2026 &middot; Data from Tue Apr 15 – Thu May 1, 2026
   </div>
 
 </div>
