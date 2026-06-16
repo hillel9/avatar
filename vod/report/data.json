@@ -1,17 +1,9 @@
 {
-  "unique_users": 101,
-  "total_videos": 398,
+  "unique_users": 96,
+  "total_videos": 377,
   "returning_users_pct": 46,
   "avg_videos_per_user": 3.9,
   "daily_users": [
-    {
-      "date": "2026-05-14",
-      "count": 15
-    },
-    {
-      "date": "2026-05-15",
-      "count": 9
-    },
     {
       "date": "2026-05-16",
       "count": 3
@@ -127,20 +119,35 @@
     {
       "date": "2026-06-13",
       "count": 1
+    },
+    {
+      "date": "2026-06-14",
+      "count": 3
+    },
+    {
+      "date": "2026-06-15",
+      "count": 11
     }
   ],
   "video_methods": {
-    "Start from scratch": 193,
-    "Generate a video on any topic": 363,
-    "Create session highlights": 276
+    "Start from scratch": 171,
+    "Generate a video on any topic": 348,
+    "Create session highlights": 256
   },
   "poc_accounts": [
     {
-      "name": "Liberty University",
-      "domain": "watch.liberty.edu",
+      "name": "eLearning Media",
+      "domain": "kms.elearningmedia.es",
       "active_users": 5,
-      "videos_created": 3,
-      "last_active": "2026-06-12"
+      "videos_created": 14,
+      "last_active": "2026-06-11"
+    },
+    {
+      "name": "AHK - Amsterdamse Hogeschool voor de Kunsten",
+      "domain": "2213002-7.mediaspace.kaltura.com",
+      "active_users": 4,
+      "videos_created": 2,
+      "last_active": "2026-05-19"
     },
     {
       "name": "McDonald's Prod",
@@ -148,6 +155,13 @@
       "active_users": 2,
       "videos_created": 6,
       "last_active": "2026-06-10"
+    },
+    {
+      "name": "eLearning Media",
+      "domain": "videos.elearningmedia.es",
+      "active_users": 2,
+      "videos_created": 1,
+      "last_active": "2026-05-20"
     },
     {
       "name": "EY - Sandbox",
@@ -162,20 +176,6 @@
       "active_users": 1,
       "videos_created": 9,
       "last_active": "2026-06-08"
-    },
-    {
-      "name": "Block , Inc.",
-      "domain": "video.square.com",
-      "active_users": 1,
-      "videos_created": 2,
-      "last_active": "2026-06-09"
-    },
-    {
-      "name": "EY - Sandbox",
-      "domain": "4733002-2.alpha.mediaspace.kaltura.com",
-      "active_users": 1,
-      "videos_created": 4,
-      "last_active": "2026-05-21"
     },
     {
       "name": "McDonald's Prod",
@@ -197,7 +197,34 @@
       "active_users": 1,
       "videos_created": 5,
       "last_active": "2026-05-14"
+    },
+    {
+      "name": "EY - Sandbox",
+      "domain": "4733002-2.alpha.mediaspace.kaltura.com",
+      "active_users": 1,
+      "videos_created": 4,
+      "last_active": "2026-05-21"
     }
   ],
-  "updated_at": "Jun 14, 2026"
+  "free_trial": [
+    {
+      "name": "Liberty University",
+      "domain": "watch.liberty.edu",
+      "active_users": 7,
+      "videos_created": 3
+    },
+    {
+      "name": "University of Maine System",
+      "domain": "video.maine.edu",
+      "active_users": 3,
+      "videos_created": 2
+    },
+    {
+      "name": "Block , Inc.",
+      "domain": "video.square.com",
+      "active_users": 1,
+      "videos_created": 2
+    }
+  ],
+  "updated_at": "Jun 16, 2026"
 }

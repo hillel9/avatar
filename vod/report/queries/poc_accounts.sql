@@ -7,8 +7,8 @@ MAX(partition_date) AS last_partition_date
 FROM nvp1.ovp_raw.application_events
 INNER JOIN nvp1.ovp_raw.partner ON partnerId = Id
 
-WHERE partition_date >= CURRENT_DATE - INTERVAL '31 days'
-AND nvp1.ovp_raw.application_events.partnerId IN (21428242,5877472,2503612,4733002,1038472,2213002,1428242)
+WHERE partition_date >= CURRENT_DATE - INTERVAL '92 days'
+AND nvp1.ovp_raw.application_events.partnerId IN (21428242,5877472,2503612,4733002,1038472,2213002,1428242,2213002)
 AND kalturaApplication = 'Avatar Videos'
 
 GROUP BY 1, 2

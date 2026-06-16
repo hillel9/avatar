@@ -6,7 +6,7 @@ COUNT(DISTINCT `customId1`) AS avatar_videos_projects
 FROM nvp1.ovp_raw.application_events
 INNER JOIN nvp1.ovp_raw.partner ON partnerId = Id
 
-WHERE partition_date >= CURRENT_DATE - INTERVAL '31 days'
+WHERE partition_date >= CURRENT_DATE - INTERVAL '92 days'
 AND nvp1.ovp_raw.application_events.partnerId IN (2167581,2189801,3193793,4170533)
 AND kalturaApplication = 'Avatar Videos'
 

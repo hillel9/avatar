@@ -18,7 +18,7 @@ This file contains business data not available in Databricks. Update manually as
 
 | Partner ID | Customer | Status |
 |-----------|----------|--------|
-| 4170533 | Allspring Global Investments | No Objections from CSM |
+| 4170533 | Allspring Global Investments | Launched |
 | 3193793 | Block, Inc. | No Objections from CSM |
 | 2167581 | Liberty University | Selected by EDU NA Team |
 | 2189801 | UMaine System | Selected by EDU NA Team |
