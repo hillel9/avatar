@@ -150,18 +150,18 @@
       "last_active": "2026-05-19"
     },
     {
+      "name": "AHK Sandbox",
+      "domain": "5644772.mediaspace.kaltura.com",
+      "active_users": 3,
+      "videos_created": 15,
+      "last_active": "2026-06-15"
+    },
+    {
       "name": "McDonald's Prod",
       "domain": "2503612-5.mediaspace.kaltura.com",
       "active_users": 2,
       "videos_created": 6,
       "last_active": "2026-06-10"
-    },
-    {
-      "name": "eLearning Media",
-      "domain": "videos.elearningmedia.es",
-      "active_users": 2,
-      "videos_created": 1,
-      "last_active": "2026-05-20"
     },
     {
       "name": "EY - Sandbox",
@@ -171,11 +171,25 @@
       "last_active": "2026-05-26"
     },
     {
+      "name": "eLearning Media",
+      "domain": "videos.elearningmedia.es",
+      "active_users": 2,
+      "videos_created": 1,
+      "last_active": "2026-05-20"
+    },
+    {
       "name": "Roche Learning PROD",
       "domain": "learnmedia-stg.roche.com",
       "active_users": 1,
       "videos_created": 9,
       "last_active": "2026-06-08"
+    },
+    {
+      "name": "EY - Sandbox",
+      "domain": "4733002-2.alpha.mediaspace.kaltura.com",
+      "active_users": 1,
+      "videos_created": 4,
+      "last_active": "2026-05-21"
     },
     {
       "name": "McDonald's Prod",
@@ -186,24 +200,17 @@
     },
     {
       "name": "U of Michigan (KMC1)",
-      "domain": "1038472-49.mediaspace.kaltura.com",
-      "active_users": 1,
-      "videos_created": 1,
-      "last_active": "2026-05-14"
-    },
-    {
-      "name": "U of Michigan (KMC1)",
       "domain": "cai-media.mivideo.it.umich.edu",
       "active_users": 1,
       "videos_created": 5,
       "last_active": "2026-05-14"
     },
     {
-      "name": "EY - Sandbox",
-      "domain": "4733002-2.alpha.mediaspace.kaltura.com",
+      "name": "U of Michigan (KMC1)",
+      "domain": "1038472-49.mediaspace.kaltura.com",
       "active_users": 1,
-      "videos_created": 4,
-      "last_active": "2026-05-21"
+      "videos_created": 1,
+      "last_active": "2026-05-14"
     }
   ],
   "free_trial": [
