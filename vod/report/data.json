@@ -1,33 +1,9 @@
 {
-  "unique_users": 96,
-  "total_videos": 377,
-  "returning_users_pct": 46,
-  "avg_videos_per_user": 3.9,
+  "unique_users": 132,
+  "total_videos": 357,
+  "returning_users_pct": 45,
+  "avg_videos_per_user": 2.7,
   "daily_users": [
-    {
-      "date": "2026-05-16",
-      "count": 3
-    },
-    {
-      "date": "2026-05-17",
-      "count": 5
-    },
-    {
-      "date": "2026-05-18",
-      "count": 19
-    },
-    {
-      "date": "2026-05-19",
-      "count": 18
-    },
-    {
-      "date": "2026-05-20",
-      "count": 13
-    },
-    {
-      "date": "2026-05-21",
-      "count": 12
-    },
     {
       "date": "2026-05-22",
       "count": 8
@@ -126,21 +102,48 @@
     },
     {
       "date": "2026-06-15",
-      "count": 11
+      "count": 12
+    },
+    {
+      "date": "2026-06-16",
+      "count": 15
+    },
+    {
+      "date": "2026-06-17",
+      "count": 10
+    },
+    {
+      "date": "2026-06-18",
+      "count": 17
+    },
+    {
+      "date": "2026-06-19",
+      "count": 3
+    },
+    {
+      "date": "2026-06-21",
+      "count": 5
     }
   ],
   "video_methods": {
-    "Start from scratch": 171,
-    "Generate a video on any topic": 348,
-    "Create session highlights": 256
+    "Start from scratch": 160,
+    "Generate a video on any topic": 314,
+    "Create session highlights": 223
   },
   "poc_accounts": [
     {
       "name": "eLearning Media",
       "domain": "kms.elearningmedia.es",
-      "active_users": 5,
-      "videos_created": 14,
-      "last_active": "2026-06-11"
+      "active_users": 6,
+      "videos_created": 16,
+      "last_active": "2026-06-18"
+    },
+    {
+      "name": "AHK Sandbox",
+      "domain": "5644772.mediaspace.kaltura.com",
+      "active_users": 4,
+      "videos_created": 16,
+      "last_active": "2026-06-16"
     },
     {
       "name": "AHK - Amsterdamse Hogeschool voor de Kunsten",
@@ -150,11 +153,18 @@
       "last_active": "2026-05-19"
     },
     {
-      "name": "AHK Sandbox",
-      "domain": "5644772.mediaspace.kaltura.com",
+      "name": "Roche Learning PROD",
+      "domain": "learnmedia-stg.roche.com",
       "active_users": 3,
-      "videos_created": 15,
-      "last_active": "2026-06-15"
+      "videos_created": 11,
+      "last_active": "2026-06-17"
+    },
+    {
+      "name": "EY - Sandbox",
+      "domain": "eysandbox.mediaspace.kaltura.com",
+      "active_users": 3,
+      "videos_created": 11,
+      "last_active": "2026-06-16"
     },
     {
       "name": "McDonald's Prod",
@@ -164,13 +174,6 @@
       "last_active": "2026-06-10"
     },
     {
-      "name": "EY - Sandbox",
-      "domain": "eysandbox.mediaspace.kaltura.com",
-      "active_users": 2,
-      "videos_created": 5,
-      "last_active": "2026-05-26"
-    },
-    {
       "name": "eLearning Media",
       "domain": "videos.elearningmedia.es",
       "active_users": 2,
@@ -178,11 +181,11 @@
       "last_active": "2026-05-20"
     },
     {
-      "name": "Roche Learning PROD",
-      "domain": "learnmedia-stg.roche.com",
+      "name": "McDonald's Prod",
+      "domain": "2503612-3.mediaspace.kaltura.com",
       "active_users": 1,
       "videos_created": 9,
-      "last_active": "2026-06-08"
+      "last_active": "2026-06-16"
     },
     {
       "name": "EY - Sandbox",
@@ -190,13 +193,6 @@
       "active_users": 1,
       "videos_created": 4,
       "last_active": "2026-05-21"
-    },
-    {
-      "name": "McDonald's Prod",
-      "domain": "2503612-3.mediaspace.kaltura.com",
-      "active_users": 1,
-      "videos_created": 6,
-      "last_active": "2026-06-11"
     },
     {
       "name": "U of Michigan (KMC1)",
@@ -217,14 +213,14 @@
     {
       "name": "Liberty University",
       "domain": "watch.liberty.edu",
-      "active_users": 7,
+      "active_users": 9,
       "videos_created": 3
     },
     {
       "name": "University of Maine System",
       "domain": "video.maine.edu",
-      "active_users": 3,
-      "videos_created": 2
+      "active_users": 5,
+      "videos_created": 6
     },
     {
       "name": "Block , Inc.",
@@ -233,5 +229,5 @@
       "videos_created": 2
     }
   ],
-  "updated_at": "Jun 16, 2026"
+  "updated_at": "Jun 22, 2026"
 }
