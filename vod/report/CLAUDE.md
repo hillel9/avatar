@@ -14,14 +14,24 @@ This file contains business data not available in Databricks. Update manually as
 | EY | Professional Services | Staging | Active | POC |
 | Simpplr | Technology | — | Planned POC | Not yet started |
 
-## Free Trial Program — Cohort 1
+## Free Trial Program — Cohort 1 (Launch Week: Jun 8–12)
 
 | Partner ID | Customer | Status |
 |-----------|----------|--------|
 | 4170533 | Allspring Global Investments | Launched |
-| 3193793 | Block, Inc. | No Objections from CSM |
-| 2167581 | Liberty University | Selected by EDU NA Team |
-| 2189801 | UMaine System | Selected by EDU NA Team |
+| 3193793 | Block, Inc. | Launched |
+| 2167581 | Liberty University | Launched |
+| 2189801 | UMaine System | Launched |
+
+## Free Trial Program — Cohort 2 (Launch Week: Jun 22–26)
+
+| Partner ID | Customer | Status |
+|-----------|----------|--------|
+| 2314871 | California State University, Long Beach | Launched |
+| 1714341 | Colorado Christian University | Launched |
+| 1889041 | Olivet Nazarene University - Production | Launched |
+| 2167551 | Saskatchewan Polytechnic | Launched |
+| 1315742 | University of Arkansas Fayetteville | Launched |
 
 ## Report Update Workflow
 

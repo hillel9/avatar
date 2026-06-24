@@ -223,11 +223,41 @@
       "videos_created": 7
     },
     {
+      "name": "UARK",
+      "domain": "video.uark.edu",
+      "active_users": 2,
+      "videos_created": 3
+    },
+    {
       "name": "Block , Inc.",
       "domain": "video.square.com",
       "active_users": 1,
       "videos_created": 2
+    },
+    {
+      "name": "Colorado Christian University",
+      "domain": "mediaspace.ccu.edu",
+      "active_users": 1,
+      "videos_created": 1
     }
   ],
+  "free_trial_modal": {
+    "Liberty University": 3097,
+    "Block , Inc.": 539,
+    "University of Maine System": 209,
+    "Colorado Christian University": 78,
+    "2167551 - Sask Polytech - PROD": 33,
+    "California State University, Long Beach": 25,
+    "UARK": 18,
+    "Allspring Global Investments": 13,
+    "Olivet Nazarene University - Production": 8
+  },
+  "free_trial_returning": {
+    "Colorado Christian University": 0,
+    "University of Maine System": 0,
+    "UARK": 0,
+    "Liberty University": 0,
+    "Block , Inc.": 0
+  },
   "updated_at": "Jun 24, 2026"
 }

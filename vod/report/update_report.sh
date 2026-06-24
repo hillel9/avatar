@@ -52,26 +52,32 @@ print(json.dumps({'warehouse_id': '$WAREHOUSE_ID', 'statement': q, 'wait_timeout
 }
 
 echo "Running queries..."
-echo "  [1/7] Unique users..."
+echo "  [1/9] Unique users..."
 run_query "$SCRIPT_DIR/queries/unique_users.sql" "$TMP_DIR/unique_users.json"
 
-echo "  [2/7] Total videos..."
+echo "  [2/9] Total videos..."
 run_query "$SCRIPT_DIR/queries/total_videos.sql" "$TMP_DIR/total_videos.json"
 
-echo "  [3/7] Daily users..."
+echo "  [3/9] Daily users..."
 run_query "$SCRIPT_DIR/queries/daily_users.sql" "$TMP_DIR/daily_users.json"
 
-echo "  [4/7] Returning users..."
+echo "  [4/9] Returning users..."
 run_query "$SCRIPT_DIR/queries/returning_users.sql" "$TMP_DIR/returning_users.json"
 
-echo "  [5/7] Video creation methods..."
+echo "  [5/9] Video creation methods..."
 run_query "$SCRIPT_DIR/queries/video_methods.sql" "$TMP_DIR/video_methods.json"
 
-echo "  [6/7] POC accounts..."
+echo "  [6/9] POC accounts..."
 run_query "$SCRIPT_DIR/queries/poc_accounts.sql" "$TMP_DIR/poc_accounts.json"
 
-echo "  [7/7] Free trial..."
+echo "  [7/9] Free trial..."
 run_query "$SCRIPT_DIR/queries/free_trial.sql" "$TMP_DIR/free_trial.json"
+
+echo "  [8/9] Free trial modal..."
+run_query "$SCRIPT_DIR/queries/free_trial_modal.sql" "$TMP_DIR/free_trial_modal.json"
+
+echo "  [9/9] Free trial returning..."
+run_query "$SCRIPT_DIR/queries/free_trial_returning.sql" "$TMP_DIR/free_trial_returning.json"
 
 # Parse all results into data.json
 python3 << PYTHON
@@ -104,6 +110,8 @@ returning = load_resp("$TMP_DIR/returning_users.json")
 methods = load_resp("$TMP_DIR/video_methods.json")
 poc = load_resp("$TMP_DIR/poc_accounts.json")
 trial = load_resp("$TMP_DIR/free_trial.json")
+trial_modal = load_resp("$TMP_DIR/free_trial_modal.json")
+trial_returning = load_resp("$TMP_DIR/free_trial_returning.json")
 
 data = {}
 data['unique_users'] = int(single_val(unique)) if single_val(unique) else None
@@ -150,6 +158,16 @@ for row in all_rows(trial):
         'videos_created': int(row[3]) if row[3] else 0
     })
 
+data['free_trial_modal'] = {}
+for row in all_rows(trial_modal):
+    if row[0]:
+        data['free_trial_modal'][row[0]] = int(row[1]) if row[1] else 0
+
+data['free_trial_returning'] = {}
+for row in all_rows(trial_returning):
+    if row[0]:
+        data['free_trial_returning'][row[0]] = round(float(row[1])) if row[1] else 0
+
 data['updated_at'] = datetime.now().strftime('%b %-d, %Y')
 
 with open("$DATA_FILE", 'w') as f:
@@ -167,7 +185,9 @@ for a in data['poc_accounts']:
     print(f"    {a['name']:30s} users={a['active_users']} videos={a['videos_created']} last={a['last_active']}")
 print(f"  Free trial:        {len(data['free_trial'])}")
 for a in data['free_trial']:
-    print(f"    {a['name']:30s} users={a['active_users']} videos={a['videos_created']}")
+    modal = data['free_trial_modal'].get(a['name'], 0)
+    ret = data['free_trial_returning'].get(a['name'], 0)
+    print(f"    {a['name']:30s} modal={modal} users={a['active_users']} returning={ret}% videos={a['videos_created']}")
 print()
 print(f"Saved to $DATA_FILE")
 PYTHON
