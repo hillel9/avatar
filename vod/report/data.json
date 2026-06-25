@@ -1,13 +1,9 @@
 {
-  "unique_users": 140,
-  "total_videos": 371,
+  "unique_users": 144,
+  "total_videos": 349,
   "returning_users_pct": 40,
-  "avg_videos_per_user": 2.6,
+  "avg_videos_per_user": 2.4,
   "daily_users": [
-    {
-      "date": "2026-05-24",
-      "count": 10
-    },
     {
       "date": "2026-05-25",
       "count": 5
@@ -122,13 +118,17 @@
     },
     {
       "date": "2026-06-23",
-      "count": 13
+      "count": 16
+    },
+    {
+      "date": "2026-06-24",
+      "count": 12
     }
   ],
   "video_methods": {
-    "Generate a video on any topic": 324,
-    "Start from scratch": 166,
-    "Create session highlights": 232
+    "Start from scratch": 160,
+    "Generate a video on any topic": 299,
+    "Create session highlights": 242
   },
   "poc_accounts": [
     {
@@ -182,13 +182,6 @@
     },
     {
       "name": "U of Michigan (KMC1)",
-      "domain": "1038472-49.mediaspace.kaltura.com",
-      "active_users": 1,
-      "videos_created": 1,
-      "last_active": "2026-05-14"
-    },
-    {
-      "name": "U of Michigan (KMC1)",
       "domain": "cai-media.mivideo.it.umich.edu",
       "active_users": 1,
       "videos_created": 5,
@@ -207,13 +200,37 @@
       "active_users": 1,
       "videos_created": 4,
       "last_active": "2026-05-21"
+    },
+    {
+      "name": "U of Michigan (KMC1)",
+      "domain": "1038472-49.mediaspace.kaltura.com",
+      "active_users": 1,
+      "videos_created": 1,
+      "last_active": "2026-05-14"
+    },
+    {
+      "name": "Kaltura LTD",
+      "domain": "683.mediaspace.eu2.kaltura.com",
+      "active_users": 1,
+      "videos_created": 1,
+      "last_active": "2026-06-24"
     }
   ],
+  "poc_returning": {
+    "EY - Sandbox": 67,
+    "Roche Learning PROD": 67,
+    "McDonald's Prod": 67,
+    "AHK Sandbox": 50,
+    "eLearning Media": 38,
+    "AHK - Amsterdamse Hogeschool voor de Kunsten": 0,
+    "U of Michigan (KMC1)": 0,
+    "Kaltura LTD": 0
+  },
   "free_trial": [
     {
       "name": "Liberty University",
       "domain": "watch.liberty.edu",
-      "active_users": 12,
+      "active_users": 13,
       "videos_created": 6
     },
     {
@@ -221,6 +238,12 @@
       "domain": "video.maine.edu",
       "active_users": 9,
       "videos_created": 7
+    },
+    {
+      "name": "Colorado Christian University",
+      "domain": "mediaspace.ccu.edu",
+      "active_users": 4,
+      "videos_created": 4
     },
     {
       "name": "UARK",
@@ -233,31 +256,36 @@
       "domain": "video.square.com",
       "active_users": 1,
       "videos_created": 2
-    },
-    {
-      "name": "Colorado Christian University",
-      "domain": "mediaspace.ccu.edu",
-      "active_users": 1,
-      "videos_created": 1
     }
   ],
   "free_trial_modal": {
-    "Liberty University": 3097,
-    "Block , Inc.": 539,
-    "University of Maine System": 209,
-    "Colorado Christian University": 78,
-    "2167551 - Sask Polytech - PROD": 33,
-    "California State University, Long Beach": 25,
-    "UARK": 18,
-    "Allspring Global Investments": 13,
-    "Olivet Nazarene University - Production": 8
+    "Liberty University": 3374,
+    "Block , Inc.": 576,
+    "University of Maine System": 231,
+    "Colorado Christian University": 128,
+    "2167551 - Sask Polytech - PROD": 47,
+    "California State University, Long Beach": 39,
+    "UARK": 29,
+    "Olivet Nazarene University - Production": 17,
+    "Allspring Global Investments": 13
   },
   "free_trial_returning": {
+    "UARK": 50,
     "Colorado Christian University": 0,
     "University of Maine System": 0,
-    "UARK": 0,
     "Liberty University": 0,
     "Block , Inc.": 0
   },
-  "updated_at": "Jun 24, 2026"
+  "free_trial_potential": {
+    "Liberty University": 12608,
+    "Colorado Christian University": 3016,
+    "University of Maine System": 1139,
+    "UARK": 945,
+    "Olivet Nazarene University - Production": 402,
+    "2167551 - Sask Polytech - PROD": 318,
+    "Block , Inc.": 242,
+    "California State University, Long Beach": 116,
+    "Allspring Global Investments": 8
+  },
+  "updated_at": "Jun 25, 2026"
 }

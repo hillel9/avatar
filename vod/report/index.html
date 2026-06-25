@@ -592,6 +592,40 @@
     opacity: 1;
   }
 
+  /* Tooltip */
+  .tooltip-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    width: 300px;
+    background: #424242;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.5;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .tooltip-wrap:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -615,7 +649,7 @@
       <button class="video-recap-btn">
         &#9654; Watch Video Recap
       </button>
-      <span style="font-size:13px;color:#9e9e9e;font-weight:400;">Updated Jun 24, 2026</span>
+      <span style="font-size:13px;color:#9e9e9e;font-weight:400;">Updated Jun 25, 2026</span>
     </div>
   </div>
 
@@ -623,7 +657,7 @@
   <div style="margin-bottom:20px;">
     <h2 style="font-size:18px;font-weight:500;color:#424242;display:flex;align-items:center;gap:10px;">
       Snapshot of All Accounts
-      <span style="background:#e3f2fd;color:#1565c0;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;">Last 31 days &middot; May 24 – Jun 24</span>
+      <span style="background:#e3f2fd;color:#1565c0;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;">Last 30 days &middot; May 25 – Jun 24</span>
     </h2>
   </div>
 
@@ -631,15 +665,15 @@
   <div class="kpi-grid">
     <div class="kpi-card">
       <div class="label">Monthly Unique Users</div>
-      <div class="value">140</div>
+      <div class="value">144</div>
     </div>
     <div class="kpi-card">
       <div class="label">Monthly Avatar Videos</div>
-      <div class="value">371</div>
+      <div class="value">349</div>
     </div>
     <div class="kpi-card">
       <div class="label">Avg. Videos per User</div>
-      <div class="value">2.6</div>
+      <div class="value">2.4</div>
     </div>
     <div class="kpi-card">
       <div class="label">Returning Users</div>
@@ -662,14 +696,14 @@
     const dpr = window.devicePixelRatio || 1;
 
     const data = [
-      {date:'May 24',value:10},{date:'May 25',value:5},{date:'May 26',value:15},
+      {date:'May 25',value:5},{date:'May 26',value:15},
       {date:'May 27',value:10},{date:'May 28',value:13},{date:'May 29',value:7},{date:'May 30',value:1},
       {date:'May 31',value:4},{date:'Jun 1',value:10},{date:'Jun 2',value:17},{date:'Jun 3',value:20},
       {date:'Jun 4',value:17},{date:'Jun 5',value:9},{date:'Jun 6',value:2},{date:'Jun 7',value:7},
       {date:'Jun 8',value:14},{date:'Jun 9',value:13},{date:'Jun 10',value:12},{date:'Jun 11',value:10},
       {date:'Jun 12',value:7},{date:'Jun 13',value:1},{date:'Jun 14',value:3},{date:'Jun 15',value:12},
       {date:'Jun 16',value:15},{date:'Jun 17',value:10},{date:'Jun 18',value:17},{date:'Jun 19',value:3},
-      {date:'Jun 21',value:5},{date:'Jun 22',value:9},{date:'Jun 23',value:13}
+      {date:'Jun 21',value:5},{date:'Jun 22',value:9},{date:'Jun 23',value:16},{date:'Jun 24',value:12}
     ];
 
     function draw() {
@@ -782,6 +816,7 @@
         <tr style="border-bottom:2px solid #e0e0e0;text-align:left;">
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Customer</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Active Users</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Returning Users</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Avatar Video Projects</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Last Login</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Status</th>
@@ -791,6 +826,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">AHK</td>
           <td style="padding:12px;font-weight:700;color:#424242;">8</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">50%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">18</td>
           <td style="padding:12px;color:#616161;">Jun 16</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -798,6 +834,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">eLearning Media</td>
           <td style="padding:12px;font-weight:700;color:#424242;">8</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">38%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">17</td>
           <td style="padding:12px;color:#616161;">Jun 18</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -805,6 +842,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">EY</td>
           <td style="padding:12px;font-weight:700;color:#424242;">4</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">67%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">15</td>
           <td style="padding:12px;color:#616161;">Jun 16</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -812,6 +850,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">McDonald's</td>
           <td style="padding:12px;font-weight:700;color:#424242;">3</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">67%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">15</td>
           <td style="padding:12px;color:#616161;">Jun 16</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -819,6 +858,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">Roche</td>
           <td style="padding:12px;font-weight:700;color:#424242;">3</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">67%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">11</td>
           <td style="padding:12px;color:#616161;">Jun 22</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -826,6 +866,7 @@
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">U of Michigan</td>
           <td style="padding:12px;font-weight:700;color:#424242;">2</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">6</td>
           <td style="padding:12px;color:#616161;">May 14</td>
           <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">Active</span></td>
@@ -838,51 +879,58 @@
   <div class="panel" style="margin-bottom:24px;">
     <h2>
       Free Trial Program
-      <span style="background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-left:auto;">9</span>
+      <span style="background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;margin-left:auto;">9 accounts</span>
     </h2>
     <p style="font-size:14px;color:#616161;margin-bottom:20px;line-height:1.5;">Accounts selected for the Free Trial program — the app is open for all creators on their production site.</p>
-    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+
+    <!-- Cohort 1 -->
+    <h3 style="font-size:14px;font-weight:600;color:#424242;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      Cohort 1
+      <span style="background:#e8f5e9;color:#2e7d32;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;">Launched Jun 8–12</span>
+    </h3>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;table-layout:fixed;">
+      <colgroup>
+        <col style="width:30%">
+        <col style="width:12%">
+        <col style="width:12%">
+        <col style="width:16%">
+        <col style="width:14%">
+        <col style="width:16%">
+      </colgroup>
       <thead>
         <tr style="border-bottom:2px solid #e0e0e0;text-align:left;">
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Customer</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Saw Modal</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Entered App</th>
           <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Returning Users</th>
-          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Avatar Video Projects</th>
-          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Cohort</th>
-          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Launch Week</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Video Projects</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Potential Creators <span class="tooltip-wrap"><svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#9e9e9e" style="vertical-align:middle;cursor:help;"><path d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><span class="tooltip-text">Users who performed content creation, editing, or management actions (uploads, media edits, captures) on the platform in the last 92 days. A heuristic estimate of the addressable audience for Avatar Videos within each account.</span></span></th>
         </tr>
       </thead>
       <tbody>
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">Liberty University</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">3,097</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">12</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">3,374</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">13</td>
           <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">6</td>
-          <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C1</span></td>
-          <td style="padding:12px;color:#616161;">Jun 8–12</td>
-
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">12,608</td>
         </tr>
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">University of Maine System</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">209</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">231</td>
           <td style="padding:12px;font-weight:700;color:#424242;">9</td>
           <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">7</td>
-          <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C1</span></td>
-          <td style="padding:12px;color:#616161;">Jun 8–12</td>
-
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">1,139</td>
         </tr>
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">Block, Inc.</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">539</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">576</td>
           <td style="padding:12px;font-weight:700;color:#424242;">1</td>
           <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">2</td>
-          <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C1</span></td>
-          <td style="padding:12px;color:#616161;">Jun 8–12</td>
-
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">242</td>
         </tr>
         <tr style="border-bottom:1px solid #f0f0f0;">
           <td style="padding:12px;font-weight:500;">Allspring Global Investments</td>
@@ -890,62 +938,79 @@
           <td style="padding:12px;font-weight:700;color:#424242;">0</td>
           <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
           <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;"><span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C1</span></td>
-          <td style="padding:12px;color:#616161;">Jun 8–12</td>
-
-        </tr>
-        <tr style="border-bottom:1px solid #f0f0f0;">
-          <td style="padding:12px;font-weight:500;">University of Arkansas Fayetteville</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">18</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">2</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">3</td>
-          <td style="padding:12px;"><span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C2</span></td>
-          <td style="padding:12px;color:#616161;">Jun 22–26</td>
-
-        </tr>
-        <tr style="border-bottom:1px solid #f0f0f0;">
-          <td style="padding:12px;font-weight:500;">Colorado Christian University</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">78</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">1</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">1</td>
-          <td style="padding:12px;"><span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C2</span></td>
-          <td style="padding:12px;color:#616161;">Jun 22–26</td>
-
-        </tr>
-        <tr style="border-bottom:1px solid #f0f0f0;">
-          <td style="padding:12px;font-weight:500;">California State University, Long Beach</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">25</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;"><span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C2</span></td>
-          <td style="padding:12px;color:#616161;">Jun 22–26</td>
-
-        </tr>
-        <tr style="border-bottom:1px solid #f0f0f0;">
-          <td style="padding:12px;font-weight:500;">Olivet Nazarene University</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">8</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;"><span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C2</span></td>
-          <td style="padding:12px;color:#616161;">Jun 22–26</td>
-
-        </tr>
-        <tr style="border-bottom:1px solid #f0f0f0;">
-          <td style="padding:12px;font-weight:500;">Saskatchewan Polytechnic</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">33</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
-          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
-          <td style="padding:12px;"><span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:600;padding:3px 10px;border-radius:12px;">C2</span></td>
-          <td style="padding:12px;color:#616161;">Jun 22–26</td>
-
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">8</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Cohort 2 -->
+    <h3 style="font-size:14px;font-weight:600;color:#424242;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      Cohort 2
+      <span style="background:#e3f2fd;color:#1565c0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;">Launched Jun 22–26</span>
+    </h3>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;table-layout:fixed;">
+      <colgroup>
+        <col style="width:30%">
+        <col style="width:12%">
+        <col style="width:12%">
+        <col style="width:16%">
+        <col style="width:14%">
+        <col style="width:16%">
+      </colgroup>
+      <thead>
+        <tr style="border-bottom:2px solid #e0e0e0;text-align:left;">
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Customer</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Saw Modal</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Entered App</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Returning Users</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Video Projects</th>
+          <th style="padding:10px 12px;font-weight:600;color:#616161;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;">Potential Creators <span class="tooltip-wrap"><svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#9e9e9e" style="vertical-align:middle;cursor:help;"><path d="M513.5-254.5Q528-269 528-290t-14.5-35.5Q499-340 478-340t-35.5 14.5Q428-311 428-290t14.5 35.5Q457-240 478-240t35.5-14.5ZM442-394h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><span class="tooltip-text">Users who performed content creation, editing, or management actions (uploads, media edits, captures) on the platform in the last 92 days. A heuristic estimate of the addressable audience for Avatar Videos within each account.</span></span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px;font-weight:500;">Colorado Christian University</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">128</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">4</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">4</td>
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">3,016</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px;font-weight:500;">University of Arkansas Fayetteville</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">29</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">2</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">50%</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">3</td>
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">945</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px;font-weight:500;">Saskatchewan Polytechnic</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">47</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">318</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px;font-weight:500;">California State University, Long Beach</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">39</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">116</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:12px;font-weight:500;">Olivet Nazarene University</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">17</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0%</td>
+          <td style="padding:12px;font-weight:700;color:#424242;">0</td>
+          <td style="padding:12px;font-weight:700;color:#9e9e9e;">402</td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 
 
@@ -956,7 +1021,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:14px;font-weight:500;color:#212121;">Generate a video on any topic</span>
-          <span style="font-size:14px;font-weight:700;color:#1565c0;">324</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">299</span>
         </div>
         <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
           <div style="background:#1565c0;height:100%;border-radius:6px;width:100%;"></div>
@@ -965,19 +1030,19 @@
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:14px;font-weight:500;color:#212121;">Create session highlights</span>
-          <span style="font-size:14px;font-weight:700;color:#1565c0;">232</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">242</span>
         </div>
         <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
-          <div style="background:#1565c0;height:100%;border-radius:6px;width:72%;"></div>
+          <div style="background:#1565c0;height:100%;border-radius:6px;width:81%;"></div>
         </div>
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <span style="font-size:14px;font-weight:500;color:#212121;">Start from scratch</span>
-          <span style="font-size:14px;font-weight:700;color:#1565c0;">166</span>
+          <span style="font-size:14px;font-weight:700;color:#1565c0;">160</span>
         </div>
         <div style="background:#e3f2fd;border-radius:6px;height:28px;overflow:hidden;">
-          <div style="background:#1565c0;height:100%;border-radius:6px;width:51%;"></div>
+          <div style="background:#1565c0;height:100%;border-radius:6px;width:54%;"></div>
         </div>
       </div>
     </div>
@@ -1111,7 +1176,7 @@
   </div>
 
   <div class="footer">
-    Generated on Jun 24, 2026 &middot; Snapshot: May 24 – Jun 24 &middot; Accounts: Mar 24 – Jun 24
+    Generated on Jun 25, 2026 &middot; Snapshot: May 25 – Jun 24 &middot; Accounts: Mar 25 – Jun 25
   </div>
 
 </div>
