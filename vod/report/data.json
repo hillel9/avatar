@@ -1,49 +1,9 @@
 {
-  "unique_users": 189,
-  "total_videos": 401,
-  "returning_users_pct": 32,
-  "avg_videos_per_user": 2.1,
+  "unique_users": 196,
+  "total_videos": 466,
+  "returning_users_pct": 36,
+  "avg_videos_per_user": 2.4,
   "daily_users": [
-    {
-      "date": "2026-06-18",
-      "count": 17
-    },
-    {
-      "date": "2026-06-19",
-      "count": 3
-    },
-    {
-      "date": "2026-06-21",
-      "count": 5
-    },
-    {
-      "date": "2026-06-22",
-      "count": 9
-    },
-    {
-      "date": "2026-06-23",
-      "count": 16
-    },
-    {
-      "date": "2026-06-24",
-      "count": 14
-    },
-    {
-      "date": "2026-06-25",
-      "count": 14
-    },
-    {
-      "date": "2026-06-26",
-      "count": 8
-    },
-    {
-      "date": "2026-06-27",
-      "count": 5
-    },
-    {
-      "date": "2026-06-28",
-      "count": 5
-    },
     {
       "date": "2026-06-29",
       "count": 22
@@ -122,36 +82,80 @@
     },
     {
       "date": "2026-07-18",
+      "count": 9
+    },
+    {
+      "date": "2026-07-19",
       "count": 6
+    },
+    {
+      "date": "2026-07-20",
+      "count": 17
+    },
+    {
+      "date": "2026-07-21",
+      "count": 19
+    },
+    {
+      "date": "2026-07-22",
+      "count": 15
+    },
+    {
+      "date": "2026-07-23",
+      "count": 16
+    },
+    {
+      "date": "2026-07-24",
+      "count": 14
+    },
+    {
+      "date": "2026-07-25",
+      "count": 3
+    },
+    {
+      "date": "2026-07-26",
+      "count": 6
+    },
+    {
+      "date": "2026-07-27",
+      "count": 11
+    },
+    {
+      "date": "2026-07-28",
+      "count": 15
+    },
+    {
+      "date": "2026-07-29",
+      "count": 8
     }
   ],
   "video_methods": {
-    "Start from scratch": 96,
-    "Generate a video on any topic": 120,
-    "Narrate your presentation": 20,
-    "Create session highlights": 32
+    "Start from scratch": 89,
+    "Generate a video on any topic": 132,
+    "Narrate your presentation": 39,
+    "Create session highlights": 24
   },
   "poc_accounts": [
     {
       "name": "SAP Media Share",
       "domain": "video.sap.com",
-      "active_users": 8,
+      "active_users": 9,
       "videos_created": 17,
-      "last_active": "2026-07-08"
+      "last_active": "2026-07-22"
     },
     {
       "name": "eLearning Media",
       "domain": "kms.elearningmedia.es",
       "active_users": 6,
-      "videos_created": 21,
-      "last_active": "2026-07-17"
+      "videos_created": 22,
+      "last_active": "2026-07-22"
     },
     {
       "name": "EY - Sandbox",
       "domain": "eysandbox.mediaspace.kaltura.com",
-      "active_users": 4,
-      "videos_created": 17,
-      "last_active": "2026-06-30"
+      "active_users": 5,
+      "videos_created": 19,
+      "last_active": "2026-07-23"
     },
     {
       "name": "AHK Sandbox",
@@ -171,15 +175,8 @@
       "name": "Roche Learning PROD",
       "domain": "learnmedia-stg.roche.com",
       "active_users": 3,
-      "videos_created": 11,
-      "last_active": "2026-07-13"
-    },
-    {
-      "name": "McDonald's Prod",
-      "domain": "2503612-5.mediaspace.kaltura.com",
-      "active_users": 2,
-      "videos_created": 6,
-      "last_active": "2026-06-10"
+      "videos_created": 12,
+      "last_active": "2026-07-28"
     },
     {
       "name": "eLearning Media",
@@ -210,26 +207,33 @@
       "last_active": "2026-07-01"
     },
     {
+      "name": "McDonald's Prod",
+      "domain": "2503612-5.mediaspace.kaltura.com",
+      "active_users": 1,
+      "videos_created": 3,
+      "last_active": "2026-06-10"
+    },
+    {
       "name": "EY - Sandbox",
       "domain": "4733002-2.alpha.mediaspace.kaltura.com",
       "active_users": 1,
-      "videos_created": 4,
-      "last_active": "2026-05-21"
+      "videos_created": 5,
+      "last_active": "2026-07-22"
     },
     {
       "name": "Kaltura LTD",
       "domain": "683.mediaspace.eu2.kaltura.com",
       "active_users": 4,
       "videos_created": 9,
-      "last_active": "2026-07-17"
+      "last_active": "2026-07-22"
     }
   ],
   "poc_returning": {
+    "McDonald's Prod": 100,
     "Roche Learning PROD": 67,
-    "McDonald's Prod": 67,
-    "SAP Media Share": 63,
+    "SAP Media Share": 56,
     "AHK Sandbox": 50,
-    "EY - Sandbox": 50,
+    "EY - Sandbox": 40,
     "eLearning Media": 38,
     "AHK - Amsterdamse Hogeschool voor de Kunsten": 0,
     "U of Michigan (KMC1)": 0,
@@ -239,38 +243,38 @@
     {
       "name": "Liberty University",
       "domain": "watch.liberty.edu",
-      "active_users": 36,
-      "videos_created": 14
+      "active_users": 46,
+      "videos_created": 17
     },
     {
       "name": "University of Maine System",
       "domain": "video.maine.edu",
-      "active_users": 30,
-      "videos_created": 69
+      "active_users": 34,
+      "videos_created": 88
     },
     {
       "name": "Colorado Christian University",
       "domain": "mediaspace.ccu.edu",
-      "active_users": 22,
-      "videos_created": 20
+      "active_users": 33,
+      "videos_created": 29
     },
     {
       "name": "UARK",
       "domain": "video.uark.edu",
-      "active_users": 4,
-      "videos_created": 4
+      "active_users": 6,
+      "videos_created": 9
+    },
+    {
+      "name": "Olivet Nazarene University - Production",
+      "domain": "video.olivet.edu",
+      "active_users": 3,
+      "videos_created": 2
     },
     {
       "name": "Block , Inc.",
       "domain": "video.square.com",
       "active_users": 2,
       "videos_created": 4
-    },
-    {
-      "name": "Olivet Nazarene University - Production",
-      "domain": "video.olivet.edu",
-      "active_users": 2,
-      "videos_created": 2
     },
     {
       "name": "2167551 - Sask Polytech - PROD",
@@ -291,24 +295,24 @@
     "Allspring Global Investments": 16
   },
   "free_trial_returning": {
-    "UARK": 25,
-    "University of Maine System": 17,
-    "Liberty University": 6,
-    "Colorado Christian University": 5,
+    "UARK": 33,
+    "University of Maine System": 21,
+    "Colorado Christian University": 9,
+    "Liberty University": 4,
     "2167551 - Sask Polytech - PROD": 0,
     "Olivet Nazarene University - Production": 0,
     "Block , Inc.": 0
   },
   "free_trial_potential": {
-    "Liberty University": 13026,
-    "Colorado Christian University": 2771,
-    "University of Maine System": 1070,
-    "UARK": 788,
-    "Olivet Nazarene University - Production": 347,
-    "2167551 - Sask Polytech - PROD": 234,
-    "Block , Inc.": 223,
-    "California State University, Long Beach": 109,
+    "Liberty University": 12825,
+    "Colorado Christian University": 2654,
+    "University of Maine System": 975,
+    "UARK": 682,
+    "Olivet Nazarene University - Production": 292,
+    "2167551 - Sask Polytech - PROD": 224,
+    "Block , Inc.": 217,
+    "California State University, Long Beach": 96,
     "Allspring Global Investments": 6
   },
-  "updated_at": "Jul 19, 2026"
+  "updated_at": "Jul 30, 2026"
 }
