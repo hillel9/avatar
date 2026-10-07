@@ -28,6 +28,7 @@
       --roundness-3: 16px;
       --bar-h: 144px;
       --header-h: 48px;
+      --product-header-h: 64px;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -69,15 +70,21 @@
       background: var(--background);
     }
 
-    /* Header: black strip with links between activities */
+    /* Demo header: white strip with links between activities. It manages the demo itself and
+       is deliberately not part of the product, so it has its own font and palette. */
     .site-header {
+      --demo-ink: #111;
+      --demo-ink-muted: rgba(17, 17, 17, 0.6);
+      --demo-line: #e5e5e5;
       flex: none;
       display: flex;
       align-items: center;
       gap: 24px;
       height: var(--header-h);
       padding: 0 24px;
-      background: var(--b-100);
+      background: #fff;
+      border-bottom: 1px solid var(--demo-line);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     }
 
     .site-nav { display: flex; align-items: center; gap: 24px; }
@@ -87,22 +94,107 @@
       align-items: center;
       height: 32px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       line-height: normal;
       text-decoration: none;
       white-space: nowrap;
-      color: var(--w-80);
+      color: var(--demo-ink-muted);
     }
 
-    .site-nav a:hover { color: var(--w-100); }
+    .site-nav a:hover { color: var(--demo-ink); }
 
     .site-nav a[aria-current="page"] {
-      color: var(--w-100);
+      color: var(--demo-ink);
       text-decoration: underline;
       text-underline-offset: 8px;
     }
 
-    .site-nav a:focus-visible { outline: 2px solid var(--w-100); outline-offset: 2px; border-radius: 2px; }
+    .site-nav a:focus-visible { outline: 2px solid var(--demo-ink); outline-offset: 2px; border-radius: 2px; }
+
+    /* Product header: unit progress step bar, overlaid on top of the avatar view */
+    .product-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--product-header-h);
+      padding: 0 24px;
+    }
+
+    .steps {
+      display: flex;
+      align-items: center;
+      width: 620px;
+      min-width: 620px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step { display: flex; align-items: center; }
+
+    /* every milestone after the first brings its own connector, so the line segments share the width equally */
+    .step + .step { flex: 1 1 0; }
+
+    /* connector to the previous milestone: fills once that milestone is completed */
+    .step + .step::before {
+      content: "";
+      flex: 1 1 0;
+      height: 8px;
+      margin: 0 8px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .step.done + .step::before { background: var(--primary); }
+
+    .step-dot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: normal;
+      color: var(--w-80);
+      transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .step-dot > span { text-box: trim-both cap alphabetic; }
+
+    /* current milestone: same translucent fill as the rest, with a blue outline and white number
+       (inset outline so the circle keeps its size) */
+    .step.current .step-dot {
+      box-shadow: inset 0 0 0 2px var(--primary);
+      color: var(--w-100);
+    }
+
+    /* completed milestone: blue */
+    .step.done .step-dot {
+      background: var(--primary);
+      box-shadow: none;
+      color: var(--primary-text-contrast);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
 
     /* Avatar view */
     @property --glow-start {
@@ -756,6 +848,16 @@
 
     <div class="avatar-view">
 
+      <!-- Product header: student progress through the unit's components -->
+      <header class="product-header">
+        <ol class="steps" aria-label="Unit progress">
+          <li class="step"><span class="step-dot"><span>1</span></span><span class="sr-only"></span></li>
+          <li class="step"><span class="step-dot"><span>2</span></span><span class="sr-only"></span></li>
+          <li class="step"><span class="step-dot"><span>3</span></span><span class="sr-only"></span></li>
+          <li class="step"><span class="step-dot"><span>4</span></span><span class="sr-only"></span></li>
+        </ol>
+      </header>
+
       <!-- Activity 1: quiz -->
       <div class="canvas active" data-activity="quiz">
         <section class="flashcard">
@@ -932,6 +1034,7 @@
           confirmButton.disabled = false;
         });
       });
+      confirmButton.addEventListener('click', completeCurrent);
 
       // When the avatar video ends, shrink the avatar and reveal the "Ask for a hint" button
       const avatar = root.querySelector('.avatar');
@@ -1026,6 +1129,7 @@
           readLabel.textContent = 'Read again';
           setMic('idle');
           playDoneSound();
+          completeCurrent();
           // The avatar expands back to full size and reacts ("Need help?" only exists while shrunk)
           helpPlaying = false;
           avatar.classList.remove('hint-playing', 'shrunk');
@@ -1135,6 +1239,7 @@
         if (player) player.pause();
         state = 'done';
         render();
+        completeCurrent();
         avatarVideo.src = 'assets/post -video.mp4';
         avatarVideo.play();
       });
@@ -1176,12 +1281,44 @@
     const navLinks = [...document.querySelectorAll('.site-nav a')];
     let current = 0;
 
+    // ---- Product header: student progress through the unit's components ----------
+    // The student has already finished PRIOR_STEPS components before the demo's activities, so the
+    // first activity is step 2. An activity's milestone is completed when it is finished (quiz
+    // answer confirmed, reading done, video watched). Jumping to an activity treats the earlier
+    // ones as already done and clears it and everything after it, so the bar always matches
+    // what the demo is showing.
+    const PRIOR_STEPS = 1;
+    const steps = [...document.querySelectorAll('.step')];
+    const completed = new Set(); // activity indices
+
+    function renderProgress() {
+      steps.forEach((step, i) => {
+        const activity = i - PRIOR_STEPS;
+        const done = activity < 0 || completed.has(activity);
+        const isCurrent = activity === current && !done;
+        const name = activity < 0 ? 'Previous component' : navLinks[activity].textContent;
+        step.classList.toggle('done', done);
+        step.classList.toggle('current', isCurrent);
+        if (isCurrent) step.setAttribute('aria-current', 'step');
+        else step.removeAttribute('aria-current');
+        step.querySelector('.sr-only').textContent =
+          `${name}, ${done ? 'completed' : isCurrent ? 'in progress' : 'not started'}`;
+      });
+    }
+
+    function completeCurrent() {
+      completed.add(current);
+      renderProgress();
+    }
+
     // Every navigation (including clicking the tab you're already on) restarts the activity
     function goTo(index) {
       if (index < 0 || index >= activities.length) return;
       activities[current].leave();
       canvases[current].classList.remove('active');
       current = index;
+      activities.forEach((_, i) => (i < current ? completed.add(i) : completed.delete(i)));
+      renderProgress();
       activities[current].reset();
       canvases[current].classList.add('active');
       navLinks.forEach((link, i) => {
@@ -1198,6 +1335,8 @@
         goTo(i);
       });
     });
+
+    renderProgress();
 
     // ---- Splash: "Start demo" is the first click, so the first video can play with sound --
     const splash = document.getElementById('splash');
