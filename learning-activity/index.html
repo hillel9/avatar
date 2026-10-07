@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avatar MD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --background: #121212;
+      --tone-1: #fff;
+      --tone-6: #383838;
+      --w-20: rgba(255, 255, 255, 0.2);
+      --w-80: rgba(255, 255, 255, 0.8);
+      --w-100: #fff;
+      --b-20: rgba(0, 0, 0, 0.2);
+      --b-50: rgba(0, 0, 0, 0.5);
+      --b-60: rgba(0, 0, 0, 0.6);
+      --b-100: #000;
+      --primary: #006efa;
+      --primary-text-contrast: #fff;
+      --danger: #ca1c2d;
+      --danger-text-contrast: #fff;
+      --roundness-1: 8px;
+      --roundness-2: 8px;
+      --roundness-3: 16px;
+      --bar-h: 144px;
+      --header-h: 48px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: var(--background);
+      font-family: "Lato", sans-serif;
+      font-style: normal;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    p { margin: 0; }
+
+    button {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      background: none;
+      cursor: pointer;
+    }
+
+    button:focus-visible { outline: 2px solid var(--w-100); outline-offset: 2px; }
+
+    /* Avatar MD (root frame) */
+    .frame {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      min-width: 1440px;
+      /* the avatar view keeps its 900px minimum below the header */
+      min-height: calc(900px + var(--header-h));
+      background: var(--background);
+    }
+
+    /* Header: black strip with links between activities */
+    .site-header {
+      flex: none;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      height: var(--header-h);
+      padding: 0 24px;
+      background: var(--b-100);
+    }
+
+    .site-nav { display: flex; align-items: center; gap: 24px; }
+
+    .site-nav a {
+      display: flex;
+      align-items: center;
+      height: 32px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: normal;
+      text-decoration: none;
+      white-space: nowrap;
+      color: var(--w-80);
+    }
+
+    .site-nav a:hover { color: var(--w-100); }
+
+    .site-nav a[aria-current="page"] {
+      color: var(--w-100);
+      text-decoration: underline;
+      text-underline-offset: 8px;
+    }
+
+    .site-nav a:focus-visible { outline: 2px solid var(--w-100); outline-offset: 2px; border-radius: 2px; }
+
+    /* Avatar view */
+    @property --glow-start {
+      syntax: '<percentage>';
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    .avatar-view {
+      position: relative;
+      flex: 1 0 0;
+      min-height: 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: clip;
+      border-left: 1px solid var(--tone-6);
+      --glow-start: 0%;
+      background-image:
+        linear-gradient(186.83deg, rgba(0, 110, 250, 0) var(--glow-start), rgba(0, 110, 250, 0.35) 100%),
+        linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+      transition: --glow-start 0.3s ease;
+    }
+
+    /* When the avatar shrinks, the blue glow spreads further up */
+    .avatar-view:has(.canvas.active .avatar.shrunk) {
+      --glow-start: -25%;
+    }
+
+    /* Throughout the watch activity the glow spreads even further */
+    .avatar-view:has(.canvas.watch.active) {
+      --glow-start: -60%;
+    }
+
+    /* Canvas */
+    .canvas {
+      flex: 1 0 0;
+      min-height: 1px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      /* symmetric block padding (bar height + gap) so content centers on the full viewport */
+      padding: calc(var(--bar-h) + 16px) 48px;
+    }
+
+    /* Only the current activity is shown (Space advances to the next one) */
+    .canvas:not(.active) { display: none; }
+
+    .reading-card {
+      flex-shrink: 0;
+      width: 954px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+      padding: 32px;
+      overflow: clip;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .reading-text {
+      flex: 1 0 0;
+      min-height: 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 32px;
+      border-radius: var(--roundness-2);
+      background: var(--b-20);
+      color: var(--w-100);
+      word-break: break-word;
+    }
+
+    .reading-text .reading-title {
+      width: 100%;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: normal;
+    }
+
+    .reading-text .reading-body {
+      width: 100%;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .read-button {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      height: 48px;
+      padding: 0 16px;
+      border-radius: var(--roundness-1);
+      background: var(--primary);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--primary-text-contrast);
+    }
+
+    .read-button > span { position: relative; text-box: trim-both cap alphabetic; }
+
+    /* "Done reading": subtle white breathing overlay on the blue background */
+    .read-button.breathing { position: relative; overflow: hidden; }
+
+    .read-button.breathing::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      animation: breathe 3s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0; }
+      50%      { opacity: 0.4; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .read-button.breathing::before { animation: none; opacity: 0.2; }
+    }
+
+    /* "Read again": same look as the avatar's "Need help?" button */
+    .read-button.again {
+      background: var(--b-60);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      color: var(--w-100);
+    }
+
+    .read-button:disabled {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px #ccc;
+      color: #ccc;
+      cursor: default;
+    }
+
+    /* Flashcard */
+    .flashcard {
+      flex-shrink: 0;
+      width: 924px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 64px;
+      padding: 48px;
+      overflow: clip;
+      border-radius: var(--roundness-3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .text {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .title {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .title .eyebrow {
+      font-size: 16px;
+      line-height: normal;
+      letter-spacing: 2.24px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--w-80);
+    }
+
+    .title h1 {
+      margin: 0;
+      width: 100%;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--w-100);
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    /* Answer */
+    .answer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 12px 16px;
+      border-radius: var(--roundness-2);
+      background: var(--w-20);
+      text-align: left;
+      transition: background 0.15s ease;
+    }
+
+    .answer:hover { background: rgba(255, 255, 255, 0.3); }
+
+    .answer[aria-checked="true"] { box-shadow: inset 0 0 0 1px var(--w-100); }
+
+    .answer .label {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--tone-1);
+    }
+
+    /* Pill (letter badge) */
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+      height: 32px;
+      min-width: 32px;
+      padding: 8px 10px;
+      box-shadow: inset 0 0 0 1px var(--w-100);
+      border-radius: var(--roundness-1);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--w-100);
+    }
+
+    .pill > span {
+      text-box: trim-both cap alphabetic;
+    }
+
+    .pill.wide { padding: 8px 12px; }
+
+    .answer[aria-checked="true"] .pill {
+      background: var(--primary-text-contrast);
+      box-shadow: none;
+      color: var(--b-100);
+    }
+
+    /* CTA */
+    .cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 56px;
+      padding: 12px 16px;
+      border-radius: var(--roundness-2);
+      background: var(--primary);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--primary-text-contrast);
+    }
+
+    .cta-button > span { text-box: trim-both cap alphabetic; }
+
+    .cta-button:disabled {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px #ccc;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* tint the white arrow svg to #ccc */
+    .cta-button:disabled .icon { filter: brightness(0) invert(0.8); }
+
+    .icon { display: block; flex-shrink: 0; }
+    .icon-24 { width: 24px; height: 24px; }
+    .icon-16 { width: 16px; height: 16px; }
+
+    /* Avatar */
+    .avatar {
+      position: relative;
+      flex-shrink: 0;
+      width: 406px;
+      height: 541px;
+      overflow: hidden;
+      border-radius: var(--roundness-3);
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .avatar.shrunk {
+      width: 275px;
+      height: 365px;
+    }
+
+    /* Hint button (shown over the avatar when shrunk) */
+    .hint-button {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translate(-50%, 8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: var(--roundness-2);
+      background: var(--b-60);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--w-100);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    }
+
+    .hint-button > span { text-box: trim-both cap alphabetic; }
+
+    .avatar.shrunk .hint-button {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    /* Hide the button while the hint video is playing */
+    .avatar.shrunk.hint-playing .hint-button {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 8px);
+    }
+
+    .avatar video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+    }
+
+    /* Bottom bar */
+    .bottom-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+    }
+
+    .indicators {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 0;
+    }
+
+    .indicators .message {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 8px;
+    }
+
+    .indicators .message p {
+      font-size: 16px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: normal;
+      text-align: center;
+      white-space: nowrap;
+      color: var(--tone-1);
+      text-box: trim-both cap alphabetic;
+    }
+
+    /* Mic muted: message gets a dark chip and loses the italic */
+    .indicators .message.muted {
+      background: var(--b-50);
+      border-radius: var(--roundness-2);
+    }
+
+    .indicators .message.muted p { font-style: normal; }
+
+    .controls {
+      position: relative;
+      width: 100%;
+      height: 96px;
+    }
+
+    .mic-pill {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 56px;
+      padding: 16px;
+      border-radius: 56px;
+      background: var(--b-60);
+      transition: box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    }
+
+    /* Muted: red inner border + glow (inset border keeps the pill size unchanged) */
+    .mic-pill.muted {
+      box-shadow: inset 0 0 0 2px var(--danger), 0 0 56px 0 var(--danger);
+    }
+
+    /* Listening: blue inner border + soft blue glow */
+    .mic-pill.listening {
+      box-shadow: inset 0 0 0 2px var(--primary), 0 0 56px 0 rgba(0, 110, 250, 0.5);
+    }
+
+    .end-pill {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      padding: 8px 4px 8px 8px;
+      border-radius: 8px;
+      background: var(--danger);
+    }
+
+    .end-pill span {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--danger-text-contrast);
+      text-box: trim-both cap alphabetic;
+    }
+
+    .add-context {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      padding: 8px;
+      border-radius: 56px;
+    }
+
+    .add-context span {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--w-100);
+      text-box: trim-both cap alphabetic;
+    }
+
+    /* Activity 3: watch a video */
+    .canvas.watch { padding-inline: 32px; }
+
+    .video-card {
+      position: relative;
+      flex-shrink: 0;
+      width: 954px;
+      height: 540px;
+      overflow: hidden;
+      border-radius: var(--roundness-3);
+      background: var(--b-100);
+      transition: width 0.3s ease, margin-right 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    }
+
+    /* fixed width so the player is clipped, not reflowed, while the card collapses */
+    .video-card .player { width: 954px; height: 100%; }
+
+    /* "Watch clip" label over the video (clicks pass through to the player) */
+    .video-label {
+      position: absolute;
+      left: 32px;
+      bottom: 32px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 48px;
+      padding: 0 16px;
+      border-radius: var(--roundness-1);
+      background: var(--b-60);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--w-100);
+      pointer-events: none;
+    }
+
+    .video-label > span { text-box: trim-both cap alphabetic; }
+
+    /* After "I'm done watching": the player slides away (the negative margin cancels the
+       canvas gap) while the avatar comes back and ends up centered */
+    .canvas.watch.done .video-card {
+      width: 0;
+      margin-right: -16px;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* While watching: the avatar fades out and the video re-centers */
+    .canvas.watch .avatar {
+      transition: width 0.3s ease, margin-left 0.3s ease, opacity 0.3s ease;
+    }
+
+    .canvas.watch.watching .avatar {
+      width: 0;
+      margin-left: -16px;
+      opacity: 0;
+    }
+
+    /* Resume pill: takes the mic pill's place while watching */
+    .resume-pill {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 56px;
+      padding: 0 16px;
+      border-radius: 56px;
+      background: var(--b-60);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--w-100);
+      opacity: 0;
+      visibility: hidden;
+      transition: background 0.3s ease, color 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    }
+
+    .resume-pill img {
+      display: block;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--roundness-3);
+      object-fit: cover;
+    }
+
+    .resume-pill > span { text-box: trim-both cap alphabetic; }
+
+    /* Video ended: the pill becomes the primary CTA */
+    .resume-pill.ready {
+      background: var(--primary);
+      color: var(--primary-text-contrast);
+    }
+
+    /* Crossfade: mic pill out, resume pill in */
+    .bottom-bar.watching .mic-pill { opacity: 0; visibility: hidden; }
+    .bottom-bar.watching .resume-pill { opacity: 1; visibility: visible; }
+
+    /* The "Talk to interrupt" message fades out while watching */
+    .indicators .message { transition: opacity 0.3s ease, visibility 0.3s; }
+    .indicators .message.away { opacity: 0; visibility: hidden; }
+
+    /* Splash screen: the "Start demo" click unlocks sound/autoplay for the first video */
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      background-image:
+        linear-gradient(186.83deg, rgba(0, 110, 250, 0) 0%, rgba(0, 110, 250, 0.35) 100%),
+        linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+
+    .splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash h1 {
+      margin: 0;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--w-100);
+    }
+  </style>
+</head>
+<body>
+  <div class="splash" id="splash">
+    <h1>Avatar MD</h1>
+    <button class="cta-button" id="start-demo" type="button">
+      <span>Start demo</span>
+      <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+    </button>
+  </div>
+
+  <div class="frame">
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Activities">
+        <a href="#quiz" data-target="0" aria-current="page">Quiz</a>
+        <a href="#read-aloud" data-target="1">Reading activity</a>
+        <a href="#watch" data-target="2">Watch a video</a>
+      </nav>
+    </header>
+
+    <div class="avatar-view">
+
+      <!-- Activity 1: quiz -->
+      <div class="canvas active" data-activity="quiz">
+        <section class="flashcard">
+          <div class="text">
+            <div class="title">
+              <p class="eyebrow">Practice</p>
+              <h1 id="question">Look at the book I’m holding. Which sentence is correct?</h1>
+            </div>
+
+            <div class="answers" role="radiogroup" aria-labelledby="question">
+              <button class="answer" type="button" role="radio" aria-checked="false" data-correct="true">
+                <span class="pill"><span>A</span></span>
+                <span class="label">This is a book.</span>
+              </button>
+              <button class="answer" type="button" role="radio" aria-checked="false">
+                <span class="pill"><span>B</span></span>
+                <span class="label">That is a book.</span>
+              </button>
+              <button class="answer" type="button" role="radio" aria-checked="false">
+                <span class="pill"><span>C</span></span>
+                <span class="label">These is a book.</span>
+              </button>
+              <button class="answer" type="button" role="radio" aria-checked="false">
+                <span class="pill wide"><span>D</span></span>
+                <span class="label">Those is a book.</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="cta">
+            <button class="cta-button" type="button" disabled>
+              <span>Confirm answer</span>
+              <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+            </button>
+          </div>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/Julia-pause-Look-at-2026-10-06.mp4" playsinline preload="auto"></video>
+          <button class="hint-button" type="button" tabindex="-1"><span>Ask for a hint</span></button>
+        </div>
+      </div>
+
+      <!-- Activity 2: read aloud -->
+      <div class="canvas read-aloud" data-activity="read-aloud">
+        <section class="reading-card">
+          <div class="title">
+            <p class="eyebrow">Practice</p>
+            <h1>Read aloud the following text</h1>
+          </div>
+
+          <div class="reading-text">
+            <p class="reading-title">The Mystery of the Missing Lunch</p>
+            <div class="reading-body">
+              <p>Mia opened her backpack and noticed something strange.</p>
+              <p>"My lunch is missing!" she said.</p>
+              <p>Her friend Noah asked, "Did you check everywhere?"</p>
+              <p>They looked in the classroom, the library, and the playground.</p>
+              <p>Suddenly, Mia remembered something.</p>
+              <p>"I visited my brother's classroom this morning!"</p>
+              <p>They went there and found her lunchbox on a table.</p>
+              <p>Mia smiled and said, "The mystery is solved!"</p>
+              <p>Noah laughed. "Sometimes the answer is closer than you think."</p>
+            </div>
+          </div>
+
+          <button class="read-button" type="button"><span>Start reading</span></button>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/read out loud.mp4" playsinline preload="auto"></video>
+          <button class="hint-button" type="button" tabindex="-1"><span>Need help?</span></button>
+        </div>
+      </div>
+
+      <!-- Activity 3: watch a video -->
+      <div class="canvas watch" data-activity="watch">
+        <section class="video-card">
+          <div class="player" id="kaltura_player_83516016"></div>
+          <p class="video-label"><span>Watch clip</span></p>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/Video presentation.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="indicators">
+          <div class="message"><p id="mic-message">Talk to interrupt</p></div>
+        </div>
+
+        <div class="controls">
+          <button class="add-context" type="button">
+            <img class="icon icon-24" src="assets/add.svg" width="24" height="24" alt="" />
+            <span>Add context</span>
+          </button>
+
+          <button class="mic-pill" type="button" aria-label="Microphone" aria-pressed="false">
+            <img class="icon icon-24 mic-icon" src="assets/microphone.svg" width="24" height="24" alt="" />
+            <img class="icon icon-16" src="assets/chevron-down.svg" width="16" height="16" alt="" />
+          </button>
+
+          <button class="resume-pill" type="button">
+            <img src="assets/raw_image_1.png" width="32" height="32" alt="" />
+            <span>I’m done watching</span>
+          </button>
+
+          <button class="end-pill" type="button">
+            <span>End</span>
+            <img class="icon icon-24" src="assets/clear.svg" width="24" height="24" alt="" />
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdnapisec.kaltura.com/p/1912501/embedPlaykitJs/uiconf_id/57496443"></script>
+  <script>
+    // ---- Shared mic / bottom bar -------------------------------------------------
+    // state: 'idle' | 'muted' | 'listening'
+    const micPill = document.querySelector('.mic-pill');
+    const micIcon = micPill.querySelector('.mic-icon');
+    const micMessage = document.getElementById('mic-message');
+
+    function setMic(state) {
+      const muted = state === 'muted';
+      micPill.classList.toggle('muted', muted);
+      micPill.classList.toggle('listening', state === 'listening');
+      micPill.setAttribute('aria-pressed', String(muted));
+      micIcon.src = muted ? 'assets/microphone-muted.svg' : 'assets/microphone.svg';
+      micMessage.parentElement.classList.toggle('muted', muted);
+      micMessage.textContent = muted
+        ? 'Enable your mic to talk'
+        : state === 'listening' ? 'Listening...' : 'Talk to interrupt';
+    }
+
+    // Short two-note "go ahead, I'm listening" chime, synthesized so no audio file is needed
+    let audioCtx;
+    function playStartSound() {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const t0 = audioCtx.currentTime;
+      [[660, 0], [990, 0.12]].forEach(([freq, offset]) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, t0 + offset);
+        gain.gain.linearRampToValueAtTime(0.25, t0 + offset + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, t0 + offset + 0.4);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(t0 + offset);
+        osc.stop(t0 + offset + 0.45);
+      });
+    }
+
+    // Click sound played when the user finishes reading
+    const doneSound = new Audio('assets/Ni Sound - Soft UI - Short Simple Click.wav');
+    doneSound.preload = 'auto';
+    function playDoneSound() {
+      doneSound.currentTime = 0;
+      doneSound.play();
+    }
+
+    // ---- Activity 1: quiz --------------------------------------------------------
+    function quizActivity(root) {
+      const answers = root.querySelectorAll('.answer');
+      const confirmButton = root.querySelector('.cta-button');
+      answers.forEach((answer) => {
+        answer.addEventListener('click', () => {
+          answers.forEach((a) => a.setAttribute('aria-checked', String(a === answer)));
+          confirmButton.disabled = false;
+        });
+      });
+
+      // When the avatar video ends, shrink the avatar and reveal the "Ask for a hint" button
+      const avatar = root.querySelector('.avatar');
+      const video = avatar.querySelector('video');
+      const hintButton = avatar.querySelector('.hint-button');
+      let started = false;
+      let hintPlaying = false;
+      const introSrc = video.getAttribute('src');
+
+      // "Ask for a hint": play the hint video in place of the intro video
+      hintButton.addEventListener('click', () => {
+        hintPlaying = true;
+        avatar.classList.add('hint-playing');
+        hintButton.tabIndex = -1;
+        video.src = 'assets/hint.mp4';
+        video.play();
+      });
+
+      video.addEventListener('ended', () => {
+        if (hintPlaying) {
+          // hint finished: let the user ask again
+          hintPlaying = false;
+          avatar.classList.remove('hint-playing');
+          hintButton.tabIndex = 0;
+          return;
+        }
+        avatar.classList.add('shrunk');
+        hintButton.tabIndex = 0;
+        setMic('muted');
+        playStartSound();
+      });
+
+      return {
+        enter() { setMic('idle'); },
+        start() { if (!started) { started = true; video.play(); } },
+        leave() { video.pause(); },
+        reset() {
+          started = false;
+          hintPlaying = false;
+          answers.forEach((a) => a.setAttribute('aria-checked', 'false'));
+          confirmButton.disabled = true;
+          avatar.classList.remove('shrunk', 'hint-playing');
+          hintButton.tabIndex = -1;
+          video.pause();
+          if (video.getAttribute('src') !== introSrc) video.src = introSrc;
+          video.currentTime = 0;
+        },
+      };
+    }
+
+    // ---- Activity 2: read aloud --------------------------------------------------
+    function readAloudActivity(root) {
+      const avatar = root.querySelector('.avatar');
+      const video = avatar.querySelector('video');
+      const helpButton = avatar.querySelector('.hint-button');
+      const readButton = root.querySelector('.read-button');
+      const readLabel = readButton.querySelector('span');
+      let started = false;
+      let state = 'intro'; // intro -> reading -> done -> (Read again) reading ...
+      let helpPlaying = false;
+
+      const helpSrc = 'assets/read out loud.mp4';
+      const doneSrc = 'assets/Julia-pause-Awesome-It-2026-10-06.mp4';
+      let videoSrc = helpSrc;
+      function setVideo(src) {
+        if (videoSrc === src) return;
+        videoSrc = src;
+        video.src = src;
+      }
+
+      // Start reading: avatar shrinks, "Need help?" appears, button becomes "Done reading"
+      // Done reading: stop listening, avatar says "Awesome", button becomes "Read again"
+      // Read again: back to reading
+      readButton.addEventListener('click', () => {
+        if (state === 'intro' || state === 'done') {
+          state = 'reading';
+          video.pause();
+          setVideo(helpSrc);
+          helpPlaying = false;
+          avatar.classList.remove('hint-playing');
+          avatar.classList.add('shrunk');
+          helpButton.tabIndex = 0;
+          readLabel.textContent = 'Done reading';
+          readButton.classList.remove('again');
+          readButton.classList.add('breathing');
+          setMic('listening');
+          playStartSound();
+        } else if (state === 'reading') {
+          state = 'done';
+          readButton.classList.remove('breathing');
+          readButton.classList.add('again');
+          readLabel.textContent = 'Read again';
+          setMic('idle');
+          playDoneSound();
+          // The avatar expands back to full size and reacts ("Need help?" only exists while shrunk)
+          helpPlaying = false;
+          avatar.classList.remove('hint-playing', 'shrunk');
+          helpButton.tabIndex = -1;
+          setVideo(doneSrc);
+          video.currentTime = 0;
+          video.play();
+        }
+      });
+
+      // "Need help?": the avatar repeats the instructions
+      helpButton.addEventListener('click', () => {
+        helpPlaying = true;
+        avatar.classList.add('hint-playing');
+        helpButton.tabIndex = -1;
+        setVideo(helpSrc);
+        video.currentTime = 0;
+        video.play();
+      });
+
+      video.addEventListener('ended', () => {
+        if (!helpPlaying) return;
+        helpPlaying = false;
+        avatar.classList.remove('hint-playing');
+        helpButton.tabIndex = 0;
+      });
+
+      return {
+        enter() { setMic('idle'); },
+        start() { if (!started) { started = true; video.play(); } },
+        leave() { video.pause(); },
+        reset() {
+          started = false;
+          state = 'intro';
+          helpPlaying = false;
+          avatar.classList.remove('shrunk', 'hint-playing');
+          helpButton.tabIndex = -1;
+          readLabel.textContent = 'Start reading';
+          readButton.classList.remove('again', 'breathing');
+          video.pause();
+          setVideo(helpSrc);
+          video.currentTime = 0;
+        },
+      };
+    }
+
+    // ---- Activity 3: watch a video -----------------------------------------------
+    function watchActivity(root) {
+      const bottomBar = document.querySelector('.bottom-bar');
+      const resumeButton = bottomBar.querySelector('.resume-pill');
+      const readySound = new Audio('assets/Ni Sound - Soft UI - Digital Button Select.wav');
+      readySound.preload = 'auto';
+      const avatarVideo = root.querySelector('.avatar video');
+      let player = null;
+      let started = false;
+      const introSrc = avatarVideo.getAttribute('src');
+      // intro -> watching (video playing) -> ended (button becomes the CTA) -> done (player gone)
+      let state = 'intro';
+
+      // intro: avatar (intro video) next to the player. watching / ended: player centered, avatar
+      // gone, mic replaced by the "I'm done watching" pill (blue once the video has ended).
+      // done: player gone, avatar centered
+      function render() {
+        const away = state === 'watching' || state === 'ended';
+        root.classList.toggle('watching', away);
+        root.classList.toggle('done', state === 'done');
+        bottomBar.classList.toggle('watching', away);
+        resumeButton.classList.toggle('ready', state === 'ended');
+        setMic('idle');
+        micMessage.parentElement.classList.toggle('away', away);
+      }
+
+      function setupPlayer() {
+        if (player) return;
+        try {
+          player = KalturaPlayer.setup({
+            targetId: 'kaltura_player_83516016',
+            entryTitle: 'Kaltura Avatar Walkthroughs - Marketing',
+            provider: { partnerId: 1912501, uiConfId: 57496443 },
+          });
+          player.addEventListener('playing', () => {
+            avatarVideo.pause();
+            state = 'watching';
+            render();
+          });
+          player.addEventListener('playbackended', () => {
+            state = 'ended';
+            render();
+            readySound.currentTime = 0;
+            readySound.play();
+          });
+          player.loadMedia({ entryId: '1_rtb471sc' });
+        } catch (e) {
+          console.error(e.message);
+        }
+      }
+
+      // Intro finished: the avatar disappears and the player moves front and center
+      avatarVideo.addEventListener('ended', () => {
+        if (state !== 'intro') return; // ignore the post-video clip ending
+        state = 'watching';
+        render();
+      });
+
+      // "I'm done watching": the player goes away, the avatar comes back and plays the post-video clip
+      resumeButton.addEventListener('click', () => {
+        if (player) player.pause();
+        state = 'done';
+        render();
+        avatarVideo.src = 'assets/post -video.mp4';
+        avatarVideo.play();
+      });
+
+      return {
+        enter() { render(); },
+        start() {
+          setupPlayer(); // set up once the activity is visible so the player gets its size
+          if (!started) { started = true; avatarVideo.play(); }
+        },
+        leave() {
+          if (player) player.pause();
+          avatarVideo.pause();
+          bottomBar.classList.remove('watching');
+          micMessage.parentElement.classList.remove('away');
+        },
+        reset() {
+          started = false;
+          state = 'intro';
+          if (player) {
+            player.pause();
+            player.currentTime = 0;
+          }
+          avatarVideo.pause();
+          if (avatarVideo.getAttribute('src') !== introSrc) avatarVideo.src = introSrc;
+          avatarVideo.currentTime = 0;
+          render();
+        },
+      };
+    }
+
+    // ---- Activity flow: header links (or Space) switch activities --------------------
+    const canvases = [...document.querySelectorAll('.canvas')];
+    const activities = [
+      quizActivity(canvases[0]),
+      readAloudActivity(canvases[1]),
+      watchActivity(canvases[2]),
+    ];
+    const navLinks = [...document.querySelectorAll('.site-nav a')];
+    let current = 0;
+
+    // Every navigation (including clicking the tab you're already on) restarts the activity
+    function goTo(index) {
+      if (index < 0 || index >= activities.length) return;
+      activities[current].leave();
+      canvases[current].classList.remove('active');
+      current = index;
+      activities[current].reset();
+      canvases[current].classList.add('active');
+      navLinks.forEach((link, i) => {
+        if (i === current) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+      activities[current].enter();
+      activities[current].start(); // links and Space are user gestures, so sound is allowed
+    }
+
+    navLinks.forEach((link, i) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        goTo(i);
+      });
+    });
+
+    // ---- Splash: "Start demo" is the first click, so the first video can play with sound --
+    const splash = document.getElementById('splash');
+    const startDemoButton = document.getElementById('start-demo');
+    let demoStarted = false;
+
+    function startDemo() {
+      if (demoStarted) return;
+      demoStarted = true;
+      splash.classList.add('hidden');
+      activities[current].enter();
+      activities[current].start();
+    }
+
+    startDemoButton.addEventListener('click', startDemo);
+    startDemoButton.focus();
+
+    // On the video activity Space belongs to the Kaltura player (play / pause), so leave it alone
+    const spaceIsNative = () => demoStarted && canvases[current].dataset.activity === 'watch';
+
+    document.addEventListener('keydown', (e) => {
+      if (e.code !== 'Space' || spaceIsNative()) return;
+      e.preventDefault(); // no page scroll / no "click" on a focused button
+      if (e.repeat) return;
+      if (!demoStarted) { startDemo(); return; }
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      goTo(current + 1);
+    });
+    // Some browsers fire a button's click on Space keyup
+    document.addEventListener('keyup', (e) => {
+      if (e.code === 'Space' && !spaceIsNative()) e.preventDefault();
+    });
+  </script>
+</body>
+</html>
