@@ -113,6 +113,24 @@
 
     .site-nav a:focus-visible { outline: 2px solid var(--demo-ink); outline-offset: 2px; border-radius: 2px; }
 
+    /* the display above would otherwise win over the hidden attribute */
+    .site-nav a[hidden] { display: none; }
+
+    /* "Show hidden": sits at the opposite end of the header, styled like the tabs */
+    .show-hidden {
+      margin-left: auto;
+      height: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: normal;
+      white-space: nowrap;
+      color: var(--demo-ink-muted);
+    }
+
+    .show-hidden:hover { color: var(--demo-ink); }
+
+    .show-hidden:focus-visible { outline: 2px solid var(--demo-ink); outline-offset: 2px; border-radius: 2px; }
+
     /* Product header: unit progress step bar, overlaid on top of the avatar view */
     .product-header {
       position: absolute;
@@ -282,6 +300,46 @@
       box-shadow: 0 0 16px rgba(0, 110, 250, 0.8);
     }
 
+    /* Lesson completed: the line of fire that runs along the progress. The head is a white-hot
+       flickering core in a blue glow; the trail lights each connector between two milestones. */
+    .fire-head {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0%, rgba(156, 201, 255, 0.8) 28%, rgba(0, 110, 250, 0.45) 52%, rgba(0, 110, 250, 0) 72%);
+      pointer-events: none;
+    }
+
+    .fire-head::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 12px 4px #9cc9ff;
+      animation: fire-flicker 0.14s ease-in-out infinite alternate;
+    }
+
+    @keyframes fire-flicker {
+      from { transform: scale(0.75); }
+      to   { transform: scale(1.3); }
+    }
+
+    .fire-trail {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 8px;
+      border-radius: 8px;
+      transform-origin: 0 50%;
+      background: linear-gradient(to right, rgba(77, 160, 255, 0) 0%, #4da0ff 55%, #fff 100%);
+      box-shadow: 0 0 14px 3px rgba(77, 160, 255, 0.7);
+      pointer-events: none;
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -316,6 +374,124 @@
         linear-gradient(90deg, rgb(0, 0, 0) 0%, rgb(0, 0, 0) 100%);
       transition: --glow-start 0.3s ease;
     }
+
+    /* Mesh gradient: an ambient background, on by default (.mesh-on on the avatar view) and toggled
+       with the B key, so it works on every tab. Soft color
+       blobs on a near-black base drift very slowly (30-55s loops) and cover the whole screen. The
+       base is dark and the blobs behind text are dim, so white text and the blue progress dots stay
+       readable. The layer sits behind the content (z-index -1 inside this stacking context). */
+    .avatar-view { isolation: isolate; }
+
+    .mesh {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background: #04060e;
+      opacity: 0;
+      transition: opacity 0.8s ease, background-color 0.6s ease;
+    }
+
+    /* the mesh is opaque once faded in, so it also covers the standard blue glow underneath */
+    .avatar-view.mesh-on .mesh { opacity: 1; }
+
+    .mesh-blob {
+      position: absolute;
+      left: calc(var(--x) - 35vmax);
+      top: calc(var(--y) - 35vmax);
+      width: 70vmax;
+      height: 70vmax;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, var(--c) 0%, transparent 100%);
+      will-change: transform;
+      animation: mesh-drift var(--t) ease-in-out var(--d) infinite alternate;
+    }
+
+    @keyframes mesh-drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(var(--dx), var(--dy)) scale(var(--s)); }
+    }
+
+    /* Eleven blobs spread over the whole screen: corners, edges and the middle. The ones behind the
+       text (left, center) are kept dim; the brighter ones sit in the margins, under the avatar and
+       at the bottom. */
+    /* brand blue, bottom left */
+    .mesh-blob:nth-child(1) { --x: 10%;  --y: 92%;  --c: rgba(0, 110, 250, 0.55);  --t: 34s; --d: -6s;  --dx: 12vw;  --dy: -10vh; --s: 1.2; }
+    /* violet, bottom right */
+    .mesh-blob:nth-child(2) { --x: 90%;  --y: 85%;  --c: rgba(125, 70, 255, 0.45); --t: 44s; --d: -19s; --dx: -14vw; --dy: -8vh;  --s: 1.15; }
+    /* cyan, bottom center */
+    .mesh-blob:nth-child(3) { --x: 50%;  --y: 112%; --c: rgba(0, 205, 225, 0.28);  --t: 52s; --d: -31s; --dx: 10vw;  --dy: -12vh; --s: 1.25; }
+    /* magenta, right edge */
+    .mesh-blob:nth-child(4) { --x: 100%; --y: 42%;  --c: rgba(255, 70, 170, 0.24); --t: 40s; --d: -12s; --dx: -10vw; --dy: 12vh;  --s: 1.1; }
+    /* deep indigo, left edge */
+    .mesh-blob:nth-child(5) { --x: -4%;  --y: 58%;  --c: rgba(50, 70, 220, 0.24);  --t: 48s; --d: -25s; --dx: 7vw;   --dy: -6vh;  --s: 1.15; }
+    /* azure, top left corner */
+    .mesh-blob:nth-child(6) { --x: 6%;   --y: 4%;   --c: rgba(0, 150, 255, 0.34);  --t: 46s; --d: -14s; --dx: 9vw;   --dy: 10vh;  --s: 1.2; }
+    /* orchid, top right corner */
+    .mesh-blob:nth-child(7) { --x: 94%;  --y: 6%;   --c: rgba(190, 80, 255, 0.32); --t: 38s; --d: -22s; --dx: -9vw;  --dy: 11vh;  --s: 1.15; }
+    /* soft blue-violet haze, middle of the screen (dim: it sits behind the text) */
+    .mesh-blob:nth-child(8) { --x: 46%;  --y: 52%;  --c: rgba(70, 90, 255, 0.13);  --t: 56s; --d: -35s; --dx: 8vw;   --dy: -7vh;  --s: 1.2; }
+    /* teal, mid right (behind the avatar) */
+    .mesh-blob:nth-child(9) { --x: 80%;  --y: 52%;  --c: rgba(0, 190, 160, 0.16);  --t: 42s; --d: -9s;  --dx: -7vw;  --dy: 9vh;   --s: 1.15; }
+
+    /* indigo, top center: fills the gap between the two top corners so there is no dark patch behind
+       the progress dots. Deep and moderate on purpose: the brand-blue dots must stay clearly visible. */
+    .mesh-blob:nth-child(10) { --x: 50%; --y: -4%;  --c: rgba(80, 75, 235, 0.17);  --t: 50s; --d: -28s; --dx: 6vw;   --dy: 6vh;   --s: 1.15; }
+
+    /* teal, bottom, between the blue and the cyan: a slight touch of green in the lower half, away
+       from the text */
+    .mesh-blob:nth-child(11) { --x: 32%; --y: 116%; --c: rgba(0, 190, 160, 0.14);  --t: 58s; --d: -17s; --dx: 8vw;   --dy: -9vh;  --s: 1.2; }
+
+    /* a light vignette settles the edges */
+    .mesh::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(4, 6, 14, 0) 65%, rgba(4, 6, 14, 0.25) 100%);
+    }
+
+    /* fine static grain: hides the banding that smooth dark gradients show on 8-bit screens */
+    .mesh::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-blob { animation: none; }
+    }
+
+    /* Background lift: while the avatar is shrunk (the student is working on the content) the whole
+       background gets 10% lighter. A white layer above the mesh / standard glow and below the content. */
+    .bg-lift {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: #fff;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    /* (this white layer is for the plain background; with the mesh on, the mesh's own base is lifted
+       instead, see .mesh below, which keeps the bright areas behind the text from getting brighter) */
+    .avatar-view:has(.canvas.active .avatar.shrunk):not(.mesh-on) .bg-lift { opacity: 0.1; }
+
+    /* Mesh: the near-black base gets 10% lighter (#04060e -> 10% toward white) while the avatar is shrunk */
+    .avatar-view:has(.canvas.active .avatar.shrunk) .mesh { background: #1d1f26; }
+
+    /* A lighter base costs text contrast (answer chips, progress dots), so while the avatar is shrunk
+       the mesh colors calm down: most blobs to 65%, and the three along the top, right behind the
+       progress dots, to 30%. Measured to keep text at 4.5:1 and the dots at 3:1. */
+    .mesh-blob { transition: opacity 0.6s ease; }
+    .avatar-view:has(.canvas.active .avatar.shrunk) .mesh-blob { opacity: 0.65; }
+    .avatar-view:has(.canvas.active .avatar.shrunk) .mesh-blob:nth-child(6),
+    .avatar-view:has(.canvas.active .avatar.shrunk) .mesh-blob:nth-child(7),
+    .avatar-view:has(.canvas.active .avatar.shrunk) .mesh-blob:nth-child(10) { opacity: 0.3; }
 
     /* When the avatar shrinks, the blue glow spreads further up */
     .avatar-view:has(.canvas.active .avatar.shrunk) {
@@ -1044,14 +1220,34 @@
         <a href="#quiz" data-target="0" aria-current="page">Quiz</a>
         <a href="#read-aloud" data-target="1">Reading activity</a>
         <a href="#watch" data-target="2">Watch a video</a>
-        <a href="#end-of-milestone" data-target="3">End of milestone</a>
-        <a href="#lesson-completed" data-target="4">Lesson completed</a>
-        <a href="#end-of-milestone-fade" data-target="5">End of milestone (fade)</a>
-        <a href="#lesson-completed-fade" data-target="6">Lesson completed (fade)</a>
+        <a href="#end-of-milestone" data-target="5">End of milestone</a>
+        <a href="#lesson-completed" data-target="6">Lesson completed</a>
+        <!-- the glide variants stay out of the way until "Show hidden" is clicked -->
+        <a href="#end-of-milestone-glide" data-target="3" hidden>End of milestone (glide)</a>
+        <a href="#lesson-completed-glide" data-target="4" hidden>Lesson completed (glide)</a>
       </nav>
+      <button class="show-hidden" id="show-hidden" type="button" aria-expanded="false">Show hidden</button>
     </header>
 
-    <div class="avatar-view">
+    <div class="avatar-view mesh-on">
+
+      <!-- Ambient mesh gradient background (on by default; the B key toggles it) -->
+      <div class="mesh" aria-hidden="true">
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+        <span class="mesh-blob"></span>
+      </div>
+
+      <!-- Background lift: 10% lighter while the avatar is shrunk (works with or without the mesh) -->
+      <div class="bg-lift" aria-hidden="true"></div>
 
       <!-- Product header: student progress through the unit's components -->
       <header class="product-header">
@@ -1336,6 +1532,13 @@
     function playMilestoneSound() {
       [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => playTone(freq, i * 0.1, 0.22, 1.1));
       [1567.98, 2093, 2637.02].forEach((freq, i) => playTone(freq, 0.42 + i * 0.08, 0.07, 0.6));
+    }
+
+    // A milestone lit by the line of fire: one bright bell note that rises with each milestone passed
+    function playSparkSound(index) {
+      const freq = [523.25, 659.25, 783.99, 1046.5][index] || 1046.5;
+      playTone(freq, 0, 0.2, 0.9);
+      playTone(freq * 2, 0.05, 0.06, 0.5);
     }
 
     // Lesson completed: the same rising arpeggio, then a full held chord and a longer shimmer
@@ -1625,7 +1828,9 @@
     // slate (and back after "Continue learning"): instead of the dots gliding and resizing, the whole
     // timeline fades out where it is, and fades in at its destination. Everything else is identical.
     const FADE_IN = 500;        // the timeline fades in at its destination (matches the .steps transition)
-    const FINALE_PAUSE = 900;   // longer beat before the last milestone is completed
+    const FINALE_PAUSE = 900;   // longer beat before the line of fire sets off
+    const FIRE_TIME = 1800;     // the line of fire runs from the first milestone to the last
+    const FIRE_FADE = 500;      // the fire's trail and head fade out once it arrives
     const FINALE_HOLD = 2200;   // the completed progress is admired before it turns into the button
     const CONVERGE = 800;       // dots converge on the center (the button appears as they vanish)
 
@@ -1792,7 +1997,7 @@
       // pops, the chime plays and sparks fly.
       function reachMilestone() {
         reached += 1;
-        if (lesson) { completeLesson(); return; }
+        if (lesson) { sweepFire(completeLesson); return; }
         renderProgress(true);
         titleEl.textContent = `Milestone ${reached + 1} reached!`;
         root.classList.add('reached');
@@ -1808,8 +2013,96 @@
         later(() => root.classList.add('ready'), CTA_DELAY);
       }
 
-      // Lesson completed: the last milestone (4, the one that was current) becomes completed with the
-      // big celebration and the title appears; after FINALE_HOLD the progress turns into the button.
+      // Lesson completed, part 1: a line of fire runs along the whole progress, from the first
+      // milestone to the last. Every milestone it crosses gets the milestone spark (pop, glow, burst
+      // and a bell note that rises with each one). When it reaches the last milestone, `arrived` runs
+      // and the big finale takes over.
+      function sweepFire(arrived) {
+        if (reduceMotion.matches) { arrived(); return; }
+        const view = avatarView.getBoundingClientRect();
+        const pts = steps.map((step) => {
+          const r = step.querySelector('.step-dot').getBoundingClientRect();
+          return { x: r.left - view.left + r.width / 2, y: r.top - view.top + r.height / 2 };
+        });
+        const first = pts[0];
+        const len = pts[pts.length - 1].x - first.x;
+        const total = FIRE_TIME + FIRE_FADE;
+        const rand = ([min, max]) => min + Math.random() * (max - min);
+        const run = { duration: FIRE_TIME, easing: 'linear', fill: 'forwards' };
+
+        // the glowing line that lights up behind the head
+        const trail = document.createElement('span');
+        trail.className = 'fire-trail';
+        trail.style.width = `${len}px`;
+        sparksLayer.append(trail);
+        const at = `translate(${first.x}px, ${first.y - 4}px)`;
+        animations.push(trail.animate(
+          [{ transform: `${at} scaleX(0)` }, { transform: `${at} scaleX(1)` }], run));
+        const trailFade = trail.animate(
+          [{ opacity: 1 }, { opacity: 1, offset: FIRE_TIME / total }, { opacity: 0 }],
+          { duration: total, fill: 'forwards' });
+        trailFade.onfinish = () => trail.remove();
+        animations.push(trailFade);
+
+        // the head: a white-hot flickering core that leads the line
+        const head = document.createElement('span');
+        head.className = 'fire-head';
+        sparksLayer.append(head);
+        animations.push(head.animate(
+          [
+            { transform: `translate(${first.x - 18}px, ${first.y - 18}px)` },
+            { transform: `translate(${first.x + len - 18}px, ${first.y - 18}px)` },
+          ], run));
+        const headFade = head.animate(
+          [
+            { opacity: 0 },
+            { opacity: 1, offset: 150 / total },
+            { opacity: 1, offset: FIRE_TIME / total },
+            { opacity: 0 },
+          ],
+          { duration: total, fill: 'forwards' });
+        headFade.onfinish = () => head.remove();
+        animations.push(headFade);
+
+        // embers rising from the line as the head passes
+        const colors = ['#ffffff', '#9cc9ff', '#4da0ff', '#ffd666'];
+        const embers = 36;
+        for (let i = 0; i < embers; i++) {
+          const frac = i / (embers - 1);
+          const size = rand([3, 7]);
+          const x = first.x + frac * len + rand([-8, 8]) - size / 2;
+          const y = first.y + rand([-5, 5]) - size / 2;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const ember = document.createElement('span');
+          ember.className = 'spark';
+          ember.style.cssText = `width:${size}px;height:${size}px;background:${color};box-shadow:0 0 8px 2px ${color};opacity:0`;
+          sparksLayer.append(ember);
+          const a = ember.animate(
+            [
+              { transform: `translate(${x}px, ${y}px) scale(1)`, opacity: 1 },
+              { transform: `translate(${x + rand([-14, 14])}px, ${y - rand([18, 48])}px) scale(0.2)`, opacity: 0 },
+            ],
+            { duration: rand([500, 900]), delay: frac * FIRE_TIME, easing: 'ease-out', fill: 'forwards' }
+          );
+          a.onfinish = () => ember.remove();
+          animations.push(a);
+        }
+
+        // each milestone lights up the moment the head crosses it; the last one is the finale
+        pts.forEach((pt, i) => {
+          const hit = ((pt.x - first.x) / len) * FIRE_TIME;
+          if (i === pts.length - 1) { later(arrived, hit); return; }
+          later(() => {
+            const step = steps[i];
+            step.classList.add('celebrate');
+            playSparkSound(i);
+            burstSparks(step.querySelector('.step-dot'));
+          }, hit);
+        });
+      }
+
+      // Lesson completed, part 2: the last milestone (4, the one that was current) becomes completed
+      // with the big celebration and the title appears; after FINALE_HOLD the progress turns into the button.
       function completeLesson() {
         renderProgress();
         root.classList.add('reached');
@@ -1956,6 +2249,7 @@
       milestoneActivity(canvases[6]),
     ];
     const navLinks = [...document.querySelectorAll('.site-nav a')];
+    const targetOf = (link) => Number(link.dataset.target); // which activity a tab opens
     let current = 0;
 
     // Every navigation (including clicking the tab you're already on) restarts the activity
@@ -1968,19 +2262,36 @@
       renderProgress();
       activities[current].reset();
       canvases[current].classList.add('active');
-      navLinks.forEach((link, i) => {
-        if (i === current) link.setAttribute('aria-current', 'page');
+      navLinks.forEach((link) => {
+        if (targetOf(link) === current) link.setAttribute('aria-current', 'page');
         else link.removeAttribute('aria-current');
       });
       activities[current].enter();
       activities[current].start(); // links and Space are user gestures, so sound is allowed
     }
 
-    navLinks.forEach((link, i) => {
+    navLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        goTo(i);
+        goTo(targetOf(link));
       });
+    });
+
+    // Space steps through the tabs that are showing, in tab-bar order (-1: this is the last one)
+    function nextTarget() {
+      const from = navLinks.findIndex((link) => targetOf(link) === current);
+      const next = navLinks.slice(from + 1).find((link) => !link.hidden);
+      return next ? targetOf(next) : -1;
+    }
+
+    // "Show hidden" reveals the tabs that start out hidden (and hides them again)
+    const hiddenLinks = navLinks.filter((link) => link.hidden);
+    const showHiddenButton = document.getElementById('show-hidden');
+    showHiddenButton.addEventListener('click', () => {
+      const show = showHiddenButton.getAttribute('aria-expanded') !== 'true';
+      hiddenLinks.forEach((link) => { link.hidden = !show; });
+      showHiddenButton.setAttribute('aria-expanded', String(show));
+      showHiddenButton.textContent = show ? 'Hide hidden' : 'Show hidden';
     });
 
     renderProgress();
@@ -2010,11 +2321,19 @@
       if (e.repeat) return;
       if (!demoStarted) { startDemo(); return; }
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      goTo(current + 1);
+      goTo(nextTarget());
     });
     // Some browsers fire a button's click on Space keyup
     document.addEventListener('keyup', (e) => {
       if (e.code === 'Space' && !spaceIsNative()) e.preventDefault();
+    });
+
+    // The ambient mesh gradient background is on by default; B turns it off and on again, on any tab
+    // (ignored with Cmd/Ctrl/Alt held, so browser shortcuts like Cmd+B keep working)
+    const avatarViewEl = document.querySelector('.avatar-view');
+    document.addEventListener('keydown', (e) => {
+      if (e.code !== 'KeyB' || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      avatarViewEl.classList.toggle('mesh-on');
     });
   </script>
 </body>
