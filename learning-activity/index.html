@@ -23,6 +23,8 @@
       --primary-text-contrast: #fff;
       --danger: #ca1c2d;
       --danger-text-contrast: #fff;
+      --success: #23803a;
+      --success-text-contrast: #fff;
       --roundness-1: 8px;
       --roundness-2: 8px;
       --roundness-3: 16px;
@@ -117,7 +119,8 @@
       top: 0;
       left: 0;
       right: 0;
-      z-index: 1;
+      /* above the milestone card, so dots gliding back to the top bar are never covered by it */
+      z-index: 3;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -140,18 +143,28 @@
     /* every milestone after the first brings its own connector, so the line segments share the width equally */
     .step + .step { flex: 1 1 0; }
 
-    /* connector to the previous milestone: fills once that milestone is completed */
+    /* connector to the previous milestone: fills (animated) once that milestone is completed */
+    @property --fill {
+      syntax: '<percentage>';
+      inherits: false;
+      initial-value: 0%;
+    }
+
     .step + .step::before {
+      --fill: 0%;
       content: "";
       flex: 1 1 0;
       height: 8px;
       margin: 0 8px;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      transition: background 0.3s ease;
+      background: linear-gradient(to right, var(--primary) var(--fill), rgba(255, 255, 255, 0.1) var(--fill));
+      transition: --fill 0.7s ease, opacity 0.3s ease;
     }
 
-    .step.done + .step::before { background: var(--primary); }
+    .step.done + .step::before { --fill: 100%; }
+
+    /* connectors fade away while the timeline relocates, then fade back in */
+    .steps.lines-hidden .step + .step::before { opacity: 0; }
 
     .step-dot {
       display: flex;
@@ -183,6 +196,50 @@
       background: var(--primary);
       box-shadow: none;
       color: var(--primary-text-contrast);
+    }
+
+    /* milestone just activated: the dot pops and keeps a soft glow (plus its blue ring while current) */
+    .step.celebrate .step-dot {
+      box-shadow: 0 0 20px 2px rgba(0, 110, 250, 0.55);
+      animation: milestone-pop 0.7s ease-out;
+    }
+
+    .step.current.celebrate .step-dot {
+      box-shadow: inset 0 0 0 2px var(--primary), 0 0 20px 2px rgba(0, 110, 250, 0.55);
+    }
+
+    @keyframes milestone-pop {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .step.celebrate .step-dot { animation: none; }
+    }
+
+    /* Sparks layer: particles are created by script around the dot that just became active */
+    .sparks {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .spark, .spark-ring {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .spark-ring {
+      width: 32px;
+      height: 32px;
+      border: 2px solid #7ab8ff;
+      box-shadow: 0 0 16px rgba(0, 110, 250, 0.8);
     }
 
     .sr-only {
@@ -307,27 +364,10 @@
 
     .read-button > span { position: relative; text-box: trim-both cap alphabetic; }
 
-    /* "Done reading": subtle white breathing overlay on the blue background */
-    .read-button.breathing { position: relative; overflow: hidden; }
-
-    .read-button.breathing::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: #fff;
-      opacity: 0;
-      pointer-events: none;
-      animation: breathe 3s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0; }
-      50%      { opacity: 0.4; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .read-button.breathing::before { animation: none; opacity: 0.2; }
+    /* "Done reading": the button turns green (it also carries the animated .outlined ring) */
+    .read-button.finish {
+      background: var(--success);
+      color: var(--success-text-contrast);
     }
 
     /* "Read again": same look as the avatar's "Need help?" button */
@@ -749,6 +789,102 @@
       opacity: 0;
     }
 
+    /* Activity 4: end of milestone. The avatar starts alone and centered; once she is done the card
+       slides in on her left (same side-by-side layout as the other activities) and the timeline
+       moves into it. Collapsed like the video card: the negative margin cancels the canvas gap. */
+    .canvas.milestone { padding-inline: 32px; }
+
+    .milestone-card {
+      position: relative;
+      z-index: 1; /* above the avatar, so dots gliding in from the top bar are never covered */
+      flex-shrink: 0;
+      width: 0;
+      height: 100%;
+      margin-right: -16px;
+      overflow: clip;
+      border-radius: var(--roundness-3);
+      background: rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transition: width 0.6s ease, margin-right 0.6s ease, opacity 0.6s ease, visibility 0.6s;
+    }
+
+    .canvas.milestone.side .milestone-card {
+      width: 924px;
+      margin-right: 0;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* once open, nothing needs clipping any more */
+    .canvas.milestone.settled .milestone-card { overflow: visible; }
+
+    /* fixed width so the content is clipped, not reflowed, while the card opens */
+    .milestone-card-inner {
+      width: 924px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 64px;
+      padding: 48px;
+    }
+
+    .milestone-card .title h1 { font-size: 48px; }
+
+    /* the title is revealed at the moment the milestone is reached */
+    .milestone-title {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .canvas.milestone.reached .milestone-title { opacity: 1; transform: none; }
+
+    /* the timeline element is moved here from the top bar */
+    /* keeps its height when the timeline leaves, so the title and button don't jump */
+    .milestone-timeline { width: 100%; min-height: 32px; }
+    .milestone-timeline .steps { width: 100%; min-width: 0; }
+
+    /* "Continue learning": the largest CTA of the system (56px), revealed once the new milestone is
+       active. The button is hidden (not just transparent) so it can't be focused or clicked early. */
+    .milestone-cta {
+      display: flex;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+    }
+
+    .canvas.milestone.ready .milestone-cta {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    /* subtle white outline that breathes around a primary button (CTA buttons and the reading button) */
+    .cta-button.outlined, .read-button.outlined { position: relative; }
+
+    .cta-button.outlined::after, .read-button.outlined::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border: 2px solid var(--w-100);
+      border-radius: calc(var(--roundness-2) + 6px);
+      pointer-events: none;
+      animation: cta-outline 2.4s ease-in-out infinite;
+    }
+
+    @keyframes cta-outline {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50%      { opacity: 0.85; transform: scale(1.03); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .milestone-title, .milestone-cta { transform: none; }
+      .cta-button.outlined::after, .read-button.outlined::after { animation: none; opacity: 0.6; }
+    }
+
     /* Resume pill: takes the mic pill's place while watching */
     .resume-pill {
       position: absolute;
@@ -843,6 +979,7 @@
         <a href="#quiz" data-target="0" aria-current="page">Quiz</a>
         <a href="#read-aloud" data-target="1">Reading activity</a>
         <a href="#watch" data-target="2">Watch a video</a>
+        <a href="#end-of-milestone" data-target="3">End of milestone</a>
       </nav>
     </header>
 
@@ -924,7 +1061,7 @@
             </div>
           </div>
 
-          <button class="read-button" type="button"><span>Start reading</span></button>
+          <button class="read-button outlined" type="button"><span>Start reading</span></button>
         </section>
 
         <div class="avatar">
@@ -942,6 +1079,29 @@
 
         <div class="avatar">
           <video src="assets/Video presentation.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <!-- Activity 4: end of milestone -->
+      <div class="canvas milestone" data-activity="milestone">
+        <section class="milestone-card">
+          <div class="milestone-card-inner">
+            <div class="title milestone-title" aria-live="polite">
+              <p class="eyebrow">Congratulations</p>
+              <h1>Milestone 2 reached!</h1>
+            </div>
+            <div class="milestone-timeline"></div>
+            <div class="milestone-cta">
+              <button class="cta-button outlined" id="continue-learning" type="button">
+                <span>Continue learning</span>
+                <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/milestone.mp4" playsinline preload="auto"></video>
         </div>
       </div>
 
@@ -973,6 +1133,9 @@
         </div>
       </div>
 
+      <!-- Sparks burst around the milestone that just became active -->
+      <div class="sparks" id="sparks" aria-hidden="true"></div>
+
     </div>
   </div>
 
@@ -996,24 +1159,40 @@
         : state === 'listening' ? 'Listening...' : 'Talk to interrupt';
     }
 
-    // Short two-note "go ahead, I'm listening" chime, synthesized so no audio file is needed
+    // Sounds are synthesized so no audio file is needed
     let audioCtx;
-    function playStartSound() {
+    function getAudioCtx() {
       audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      const t0 = audioCtx.currentTime;
-      [[660, 0], [990, 0.12]].forEach(([freq, offset]) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0, t0 + offset);
-        gain.gain.linearRampToValueAtTime(0.25, t0 + offset + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, t0 + offset + 0.4);
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start(t0 + offset);
-        osc.stop(t0 + offset + 0.45);
-      });
+      return audioCtx;
+    }
+
+    // One soft sine note: quick attack, exponential decay over `length` seconds
+    function playTone(freq, offset, peak = 0.25, length = 0.4) {
+      const ctx = getAudioCtx();
+      const t = ctx.currentTime + offset;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(peak, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + length);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + length + 0.05);
+    }
+
+    // Short two-note "go ahead, I'm listening" chime
+    function playStartSound() {
+      playTone(660, 0);
+      playTone(990, 0.12);
+    }
+
+    // Milestone reached: bright rising arpeggio (C major) that ends in a high shimmer
+    function playMilestoneSound() {
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => playTone(freq, i * 0.1, 0.22, 1.1));
+      [1567.98, 2093, 2637.02].forEach((freq, i) => playTone(freq, 0.42 + i * 0.08, 0.07, 0.6));
     }
 
     // Click sound played when the user finishes reading
@@ -1034,7 +1213,6 @@
           confirmButton.disabled = false;
         });
       });
-      confirmButton.addEventListener('click', completeCurrent);
 
       // When the avatar video ends, shrink the avatar and reveal the "Ask for a hint" button
       const avatar = root.querySelector('.avatar');
@@ -1119,17 +1297,16 @@
           helpButton.tabIndex = 0;
           readLabel.textContent = 'Done reading';
           readButton.classList.remove('again');
-          readButton.classList.add('breathing');
+          readButton.classList.add('outlined', 'finish');
           setMic('listening');
           playStartSound();
         } else if (state === 'reading') {
           state = 'done';
-          readButton.classList.remove('breathing');
+          readButton.classList.remove('outlined', 'finish');
           readButton.classList.add('again');
           readLabel.textContent = 'Read again';
           setMic('idle');
           playDoneSound();
-          completeCurrent();
           // The avatar expands back to full size and reacts ("Need help?" only exists while shrunk)
           helpPlaying = false;
           avatar.classList.remove('hint-playing', 'shrunk');
@@ -1168,7 +1345,8 @@
           avatar.classList.remove('shrunk', 'hint-playing');
           helpButton.tabIndex = -1;
           readLabel.textContent = 'Start reading';
-          readButton.classList.remove('again', 'breathing');
+          readButton.classList.remove('again', 'finish');
+          readButton.classList.add('outlined');
           video.pause();
           setVideo(helpSrc);
           video.currentTime = 0;
@@ -1239,7 +1417,6 @@
         if (player) player.pause();
         state = 'done';
         render();
-        completeCurrent();
         avatarVideo.src = 'assets/post -video.mp4';
         avatarVideo.play();
       });
@@ -1271,45 +1448,264 @@
       };
     }
 
+    // ---- Activity 4: end of milestone --------------------------------------------
+    // The avatar appears alone and starts talking right away. ANIMATION_DELAY after her video starts
+    // playing (she keeps talking meanwhile), a card opens on her left (side-by-side, like the other
+    // activities) and the timeline glides from the top bar into it. Milestone 2 is completed (the
+    // line to milestone 3 fills and the title appears), then milestone 3 becomes active: its dot
+    // pops, a chime plays and sparks fly, and "Continue learning" appears. Clicking it sends the
+    // timeline back to the top bar, the card collapses, and the avatar, front and center again,
+    // plays the next video.
+    const NEXT_VIDEO = 'assets/post -video.mp4'; // placeholder until the real "continue learning" clip arrives
+    const ANIMATION_DELAY = 1000; // ms between her video starting and the animation starting
+    const CTA_DELAY = 700;      // beat after the new milestone activates before the button appears
+    const CARD_CLOSE = 600;     // the card collapses (matches its width transition) and the avatar recenters
+    const LINES_FADE = 350;     // connectors fade out before the card opens
+    const CARD_OPEN = 650;      // the card slides in and the avatar makes room
+    const MOVE_DURATION = 900;  // dots glide from the top bar into the card
+    const REACH_PAUSE = 400;    // beat between arriving and completing the milestone
+    const LINE_FILL = 650;      // the line to the next milestone fills (0.7s transition) before it activates
+
+    function milestoneActivity(root) {
+      const avatarView = document.querySelector('.avatar-view');
+      const stepsEl = document.querySelector('.steps');
+      const header = stepsEl.parentElement; // the timeline's home in the top bar
+      const timelineSlot = root.querySelector('.milestone-timeline');
+      const titleEl = root.querySelector('.milestone-title h1');
+      const sparksLayer = document.getElementById('sparks');
+      const video = root.querySelector('.avatar video');
+      const continueButton = root.querySelector('#continue-learning');
+      const introSrc = video.getAttribute('src');
+      const timers = [];
+      const animations = [];
+      // idle -> starting (video requested) -> talking (video playing) -> celebrating (animation)
+      //      -> returning (after "Continue learning") -> continued (next video playing)
+      let phase = 'idle';
+      let started = false;
+
+      const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+
+      function clearAll() {
+        timers.splice(0).forEach(clearTimeout);
+        animations.splice(0).forEach((a) => a.cancel());
+        sparksLayer.replaceChildren();
+        root.classList.remove('side', 'settled', 'reached', 'ready');
+        if (stepsEl.parentElement !== header) header.append(stepsEl);
+        stepsEl.classList.remove('lines-hidden');
+        steps.forEach((step) => step.classList.remove('celebrate'));
+      }
+
+      // Open the card, then move the timeline into it. Each dot starts at its old position in the
+      // top bar and glides to the new one (FLIP); connectors stay hidden until the dots arrive.
+      function moveTimelineIntoCard() {
+        stepsEl.classList.add('lines-hidden');
+        later(() => {
+          root.classList.add('side');
+          later(() => {
+            root.classList.add('settled'); // card stops clipping so the dots can arrive from the top bar
+            const dots = steps.map((step) => step.querySelector('.step-dot'));
+            const before = dots.map((dot) => dot.getBoundingClientRect());
+            timelineSlot.append(stepsEl);
+            dots.forEach((dot, i) => {
+              const after = dot.getBoundingClientRect();
+              animations.push(dot.animate(
+                [
+                  { transform: `translate(${before[i].left - after.left}px, ${before[i].top - after.top}px)` },
+                  { transform: 'none' },
+                ],
+                { duration: MOVE_DURATION, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+              ));
+            });
+            later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
+          }, CARD_OPEN);
+        }, LINES_FADE);
+      }
+
+      function burstSparks(dot) {
+        if (reduceMotion.matches) return;
+        const view = avatarView.getBoundingClientRect();
+        const rect = dot.getBoundingClientRect();
+        const cx = rect.left - view.left + rect.width / 2;
+        const cy = rect.top - view.top + rect.height / 2;
+
+        // two expanding rings
+        [0, 150].forEach((delay) => {
+          const ring = document.createElement('span');
+          ring.className = 'spark-ring';
+          sparksLayer.append(ring);
+          const a = ring.animate(
+            [
+              { transform: `translate(${cx - 16}px, ${cy - 16}px) scale(1)`, opacity: 0.9 },
+              { transform: `translate(${cx - 16}px, ${cy - 16}px) scale(4)`, opacity: 0 },
+            ],
+            { duration: 800, delay, easing: 'ease-out', fill: 'both' }
+          );
+          a.onfinish = () => ring.remove();
+          animations.push(a);
+        });
+
+        // flying sparks
+        const colors = ['#ffffff', '#9cc9ff', '#4da0ff', '#ffd666'];
+        const count = 40;
+        for (let i = 0; i < count; i++) {
+          const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3;
+          const dist = 70 + Math.random() * 90;
+          const size = 5 + Math.random() * 5;
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const x0 = cx - size / 2;
+          const y0 = cy - size / 2;
+          const spark = document.createElement('span');
+          spark.className = 'spark';
+          spark.style.cssText = `width:${size}px;height:${size}px;background:${color};box-shadow:0 0 10px 2px ${color}`;
+          sparksLayer.append(spark);
+          const a = spark.animate(
+            [
+              { transform: `translate(${x0}px, ${y0}px) scale(1)`, opacity: 1 },
+              // stay bright for most of the flight, then fade as they fall slightly (they have weight)
+              { transform: `translate(${x0 + Math.cos(angle) * dist * 0.75}px, ${y0 + Math.sin(angle) * dist * 0.75}px) scale(0.9)`, opacity: 1, offset: 0.55 },
+              { transform: `translate(${x0 + Math.cos(angle) * dist}px, ${y0 + Math.sin(angle) * dist + 18}px) scale(0.2)`, opacity: 0 },
+            ],
+            { duration: 1000 + Math.random() * 600, delay: Math.random() * 100, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)', fill: 'both' }
+          );
+          a.onfinish = () => spark.remove();
+          animations.push(a);
+        }
+      }
+
+      // Milestone 1 is completed: its dot is already blue, the line to milestone 2 fills and the
+      // title appears. Once the line arrives, milestone 2 becomes active: the dot pops, the chime
+      // plays and sparks fly.
+      function reachMilestone() {
+        reached = BASE_REACHED + 1;
+        renderProgress(true);
+        titleEl.textContent = `Milestone ${reached + 1} reached!`;
+        root.classList.add('reached');
+        later(activateNextMilestone, LINE_FILL);
+      }
+
+      function activateNextMilestone() {
+        renderProgress();
+        const step = steps[reached];
+        step.classList.add('celebrate');
+        playMilestoneSound();
+        burstSparks(step.querySelector('.step-dot'));
+        later(() => root.classList.add('ready'), CTA_DELAY);
+      }
+
+      // "Continue learning": the title and button fade, the connectors hide, then the dots glide back
+      // up to the top bar while the card collapses and the avatar slides back to the center. Once
+      // she is centered she plays the next video.
+      function continueLearning() {
+        if (phase !== 'celebrating') return;
+        phase = 'returning';
+        root.classList.remove('ready', 'reached');
+        steps.forEach((step) => step.classList.remove('celebrate'));
+        video.pause();
+        stepsEl.classList.add('lines-hidden');
+        later(() => {
+          const dots = steps.map((step) => step.querySelector('.step-dot'));
+          const before = dots.map((dot) => dot.getBoundingClientRect());
+          header.append(stepsEl);
+          root.classList.remove('settled', 'side'); // the card clips again while it collapses
+          dots.forEach((dot, i) => {
+            const after = dot.getBoundingClientRect();
+            animations.push(dot.animate(
+              [
+                { transform: `translate(${before[i].left - after.left}px, ${before[i].top - after.top}px)` },
+                { transform: 'none' },
+              ],
+              { duration: MOVE_DURATION, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+            ));
+          });
+          later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
+          later(() => {
+            phase = 'continued';
+            video.src = NEXT_VIDEO;
+            video.currentTime = 0;
+            video.play().catch((e) => console.error(e.message));
+          }, CARD_CLOSE);
+        }, LINES_FADE);
+      }
+
+      continueButton.addEventListener('click', continueLearning);
+
+      function startAnimation() {
+        phase = 'celebrating';
+        moveTimelineIntoCard();
+        later(reachMilestone, LINES_FADE + CARD_OPEN + MOVE_DURATION + REACH_PAUSE);
+      }
+
+      // The delay is measured from the moment the video really starts playing (not from the click),
+      // so buffering can't shift the animation relative to what she says
+      video.addEventListener('playing', () => {
+        if (phase !== 'starting') return;
+        phase = 'talking';
+        later(startAnimation, ANIMATION_DELAY);
+      });
+
+      return {
+        enter() { setMic('idle'); },
+        start() {
+          if (started) return;
+          started = true;
+          phase = 'starting';
+          video.play().catch((e) => {
+            console.error(e.message);
+            // Autoplay refused: still run the animation so the milestone isn't lost. (Leaving the tab
+            // pauses the video, which rejects play() with an AbortError; that must not trigger it.)
+            if (e.name === 'NotAllowedError' && phase === 'starting') {
+              phase = 'talking';
+              later(startAnimation, ANIMATION_DELAY);
+            }
+          });
+        },
+        leave() { clearAll(); phase = 'idle'; video.pause(); },
+        reset() {
+          clearAll();
+          started = false;
+          phase = 'idle';
+          video.pause();
+          if (video.getAttribute('src') !== introSrc) video.src = introSrc;
+          video.currentTime = 0;
+        },
+      };
+    }
+
+    // ---- Product header: student progress through the unit's milestones ----------
+    // A milestone spans several learning activities: the quiz, the reading activity and the video
+    // all belong to milestone 2, which stays the current one throughout. The "End of milestone"
+    // activity completes it and moves on to milestone 3. BASE_REACHED is how many milestones were
+    // already complete when the demo starts. Navigating always resets the bar to match what the
+    // demo is showing.
+    const BASE_REACHED = 1;
+    const steps = [...document.querySelectorAll('.step')];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reached = BASE_REACHED; // milestones completed so far; the next one is in progress
+
+    // holdNext: show the milestone as completed but don't activate the next one yet
+    function renderProgress(holdNext = false) {
+      steps.forEach((step, i) => {
+        const done = i < reached;
+        const isCurrent = i === reached && !holdNext;
+        step.classList.toggle('done', done);
+        step.classList.toggle('current', isCurrent);
+        if (isCurrent) step.setAttribute('aria-current', 'step');
+        else step.removeAttribute('aria-current');
+        step.querySelector('.sr-only').textContent =
+          `Milestone ${i + 1}, ${done ? 'reached' : isCurrent ? 'in progress' : 'not started'}`;
+      });
+    }
+
     // ---- Activity flow: header links (or Space) switch activities --------------------
     const canvases = [...document.querySelectorAll('.canvas')];
     const activities = [
       quizActivity(canvases[0]),
       readAloudActivity(canvases[1]),
       watchActivity(canvases[2]),
+      milestoneActivity(canvases[3]),
     ];
     const navLinks = [...document.querySelectorAll('.site-nav a')];
     let current = 0;
-
-    // ---- Product header: student progress through the unit's components ----------
-    // The student has already finished PRIOR_STEPS components before the demo's activities, so the
-    // first activity is step 2. An activity's milestone is completed when it is finished (quiz
-    // answer confirmed, reading done, video watched). Jumping to an activity treats the earlier
-    // ones as already done and clears it and everything after it, so the bar always matches
-    // what the demo is showing.
-    const PRIOR_STEPS = 1;
-    const steps = [...document.querySelectorAll('.step')];
-    const completed = new Set(); // activity indices
-
-    function renderProgress() {
-      steps.forEach((step, i) => {
-        const activity = i - PRIOR_STEPS;
-        const done = activity < 0 || completed.has(activity);
-        const isCurrent = activity === current && !done;
-        const name = activity < 0 ? 'Previous component' : navLinks[activity].textContent;
-        step.classList.toggle('done', done);
-        step.classList.toggle('current', isCurrent);
-        if (isCurrent) step.setAttribute('aria-current', 'step');
-        else step.removeAttribute('aria-current');
-        step.querySelector('.sr-only').textContent =
-          `${name}, ${done ? 'completed' : isCurrent ? 'in progress' : 'not started'}`;
-      });
-    }
-
-    function completeCurrent() {
-      completed.add(current);
-      renderProgress();
-    }
 
     // Every navigation (including clicking the tab you're already on) restarts the activity
     function goTo(index) {
@@ -1317,7 +1713,7 @@
       activities[current].leave();
       canvases[current].classList.remove('active');
       current = index;
-      activities.forEach((_, i) => (i < current ? completed.add(i) : completed.delete(i)));
+      reached = BASE_REACHED;
       renderProgress();
       activities[current].reset();
       canvases[current].classList.add('active');
