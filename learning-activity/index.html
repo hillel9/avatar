@@ -140,6 +140,15 @@
       margin: 0;
       padding: 0;
       list-style: none;
+      /* fade in (used by the "fade" variants of the milestone / lesson tabs) */
+      transition: opacity 0.5s ease;
+    }
+
+    /* the whole timeline faded out: it disappears in one place and reappears in another, without
+       gliding between them (the faster fade-out finishes before the card starts to open) */
+    .steps.faded {
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .step { display: flex; align-items: center; }
@@ -219,14 +228,28 @@
       box-shadow: inset 0 0 0 2px var(--primary), 0 0 20px 2px rgba(0, 110, 250, 0.55);
     }
 
+    /* lesson completed: the last milestone gets a much bigger pop and glow */
+    .step.finale .step-dot {
+      box-shadow: 0 0 48px 10px rgba(0, 110, 250, 0.8);
+      animation: finale-pop 1.2s ease-out;
+    }
+
     @keyframes milestone-pop {
       0%   { transform: scale(1); }
       35%  { transform: scale(1.5); }
       100% { transform: scale(1); }
     }
 
+    @keyframes finale-pop {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(2); }
+      45%  { transform: scale(1.3); }
+      65%  { transform: scale(1.6); }
+      100% { transform: scale(1); }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .step.celebrate .step-dot { animation: none; }
+      .step.celebrate .step-dot, .step.finale .step-dot { animation: none; }
     }
 
     /* Sparks layer: particles are created by script around the dot that just became active */
@@ -238,12 +261,19 @@
       pointer-events: none;
     }
 
-    .spark, .spark-ring {
+    .spark, .spark-ring, .spark-glow {
       position: absolute;
       left: 0;
       top: 0;
       border-radius: 50%;
       pointer-events: none;
+    }
+
+    /* soft flash of light behind the dot (lesson completed only) */
+    .spark-glow {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(156, 201, 255, 0.5) 0%, rgba(0, 110, 250, 0.3) 35%, rgba(0, 110, 250, 0) 70%);
     }
 
     /* sized to the dot by script */
@@ -899,8 +929,24 @@
       50%      { opacity: 0.85; transform: scale(1.03); }
     }
 
+    /* Lesson completed: the "Next lesson" button takes the timeline's place, so both share one cell
+       and the button grows in as the dots disappear */
+    .milestone-stage {
+      display: grid;
+      width: 100%;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .milestone-stage > * { grid-area: 1 / 1; }
+
+    .canvas.lesson .milestone-cta { transform: scale(0.85); }
+
+    /* once the dots have converged the (now empty) timeline is hidden; its cell keeps its size */
+    .canvas.lesson.consumed .milestone-timeline { visibility: hidden; }
+
     @media (prefers-reduced-motion: reduce) {
-      .milestone-title, .milestone-cta { transform: none; }
+      .milestone-title, .milestone-cta, .canvas.lesson .milestone-cta { transform: none; }
       .cta-button.outlined::after, .read-button.outlined::after { animation: none; opacity: 0.6; }
     }
 
@@ -999,6 +1045,9 @@
         <a href="#read-aloud" data-target="1">Reading activity</a>
         <a href="#watch" data-target="2">Watch a video</a>
         <a href="#end-of-milestone" data-target="3">End of milestone</a>
+        <a href="#lesson-completed" data-target="4">Lesson completed</a>
+        <a href="#end-of-milestone-fade" data-target="5">End of milestone (fade)</a>
+        <a href="#lesson-completed-fade" data-target="6">Lesson completed (fade)</a>
       </nav>
     </header>
 
@@ -1124,6 +1173,81 @@
         </div>
       </div>
 
+      <!-- Activity 5: lesson completed (same flow as the milestone, with a bigger celebration; the
+           progress turns into the "Next lesson" button; placeholder clip until the real one arrives) -->
+      <div class="canvas milestone lesson" data-activity="lesson">
+        <section class="milestone-card">
+          <div class="milestone-card-inner">
+            <div class="title milestone-title" aria-live="polite">
+              <p class="eyebrow">Congratulations</p>
+              <h1>Lesson completed!</h1>
+            </div>
+            <div class="milestone-stage">
+              <div class="milestone-timeline"></div>
+              <div class="milestone-cta">
+                <button class="cta-button outlined" type="button">
+                  <span>Next lesson</span>
+                  <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/milestone.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <!-- Activity 6: end of milestone, "fade" variant. Same as activity 4, but the progress fades out
+           at the top and fades in inside the slate instead of gliding there. -->
+      <div class="canvas milestone crossfade" data-activity="milestone-fade">
+        <section class="milestone-card">
+          <div class="milestone-card-inner">
+            <div class="title milestone-title" aria-live="polite">
+              <p class="eyebrow">Congratulations</p>
+              <h1>Milestone 3 reached!</h1>
+            </div>
+            <div class="milestone-timeline"></div>
+            <div class="milestone-cta">
+              <button class="cta-button outlined" type="button">
+                <span>Continue learning</span>
+                <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/milestone.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <!-- Activity 7: lesson completed, "fade" variant. Same as activity 5, with the fade transition. -->
+      <div class="canvas milestone lesson crossfade" data-activity="lesson-fade">
+        <section class="milestone-card">
+          <div class="milestone-card-inner">
+            <div class="title milestone-title" aria-live="polite">
+              <p class="eyebrow">Congratulations</p>
+              <h1>Lesson completed!</h1>
+            </div>
+            <div class="milestone-stage">
+              <div class="milestone-timeline"></div>
+              <div class="milestone-cta">
+                <button class="cta-button outlined" type="button">
+                  <span>Next lesson</span>
+                  <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/milestone.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
       <div class="bottom-bar">
         <div class="indicators">
           <div class="message"><p id="mic-message">Talk to interrupt</p></div>
@@ -1212,6 +1336,13 @@
     function playMilestoneSound() {
       [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => playTone(freq, i * 0.1, 0.22, 1.1));
       [1567.98, 2093, 2637.02].forEach((freq, i) => playTone(freq, 0.42 + i * 0.08, 0.07, 0.6));
+    }
+
+    // Lesson completed: the same rising arpeggio, then a full held chord and a longer shimmer
+    function playLessonSound() {
+      playMilestoneSound();
+      [523.25, 659.25, 783.99, 1046.5, 1318.51].forEach((freq) => playTone(freq, 0.5, 0.14, 1.9));
+      [2093, 2637.02, 3135.96, 4186].forEach((freq, i) => playTone(freq, 0.55 + i * 0.09, 0.05, 0.9));
     }
 
     // Click sound played when the user finishes reading
@@ -1485,7 +1616,22 @@
     const REACH_PAUSE = 400;    // beat between arriving and completing the milestone
     const LINE_FILL = 650;      // the line to the next milestone fills (0.7s transition) before it activates
 
+    // Lesson completed (".lesson" canvas) runs the same flow with a few differences: the progress is
+    // already on its last milestone (4), so the slate completes that one with a much bigger
+    // celebration (longer anticipation beat, bigger sparks, fuller chime), and then, instead of a
+    // "Continue learning" button under the progress, the progress itself turns into a "Next lesson"
+    // button: the dots converge on the center and fade while the button grows in.
+    // The "fade" variants (".crossfade" canvases) swap how the progress gets from the top bar to the
+    // slate (and back after "Continue learning"): instead of the dots gliding and resizing, the whole
+    // timeline fades out where it is, and fades in at its destination. Everything else is identical.
+    const FADE_IN = 500;        // the timeline fades in at its destination (matches the .steps transition)
+    const FINALE_PAUSE = 900;   // longer beat before the last milestone is completed
+    const FINALE_HOLD = 2200;   // the completed progress is admired before it turns into the button
+    const CONVERGE = 800;       // dots converge on the center (the button appears as they vanish)
+
     function milestoneActivity(root) {
+      const lesson = root.classList.contains('lesson');
+      const crossfade = root.classList.contains('crossfade');
       const avatarView = document.querySelector('.avatar-view');
       const stepsEl = document.querySelector('.steps');
       const header = stepsEl.parentElement; // the timeline's home in the top bar
@@ -1493,7 +1639,7 @@
       const titleEl = root.querySelector('.milestone-title h1');
       const sparksLayer = document.getElementById('sparks');
       const video = root.querySelector('.avatar video');
-      const continueButton = root.querySelector('#continue-learning');
+      const continueButton = root.querySelector('.milestone-cta .cta-button');
       const introSrc = video.getAttribute('src');
       const timers = [];
       const animations = [];
@@ -1508,10 +1654,19 @@
         timers.splice(0).forEach(clearTimeout);
         animations.splice(0).forEach((a) => a.cancel());
         sparksLayer.replaceChildren();
-        root.classList.remove('side', 'settled', 'reached', 'ready');
+        root.classList.remove('side', 'settled', 'reached', 'ready', 'consumed');
         if (stepsEl.parentElement !== header) header.append(stepsEl);
-        stepsEl.classList.remove('lines-hidden', 'numbered');
-        steps.forEach((step) => step.classList.remove('celebrate'));
+        stepsEl.classList.remove('lines-hidden', 'numbered', 'faded');
+        steps.forEach((step) => step.classList.remove('celebrate', 'finale'));
+      }
+
+      // Crossfade variant: moves the (already faded out) timeline to `parent` and fades it back in
+      // there, with or without the numbers
+      function fadeTimelineTo(parent, numbered) {
+        parent.append(stepsEl);
+        stepsEl.classList.toggle('numbered', numbered);
+        stepsEl.getBoundingClientRect(); // commit the faded-out state in the new place so the fade-in animates
+        stepsEl.classList.remove('faded');
       }
 
       // Moves the timeline to `parent`. Each dot starts at its old spot and size and glides to the
@@ -1536,14 +1691,16 @@
         });
       }
 
-      // Open the card, then move the timeline into it. Connectors stay hidden until the dots arrive,
-      // and the numbers fade in once they have.
+      // Open the card, then move the timeline into it. Glide variant: connectors stay hidden until
+      // the dots arrive, and the numbers fade in once they have. Fade variant: the timeline fades
+      // out at the top, and fades in (numbers included) inside the open card.
       function moveTimelineIntoCard() {
-        stepsEl.classList.add('lines-hidden');
+        stepsEl.classList.add(crossfade ? 'faded' : 'lines-hidden');
         later(() => {
           root.classList.add('side');
           later(() => {
             root.classList.add('settled'); // card stops clipping so the dots can arrive from the top bar
+            if (crossfade) { fadeTimelineTo(timelineSlot, true); return; }
             glideTimelineTo(timelineSlot);
             later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
             later(() => stepsEl.classList.add('numbered'), MOVE_DURATION);
@@ -1551,16 +1708,41 @@
         }, LINES_FADE);
       }
 
-      function burstSparks(dot) {
+      // `big` is the lesson-completed burst: four rings that travel further, a flash of light behind
+      // the dot, and two waves of many more (and larger) sparks that fly out much further
+      function burstSparks(dot, big = false) {
         if (reduceMotion.matches) return;
         const view = avatarView.getBoundingClientRect();
         const rect = dot.getBoundingClientRect();
         const cx = rect.left - view.left + rect.width / 2;
         const cy = rect.top - view.top + rect.height / 2;
         const half = rect.width / 2;
+        const cfg = big
+          ? { rings: [0, 120, 240, 360], ringScale: 8, ringTime: 1100, waves: [0, 380], count: 90,
+              dist: [120, 340], size: [6, 14], time: [1300, 2300] }
+          : { rings: [0, 150], ringScale: 3.5, ringTime: 800, waves: [0], count: 40,
+              dist: [70, 160], size: [5, 10], time: [1000, 1600] };
+        const rand = ([min, max]) => min + Math.random() * (max - min);
 
-        // two expanding rings
-        [0, 150].forEach((delay) => {
+        if (big) {
+          const glow = document.createElement('span');
+          glow.className = 'spark-glow';
+          sparksLayer.append(glow);
+          const at = `translate(${cx - 200}px, ${cy - 200}px)`;
+          const a = glow.animate(
+            [
+              { transform: `${at} scale(0.2)`, opacity: 0 },
+              { transform: `${at} scale(1)`, opacity: 1, offset: 0.2 },
+              { transform: `${at} scale(1.7)`, opacity: 0 },
+            ],
+            { duration: 1500, easing: 'ease-out', fill: 'both' }
+          );
+          a.onfinish = () => glow.remove();
+          animations.push(a);
+        }
+
+        // expanding rings
+        cfg.rings.forEach((delay) => {
           const ring = document.createElement('span');
           ring.className = 'spark-ring';
           ring.style.width = ring.style.height = `${rect.width}px`;
@@ -1568,9 +1750,9 @@
           const a = ring.animate(
             [
               { transform: `translate(${cx - half}px, ${cy - half}px) scale(1)`, opacity: 0.9 },
-              { transform: `translate(${cx - half}px, ${cy - half}px) scale(3.5)`, opacity: 0 },
+              { transform: `translate(${cx - half}px, ${cy - half}px) scale(${cfg.ringScale})`, opacity: 0 },
             ],
-            { duration: 800, delay, easing: 'ease-out', fill: 'both' }
+            { duration: cfg.ringTime, delay, easing: 'ease-out', fill: 'both' }
           );
           a.onfinish = () => ring.remove();
           animations.push(a);
@@ -1578,37 +1760,39 @@
 
         // flying sparks
         const colors = ['#ffffff', '#9cc9ff', '#4da0ff', '#ffd666'];
-        const count = 40;
-        for (let i = 0; i < count; i++) {
-          const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3;
-          const dist = 70 + Math.random() * 90;
-          const size = 5 + Math.random() * 5;
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          const x0 = cx - size / 2;
-          const y0 = cy - size / 2;
-          const spark = document.createElement('span');
-          spark.className = 'spark';
-          spark.style.cssText = `width:${size}px;height:${size}px;background:${color};box-shadow:0 0 10px 2px ${color}`;
-          sparksLayer.append(spark);
-          const a = spark.animate(
-            [
-              { transform: `translate(${x0}px, ${y0}px) scale(1)`, opacity: 1 },
-              // stay bright for most of the flight, then fade as they fall slightly (they have weight)
-              { transform: `translate(${x0 + Math.cos(angle) * dist * 0.75}px, ${y0 + Math.sin(angle) * dist * 0.75}px) scale(0.9)`, opacity: 1, offset: 0.55 },
-              { transform: `translate(${x0 + Math.cos(angle) * dist}px, ${y0 + Math.sin(angle) * dist + 18}px) scale(0.2)`, opacity: 0 },
-            ],
-            { duration: 1000 + Math.random() * 600, delay: Math.random() * 100, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)', fill: 'both' }
-          );
-          a.onfinish = () => spark.remove();
-          animations.push(a);
-        }
+        cfg.waves.forEach((waveDelay) => {
+          for (let i = 0; i < cfg.count; i++) {
+            const angle = (i / cfg.count) * Math.PI * 2 + Math.random() * 0.3;
+            const dist = rand(cfg.dist);
+            const size = rand(cfg.size);
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const x0 = cx - size / 2;
+            const y0 = cy - size / 2;
+            const spark = document.createElement('span');
+            spark.className = 'spark';
+            spark.style.cssText = `width:${size}px;height:${size}px;background:${color};box-shadow:0 0 10px 2px ${color}`;
+            sparksLayer.append(spark);
+            const a = spark.animate(
+              [
+                { transform: `translate(${x0}px, ${y0}px) scale(1)`, opacity: 1 },
+                // stay bright for most of the flight, then fade as they fall slightly (they have weight)
+                { transform: `translate(${x0 + Math.cos(angle) * dist * 0.75}px, ${y0 + Math.sin(angle) * dist * 0.75}px) scale(0.9)`, opacity: 1, offset: 0.55 },
+                { transform: `translate(${x0 + Math.cos(angle) * dist}px, ${y0 + Math.sin(angle) * dist + 18}px) scale(0.2)`, opacity: 0 },
+              ],
+              { duration: rand(cfg.time), delay: waveDelay + Math.random() * 100, easing: 'cubic-bezier(0.1, 0.7, 0.3, 1)', fill: 'both' }
+            );
+            a.onfinish = () => spark.remove();
+            animations.push(a);
+          }
+        });
       }
 
-      // Milestone 1 is completed: its dot is already blue, the line to milestone 2 fills and the
-      // title appears. Once the line arrives, milestone 2 becomes active: the dot pops, the chime
-      // plays and sparks fly.
+      // The milestone is completed: its dot is already blue, the line to the next milestone fills
+      // and the title appears. Once the line arrives, the next milestone becomes active: the dot
+      // pops, the chime plays and sparks fly.
       function reachMilestone() {
-        reached = BASE_REACHED + 1;
+        reached += 1;
+        if (lesson) { completeLesson(); return; }
         renderProgress(true);
         titleEl.textContent = `Milestone ${reached + 1} reached!`;
         root.classList.add('reached');
@@ -1624,6 +1808,39 @@
         later(() => root.classList.add('ready'), CTA_DELAY);
       }
 
+      // Lesson completed: the last milestone (4, the one that was current) becomes completed with the
+      // big celebration and the title appears; after FINALE_HOLD the progress turns into the button.
+      function completeLesson() {
+        renderProgress();
+        root.classList.add('reached');
+        const step = steps[reached - 1];
+        step.classList.add('finale');
+        playLessonSound();
+        burstSparks(step.querySelector('.step-dot'), true);
+        later(turnProgressIntoButton, FINALE_HOLD);
+      }
+
+      // The numbers and connectors fade, the dots converge on the center of the timeline (where the
+      // button is), and the "Next lesson" button grows in as they vanish.
+      function turnProgressIntoButton() {
+        stepsEl.classList.remove('numbered');
+        stepsEl.classList.add('lines-hidden');
+        const box = stepsEl.getBoundingClientRect();
+        const cx = box.left + box.width / 2;
+        steps.forEach((step) => {
+          const dot = step.querySelector('.step-dot');
+          const r = dot.getBoundingClientRect();
+          animations.push(dot.animate(
+            [
+              { transform: 'none', opacity: 1 },
+              { transform: `translate(${cx - (r.left + r.width / 2)}px, 0) scale(0.3)`, opacity: 0 },
+            ],
+            { duration: CONVERGE, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'forwards' }
+          ));
+        });
+        later(() => root.classList.add('consumed', 'ready'), CONVERGE - 200);
+      }
+
       // "Continue learning": the title and button fade, the connectors hide, then the dots glide back
       // up to the top bar while the card collapses and the avatar slides back to the center. Once
       // she is centered she plays the next video.
@@ -1633,12 +1850,20 @@
         root.classList.remove('ready', 'reached');
         steps.forEach((step) => step.classList.remove('celebrate'));
         video.pause();
-        stepsEl.classList.add('lines-hidden');
-        stepsEl.classList.remove('numbered'); // numbers fade out before the dots shrink back
+        if (crossfade) {
+          stepsEl.classList.add('faded'); // the whole timeline fades out inside the slate
+        } else {
+          stepsEl.classList.add('lines-hidden');
+          stepsEl.classList.remove('numbered'); // numbers fade out before the dots shrink back
+        }
         later(() => {
           root.classList.remove('settled', 'side'); // the card clips again while it collapses
-          glideTimelineTo(header);
-          later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
+          if (crossfade) {
+            fadeTimelineTo(header, false); // and fades back in at the top, as the card collapses
+          } else {
+            glideTimelineTo(header);
+            later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
+          }
           later(() => {
             phase = 'continued';
             video.src = NEXT_VIDEO;
@@ -1648,12 +1873,13 @@
         }, LINES_FADE);
       }
 
-      continueButton.addEventListener('click', continueLearning);
+      // ("Next lesson" has no destination yet, so it has no click behavior)
+      if (!lesson) continueButton.addEventListener('click', continueLearning);
 
       function startAnimation() {
         phase = 'celebrating';
         moveTimelineIntoCard();
-        later(reachMilestone, LINES_FADE + CARD_OPEN + MOVE_DURATION + REACH_PAUSE);
+        later(reachMilestone, LINES_FADE + CARD_OPEN + (crossfade ? FADE_IN : MOVE_DURATION) + (lesson ? FINALE_PAUSE : REACH_PAUSE));
       }
 
       // The delay is measured from the moment the video really starts playing (not from the click),
@@ -1699,6 +1925,7 @@
     // already complete when the demo starts. Navigating always resets the bar to match what the
     // demo is showing.
     const BASE_REACHED = 1;
+    const LESSON_BASE_REACHED = 3; // "Lesson completed" starts with the last milestone (4) in progress
     const steps = [...document.querySelectorAll('.step')];
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reached = BASE_REACHED; // milestones completed so far; the next one is in progress
@@ -1724,6 +1951,9 @@
       readAloudActivity(canvases[1]),
       watchActivity(canvases[2]),
       milestoneActivity(canvases[3]),
+      milestoneActivity(canvases[4]),
+      milestoneActivity(canvases[5]),
+      milestoneActivity(canvases[6]),
     ];
     const navLinks = [...document.querySelectorAll('.site-nav a')];
     let current = 0;
@@ -1734,7 +1964,7 @@
       activities[current].leave();
       canvases[current].classList.remove('active');
       current = index;
-      reached = BASE_REACHED;
+      reached = canvases[current].classList.contains('lesson') ? LESSON_BASE_REACHED : BASE_REACHED;
       renderProgress();
       activities[current].reset();
       canvases[current].classList.add('active');
