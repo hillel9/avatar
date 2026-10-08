@@ -128,7 +128,11 @@
       padding: 0 24px;
     }
 
+    /* Compact in the top bar (small dots, no numbers). Inside the milestone slate the same list
+       gets bigger dots and their numbers (see .milestone-timeline). */
     .steps {
+      --dot: 16px;
+      --line: 4px;
       display: flex;
       align-items: center;
       width: 620px;
@@ -154,9 +158,9 @@
       --fill: 0%;
       content: "";
       flex: 1 1 0;
-      height: 8px;
+      height: var(--line);
       margin: 0 8px;
-      border-radius: 8px;
+      border-radius: var(--line);
       background: linear-gradient(to right, var(--primary) var(--fill), rgba(255, 255, 255, 0.1) var(--fill));
       transition: --fill 0.7s ease, opacity 0.3s ease;
     }
@@ -171,18 +175,25 @@
       align-items: center;
       justify-content: center;
       flex: none;
-      width: 32px;
-      height: 32px;
+      width: var(--dot);
+      height: var(--dot);
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.1);
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       line-height: normal;
       color: var(--w-80);
       transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .step-dot > span { text-box: trim-both cap alphabetic; }
+    /* numbers are hidden in the top bar and fade in once the dots arrive in the milestone slate */
+    .step-dot > span {
+      text-box: trim-both cap alphabetic;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .steps.numbered .step-dot > span { opacity: 1; }
 
     /* current milestone: same translucent fill as the rest, with a blue outline and white number
        (inset outline so the circle keeps its size) */
@@ -235,9 +246,8 @@
       pointer-events: none;
     }
 
+    /* sized to the dot by script */
     .spark-ring {
-      width: 32px;
-      height: 32px;
       border: 2px solid #7ab8ff;
       box-shadow: 0 0 16px rgba(0, 110, 250, 0.8);
     }
@@ -826,10 +836,13 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       gap: 64px;
       padding: 48px;
+      text-align: center;
     }
 
+    .milestone-card .title { align-items: center; }
     .milestone-card .title h1 { font-size: 48px; }
 
     /* the title is revealed at the moment the milestone is reached */
@@ -841,10 +854,16 @@
 
     .canvas.milestone.reached .milestone-title { opacity: 1; transform: none; }
 
-    /* the timeline element is moved here from the top bar */
-    /* keeps its height when the timeline leaves, so the title and button don't jump */
-    .milestone-timeline { width: 100%; min-height: 32px; }
-    .milestone-timeline .steps { width: 100%; min-width: 0; }
+    /* the timeline element is moved here from the top bar: 40px dots, thicker lines. It keeps its
+       height when the timeline leaves, so the title and button don't jump */
+    .milestone-timeline { width: 100%; max-width: 620px; min-height: 40px; }
+
+    .milestone-timeline .steps {
+      --dot: 40px;
+      --line: 8px;
+      width: 100%;
+      min-width: 0;
+    }
 
     /* "Continue learning": the largest CTA of the system (56px), revealed once the new milestone is
        active. The button is hidden (not just transparent) so it can't be focused or clicked early. */
@@ -1491,32 +1510,43 @@
         sparksLayer.replaceChildren();
         root.classList.remove('side', 'settled', 'reached', 'ready');
         if (stepsEl.parentElement !== header) header.append(stepsEl);
-        stepsEl.classList.remove('lines-hidden');
+        stepsEl.classList.remove('lines-hidden', 'numbered');
         steps.forEach((step) => step.classList.remove('celebrate'));
       }
 
-      // Open the card, then move the timeline into it. Each dot starts at its old position in the
-      // top bar and glides to the new one (FLIP); connectors stay hidden until the dots arrive.
+      // Moves the timeline to `parent`. Each dot starts at its old spot and size and glides to the
+      // new one (FLIP: position by its center, size by scale, since the dots are 16px in the top bar
+      // and 40px in the slate).
+      function glideTimelineTo(parent) {
+        const dots = steps.map((step) => step.querySelector('.step-dot'));
+        const before = dots.map((dot) => dot.getBoundingClientRect());
+        parent.append(stepsEl);
+        dots.forEach((dot, i) => {
+          const a = before[i];
+          const b = dot.getBoundingClientRect();
+          const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+          const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+          animations.push(dot.animate(
+            [
+              { transform: `translate(${dx}px, ${dy}px) scale(${a.width / b.width})` },
+              { transform: 'none' },
+            ],
+            { duration: MOVE_DURATION, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+          ));
+        });
+      }
+
+      // Open the card, then move the timeline into it. Connectors stay hidden until the dots arrive,
+      // and the numbers fade in once they have.
       function moveTimelineIntoCard() {
         stepsEl.classList.add('lines-hidden');
         later(() => {
           root.classList.add('side');
           later(() => {
             root.classList.add('settled'); // card stops clipping so the dots can arrive from the top bar
-            const dots = steps.map((step) => step.querySelector('.step-dot'));
-            const before = dots.map((dot) => dot.getBoundingClientRect());
-            timelineSlot.append(stepsEl);
-            dots.forEach((dot, i) => {
-              const after = dot.getBoundingClientRect();
-              animations.push(dot.animate(
-                [
-                  { transform: `translate(${before[i].left - after.left}px, ${before[i].top - after.top}px)` },
-                  { transform: 'none' },
-                ],
-                { duration: MOVE_DURATION, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
-              ));
-            });
+            glideTimelineTo(timelineSlot);
             later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
+            later(() => stepsEl.classList.add('numbered'), MOVE_DURATION);
           }, CARD_OPEN);
         }, LINES_FADE);
       }
@@ -1527,16 +1557,18 @@
         const rect = dot.getBoundingClientRect();
         const cx = rect.left - view.left + rect.width / 2;
         const cy = rect.top - view.top + rect.height / 2;
+        const half = rect.width / 2;
 
         // two expanding rings
         [0, 150].forEach((delay) => {
           const ring = document.createElement('span');
           ring.className = 'spark-ring';
+          ring.style.width = ring.style.height = `${rect.width}px`;
           sparksLayer.append(ring);
           const a = ring.animate(
             [
-              { transform: `translate(${cx - 16}px, ${cy - 16}px) scale(1)`, opacity: 0.9 },
-              { transform: `translate(${cx - 16}px, ${cy - 16}px) scale(4)`, opacity: 0 },
+              { transform: `translate(${cx - half}px, ${cy - half}px) scale(1)`, opacity: 0.9 },
+              { transform: `translate(${cx - half}px, ${cy - half}px) scale(3.5)`, opacity: 0 },
             ],
             { duration: 800, delay, easing: 'ease-out', fill: 'both' }
           );
@@ -1602,21 +1634,10 @@
         steps.forEach((step) => step.classList.remove('celebrate'));
         video.pause();
         stepsEl.classList.add('lines-hidden');
+        stepsEl.classList.remove('numbered'); // numbers fade out before the dots shrink back
         later(() => {
-          const dots = steps.map((step) => step.querySelector('.step-dot'));
-          const before = dots.map((dot) => dot.getBoundingClientRect());
-          header.append(stepsEl);
           root.classList.remove('settled', 'side'); // the card clips again while it collapses
-          dots.forEach((dot, i) => {
-            const after = dot.getBoundingClientRect();
-            animations.push(dot.animate(
-              [
-                { transform: `translate(${before[i].left - after.left}px, ${before[i].top - after.top}px)` },
-                { transform: 'none' },
-              ],
-              { duration: MOVE_DURATION, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
-            ));
-          });
+          glideTimelineTo(header);
           later(() => stepsEl.classList.remove('lines-hidden'), MOVE_DURATION);
           later(() => {
             phase = 'continued';
