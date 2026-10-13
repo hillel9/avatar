@@ -116,9 +116,13 @@
     /* the display above would otherwise win over the hidden attribute */
     .site-nav a[hidden] { display: none; }
 
-    /* "Show hidden": sits at the opposite end of the header, styled like the tabs */
-    .show-hidden {
+    /* Image toggle: sits at the opposite end of the header, styled like the tabs. It only shows on
+       activities that have an image; on the others that end of the header stays empty. */
+    .image-toggle {
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       height: 32px;
       font-size: 14px;
       font-weight: 600;
@@ -127,9 +131,37 @@
       color: var(--demo-ink-muted);
     }
 
-    .show-hidden:hover { color: var(--demo-ink); }
+    /* the display above would otherwise win over the hidden attribute */
+    .image-toggle[hidden] { display: none; }
 
-    .show-hidden:focus-visible { outline: 2px solid var(--demo-ink); outline-offset: 2px; border-radius: 2px; }
+    .image-toggle:hover { color: var(--demo-ink); }
+
+    .image-toggle:focus-visible { outline: 2px solid var(--demo-ink); outline-offset: 2px; border-radius: 2px; }
+
+    .image-toggle .switch {
+      position: relative;
+      flex: none;
+      width: 28px;
+      height: 16px;
+      border-radius: 8px;
+      background: #c9c9c9;
+      transition: background 0.15s ease;
+    }
+
+    .image-toggle .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.15s ease;
+    }
+
+    .image-toggle[aria-checked="true"] .switch { background: var(--demo-ink); }
+    .image-toggle[aria-checked="true"] .switch::after { transform: translateX(12px); }
 
     /* Product header: unit progress step bar, overlaid on top of the avatar view */
     .product-header {
@@ -586,6 +618,49 @@
        bottom (same arrangement as the quiz card). */
     .reading-card.short { justify-content: space-between; }
     .input-box.short { flex: none; min-height: 0; padding: 24px 32px; }
+
+    /* Large input: the textarea is a fixed 240px and the image wrapper takes everything else, so the
+       image gets priority for the leftover space instead of splitting it with the field. */
+    textarea.input-box { flex: 0 0 240px; min-height: 240px; }
+
+    /* Image toggled off (header switch): the image goes away and the textarea fills the card again,
+       still never below 240px. */
+    .images-off .input-image-wrap { display: none; }
+    .images-off textarea.input-box { flex: 1 0 0; }
+
+    /* The text block fills the card so the image can take whatever height is left over. */
+    .reading-card.short .text { flex: 1 1 0; min-height: 0; }
+
+    /* Image above the field, inside a full-width container (white at 80%) that takes all the space left
+       between the title and the field, with the image centered in it and a 16px inset all around.
+       The inset is subtracted in the image's size (--pad) rather than set as padding: padding would
+       give the container a 32px minimum height and push the field and button out of the card when
+       less than that is left. The image fills the rest as far as its own ratio allows (scaled up or
+       down, never cropped), capped by the available width and by the available height. --ratio is
+       the picture's own width / height (set inline on the <img>), so the box hugs the picture. */
+    .input-image-wrap {
+      --pad: 16px;
+      flex: 1 1 0;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: var(--roundness-2);
+      background: var(--w-80);
+      container-type: size;
+    }
+
+    .input-image {
+      --ratio: 16 / 9;
+      display: block;
+      flex: none;
+      width: max(0px, min(100cqw - 2 * var(--pad), (100cqh - 2 * var(--pad)) * var(--ratio)));
+      aspect-ratio: var(--ratio);
+      object-fit: contain;
+      border-radius: var(--roundness-2);
+    }
 
     .read-button {
       display: flex;
@@ -1249,11 +1324,14 @@
         <a href="#watch" data-target="2">Watch a video</a>
         <a href="#end-of-milestone" data-target="5">End of milestone</a>
         <a href="#lesson-completed" data-target="6">Lesson completed</a>
-        <!-- the glide variants stay out of the way until "Show hidden" is clicked -->
+        <!-- the glide variants are kept out of the tab bar (nothing reveals them for now) -->
         <a href="#end-of-milestone-glide" data-target="3" hidden>End of milestone (glide)</a>
         <a href="#lesson-completed-glide" data-target="4" hidden>Lesson completed (glide)</a>
       </nav>
-      <button class="show-hidden" id="show-hidden" type="button" aria-expanded="false">Show hidden</button>
+      <button class="image-toggle" id="image-toggle" type="button" role="switch" aria-checked="true" hidden>
+        <span>Image</span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
     </header>
 
     <div class="avatar-view mesh-on">
@@ -1481,6 +1559,10 @@
             <h1 id="input-question">Why do you think Mia’s lunchbox ended up in her brother’s classroom?</h1>
           </div>
 
+          <div class="input-image-wrap">
+            <img class="input-image" src="assets/kaltura_video_thumb.jpg" style="--ratio: 954 / 537" alt="" />
+          </div>
+
           <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
 
           <button class="cta-button" type="button" disabled>
@@ -1503,6 +1585,10 @@
             <div class="title">
               <p class="eyebrow">Practice</p>
               <h1 id="input-short-question">Where did Mia find her lunchbox? Answer in one short sentence.</h1>
+            </div>
+
+            <div class="input-image-wrap">
+              <img class="input-image" src="assets/kaltura_video_thumb.jpg" style="--ratio: 954 / 537" alt="" />
             </div>
 
             <input class="input-box short" type="text" aria-labelledby="input-short-question" placeholder="Type a short sentence..." autocomplete="off" spellcheck="true" />
@@ -2390,6 +2476,7 @@
       activities[current].leave();
       canvases[current].classList.remove('active');
       current = index;
+      updateImageToggle();
       reached = canvases[current].classList.contains('lesson') ? LESSON_BASE_REACHED : BASE_REACHED;
       renderProgress();
       activities[current].reset();
@@ -2416,15 +2503,19 @@
       return next ? targetOf(next) : -1;
     }
 
-    // "Show hidden" reveals the tabs that start out hidden (and hides them again)
-    const hiddenLinks = navLinks.filter((link) => link.hidden);
-    const showHiddenButton = document.getElementById('show-hidden');
-    showHiddenButton.addEventListener('click', () => {
-      const show = showHiddenButton.getAttribute('aria-expanded') !== 'true';
-      hiddenLinks.forEach((link) => { link.hidden = !show; });
-      showHiddenButton.setAttribute('aria-expanded', String(show));
-      showHiddenButton.textContent = show ? 'Hide hidden' : 'Show hidden';
+    // The image toggle (right end of the header) shows or hides the image on the input activities.
+    // It is one setting for all of them, and it only appears on an activity that has an image.
+    const frameEl = document.querySelector('.frame');
+    const imageToggle = document.getElementById('image-toggle');
+    function updateImageToggle() {
+      imageToggle.hidden = canvases[current].querySelector('.input-image-wrap') === null;
+    }
+    imageToggle.addEventListener('click', () => {
+      const on = imageToggle.getAttribute('aria-checked') !== 'true';
+      imageToggle.setAttribute('aria-checked', String(on));
+      frameEl.classList.toggle('images-off', !on);
     });
+    updateImageToggle();
 
     renderProgress();
 
