@@ -16,6 +16,7 @@
       --w-80: rgba(255, 255, 255, 0.8);
       --w-100: #fff;
       --b-20: rgba(0, 0, 0, 0.2);
+      --b-30: rgba(0, 0, 0, 0.3);
       --b-50: rgba(0, 0, 0, 0.5);
       --b-60: rgba(0, 0, 0, 0.6);
       --b-100: #000;
@@ -653,6 +654,9 @@
       justify-content: center;
       overflow: hidden;
       border-radius: var(--roundness-2);
+      /* overflow + radius alone doesn't always clip a backdrop-filter child (Safari, GPU Chrome), which
+         is what squared the corners off; clip-path does, and the blur layer is rounded as well */
+      clip-path: inset(0 round var(--roundness-2));
       background-color: var(--b-20);
       background-position: center;
       background-size: cover;
@@ -664,6 +668,8 @@
       content: "";
       position: absolute;
       inset: 0;
+      border-radius: inherit;
+      background: var(--b-30); /* dark tint over the blurred picture */
       -webkit-backdrop-filter: blur(48px);
       backdrop-filter: blur(48px);
     }
