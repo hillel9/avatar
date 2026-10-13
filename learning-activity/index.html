@@ -533,7 +533,8 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    .reading-text {
+    .reading-text,
+    .input-box {
       flex: 1 0 0;
       min-height: 1px;
       width: 100%;
@@ -561,6 +562,30 @@
       font-weight: 400;
       line-height: 1.5;
     }
+
+    /* Input activity: a textarea that wears the reading box's surface (same fill, padding, radius and
+       type size) so it reads as the same family. No title inside, the question sits above it. */
+    .input-box {
+      border: 0;
+      resize: none;
+      outline: none;
+      font: inherit;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      transition: box-shadow 0.15s ease;
+    }
+
+    .input-box::placeholder { color: var(--w-80); opacity: 1; }
+
+    /* same 1px white ring the selected quiz answer gets */
+    .input-box:focus-visible { box-shadow: inset 0 0 0 1px var(--w-100); }
+
+    /* Short variant: a single-line field sized for one sentence. It hugs its content instead of
+       filling the card, so the question and the field sit together at the top and the button at the
+       bottom (same arrangement as the quiz card). */
+    .reading-card.short { justify-content: space-between; }
+    .input-box.short { flex: none; min-height: 0; padding: 24px 32px; }
 
     .read-button {
       display: flex;
@@ -1219,6 +1244,8 @@
       <nav class="site-nav" aria-label="Activities">
         <a href="#quiz" data-target="0" aria-current="page">Quiz</a>
         <a href="#read-aloud" data-target="1">Reading activity</a>
+        <a href="#input" data-target="7">Input activity</a>
+        <a href="#input-short" data-target="8">Short input activity</a>
         <a href="#watch" data-target="2">Watch a video</a>
         <a href="#end-of-milestone" data-target="5">End of milestone</a>
         <a href="#lesson-completed" data-target="6">Lesson completed</a>
@@ -1441,6 +1468,55 @@
 
         <div class="avatar">
           <video src="assets/milestone.mp4" playsinline preload="auto"></video>
+        </div>
+      </div>
+
+      <!-- Activity 8: input. The avatar asks an open question; it is also written in the left pane,
+           above a text field that wears the reading box's look. It sits right after the reading
+           activity in the tab bar (its index is last only so the other tabs keep their numbers). -->
+      <div class="canvas input-activity" data-activity="input">
+        <section class="reading-card">
+          <div class="title">
+            <p class="eyebrow">Practice</p>
+            <h1 id="input-question">Why do you think Mia’s lunchbox ended up in her brother’s classroom?</h1>
+          </div>
+
+          <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
+
+          <button class="cta-button" type="button" disabled>
+            <span>Confirm answer</span>
+            <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+          </button>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/long-input.mp4" playsinline preload="auto"></video>
+          <button class="hint-button" type="button" tabindex="-1"><span>Need help?</span></button>
+        </div>
+      </div>
+
+      <!-- Activity 9: short input. Same as activity 8, but the answer is one short sentence, so the
+           field is a single line. -->
+      <div class="canvas input-activity" data-activity="input-short">
+        <section class="reading-card short">
+          <div class="text">
+            <div class="title">
+              <p class="eyebrow">Practice</p>
+              <h1 id="input-short-question">Where did Mia find her lunchbox? Answer in one short sentence.</h1>
+            </div>
+
+            <input class="input-box short" type="text" aria-labelledby="input-short-question" placeholder="Type a short sentence..." autocomplete="off" spellcheck="true" />
+          </div>
+
+          <button class="cta-button" type="button" disabled>
+            <span>Confirm answer</span>
+            <img class="icon icon-24" src="assets/arrow-right.svg" width="24" height="24" alt="" />
+          </button>
+        </section>
+
+        <div class="avatar">
+          <video src="assets/short-input.mp4" playsinline preload="auto"></video>
+          <button class="hint-button" type="button" tabindex="-1"><span>Need help?</span></button>
         </div>
       </div>
 
@@ -1702,6 +1778,60 @@
           readButton.classList.add('outlined');
           video.pause();
           setVideo(helpSrc);
+          video.currentTime = 0;
+        },
+      };
+    }
+
+    // ---- Activity 8: input -------------------------------------------------------
+    // The avatar asks the question; when she is done she shrinks and the student types an answer.
+    // "Need help?" makes her repeat the question. Confirm unlocks once there is something written.
+    function inputActivity(root) {
+      const input = root.querySelector('.input-box');
+      const confirmButton = root.querySelector('.cta-button');
+      const avatar = root.querySelector('.avatar');
+      const video = avatar.querySelector('video');
+      const helpButton = avatar.querySelector('.hint-button');
+      let started = false;
+      let helpPlaying = false;
+
+      input.addEventListener('input', () => {
+        confirmButton.disabled = input.value.trim() === '';
+      });
+
+      helpButton.addEventListener('click', () => {
+        helpPlaying = true;
+        avatar.classList.add('hint-playing');
+        helpButton.tabIndex = -1;
+        video.currentTime = 0;
+        video.play();
+      });
+
+      video.addEventListener('ended', () => {
+        helpButton.tabIndex = 0;
+        if (helpPlaying) {
+          helpPlaying = false;
+          avatar.classList.remove('hint-playing');
+          return;
+        }
+        avatar.classList.add('shrunk');
+        setMic('muted');
+        playStartSound();
+        input.focus({ preventScroll: true });
+      });
+
+      return {
+        enter() { setMic('idle'); },
+        start() { if (!started) { started = true; video.play(); } },
+        leave() { video.pause(); },
+        reset() {
+          started = false;
+          helpPlaying = false;
+          input.value = '';
+          confirmButton.disabled = true;
+          avatar.classList.remove('shrunk', 'hint-playing');
+          helpButton.tabIndex = -1;
+          video.pause();
           video.currentTime = 0;
         },
       };
@@ -2247,6 +2377,8 @@
       milestoneActivity(canvases[4]),
       milestoneActivity(canvases[5]),
       milestoneActivity(canvases[6]),
+      inputActivity(canvases[7]),
+      inputActivity(canvases[8]),
     ];
     const navLinks = [...document.querySelectorAll('.site-nav a')];
     const targetOf = (link) => Number(link.dataset.target); // which activity a tab opens
@@ -2315,8 +2447,11 @@
     // On the video activity Space belongs to the Kaltura player (play / pause), so leave it alone
     const spaceIsNative = () => demoStarted && canvases[current].dataset.activity === 'watch';
 
+    // While the student types in a text field, keys belong to the field (Space, B, ...)
+    const isTyping = (e) => e.target instanceof HTMLElement && e.target.matches('textarea, input');
+
     document.addEventListener('keydown', (e) => {
-      if (e.code !== 'Space' || spaceIsNative()) return;
+      if (e.code !== 'Space' || spaceIsNative() || isTyping(e)) return;
       e.preventDefault(); // no page scroll / no "click" on a focused button
       if (e.repeat) return;
       if (!demoStarted) { startDemo(); return; }
@@ -2325,14 +2460,14 @@
     });
     // Some browsers fire a button's click on Space keyup
     document.addEventListener('keyup', (e) => {
-      if (e.code === 'Space' && !spaceIsNative()) e.preventDefault();
+      if (e.code === 'Space' && !spaceIsNative() && !isTyping(e)) e.preventDefault();
     });
 
     // The ambient mesh gradient background is on by default; B turns it off and on again, on any tab
     // (ignored with Cmd/Ctrl/Alt held, so browser shortcuts like Cmd+B keep working)
     const avatarViewEl = document.querySelector('.avatar-view');
     document.addEventListener('keydown', (e) => {
-      if (e.code !== 'KeyB' || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.code !== 'KeyB' || e.repeat || e.metaKey || e.ctrlKey || e.altKey || isTyping(e)) return;
       avatarViewEl.classList.toggle('mesh-on');
     });
   </script>

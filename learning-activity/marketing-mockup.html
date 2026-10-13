@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avatar MD - Marketing Mockup Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lato:ital,wght@0,400;0,700;1,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --surface-1: rgba(255, 255, 255, 0.04);
+      --surface-2: rgba(255, 255, 255, 0.07);
+      --surface-border: rgba(255, 255, 255, 0.12);
+      --primary: #006efa;
+      --primary-glow: rgba(0, 110, 250, 0.5);
+      --primary-text: #fff;
+      --accent-cyan: #00e5ff;
+      --accent-purple: #9d4edd;
+      --accent-green: #23803a;
+      --accent-red: #ca1c2d;
+      --text-main: #f0f4f8;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --round-sm: 8px;
+      --round-md: 14px;
+      --round-lg: 24px;
+      --round-xl: 32px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* Ambient marketing background aura */
+    .marketing-canvas {
+      width: 2560px;
+      margin: 0 auto;
+      padding: 70px 90px 90px;
+      position: relative;
+      background:
+        radial-gradient(1300px circle at 50% 12%, rgba(0, 110, 250, 0.22) 0%, transparent 65%),
+        radial-gradient(1000px circle at 88% 42%, rgba(157, 78, 221, 0.18) 0%, transparent 60%),
+        radial-gradient(1100px circle at 12% 52%, rgba(0, 229, 255, 0.15) 0%, transparent 60%),
+        radial-gradient(1500px circle at 50% 95%, rgba(0, 110, 250, 0.18) 0%, transparent 70%),
+        #05070c;
+      box-sizing: border-box;
+    }
+
+    /* Grid overlay for subtle high-tech feel */
+    .marketing-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    /* Top Marketing Header */
+    .marketing-header {
+      text-align: center;
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 22px;
+      border-radius: 999px;
+      background: rgba(0, 110, 250, 0.14);
+      border: 1px solid rgba(0, 110, 250, 0.45);
+      color: #70b4ff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      box-shadow: 0 0 28px rgba(0, 110, 250, 0.3);
+    }
+
+    .badge-pill .pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #00e5ff;
+      box-shadow: 0 0 12px #00e5ff;
+    }
+
+    .marketing-title {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      background: linear-gradient(180deg, #ffffff 35%, #9cb3ce 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .marketing-title span {
+      background: linear-gradient(135deg, #38bdf8 0%, #006efa 50%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .marketing-subtitle {
+      font-size: 21px;
+      line-height: 1.55;
+      color: var(--text-muted);
+      max-width: 1100px;
+      font-weight: 400;
+    }
+
+    /* Feature Metric Chips */
+    .feature-strip {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 6px;
+    }
+
+    .feature-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f1f5f9;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-chip-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 110, 250, 0.25);
+      color: #60a5fa;
+    }
+
+    /* Hero Centerpiece: Pro Studio Display Mockup Frame */
+    .hero-mockup-wrapper {
+      position: relative;
+      margin: 0 auto;
+      width: 2160px;
+    }
+
+    .display-device {
+      background: #0d0f15;
+      border-radius: 36px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow:
+        0 40px 100px -20px rgba(0, 0, 0, 0.95),
+        0 0 90px -10px rgba(0, 110, 250, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      position: relative;
+    }
+
+    /* Display top bezel with camera */
+    .device-bezel-top {
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .device-camera {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #040508;
+      box-shadow: inset 0 0 2px #38bdf8, 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .device-screen {
+      width: 2128px;
+      height: 1080px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background: #000;
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* --- EXACT APP REPLICA INSIDE HERO SCREEN --- */
+    .app-root {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: #04060e;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* App Mesh Background */
+    .app-mesh {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background: #04060e;
+    }
+
+    .app-blob {
+      position: absolute;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.8;
+    }
+
+    .app-blob.b1 { left: -50px; bottom: -100px; background: rgba(0, 110, 250, 0.6); }
+    .app-blob.b2 { right: -50px; bottom: -50px; background: rgba(125, 70, 255, 0.5); }
+    .app-blob.b3 { left: 45%; bottom: -150px; background: rgba(0, 205, 225, 0.32); }
+    .app-blob.b4 { right: 0; top: 30%; background: rgba(255, 70, 170, 0.25); }
+    .app-blob.b5 { left: -100px; top: 40%; background: rgba(50, 70, 220, 0.28); }
+    .app-blob.b6 { left: 5%; top: -100px; background: rgba(0, 150, 255, 0.38); }
+    .app-blob.b7 { right: 5%; top: -100px; background: rgba(190, 80, 255, 0.35); }
+    .app-blob.b8 { left: 50%; top: -50px; background: rgba(80, 75, 235, 0.22); }
+
+    /* Vignette & subtle texture */
+    .app-mesh::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(4, 6, 14, 0) 60%, rgba(4, 6, 14, 0.4) 100%);
+    }
+
+    /* Header Demo Strip (Authentic to app) */
+    .app-site-header {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      height: 48px;
+      padding: 0 32px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5e5;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .app-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .app-nav-item {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(17, 17, 17, 0.6);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      height: 32px;
+    }
+
+    .app-nav-item.active {
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 8px;
+      font-weight: 700;
+    }
+
+    .app-show-hidden {
+      margin-left: auto;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(17, 17, 17, 0.6);
+    }
+
+    /* Top Product Steps Bar */
+    .app-product-header {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 6;
+    }
+
+    .app-steps {
+      display: flex;
+      align-items: center;
+      width: 640px;
+      list-style: none;
+    }
+
+    .app-step {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-step + .app-step {
+      flex: 1 1 0;
+    }
+
+    .app-step + .app-step::before {
+      content: "";
+      flex: 1 1 0;
+      height: 4px;
+      margin: 0 10px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .app-step.done + .app-step::before {
+      background: #006efa;
+    }
+
+    .app-step-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .app-step.current .app-step-dot {
+      box-shadow: inset 0 0 0 2px #006efa, 0 0 24px 3px rgba(0, 110, 250, 0.85);
+      background: rgba(0, 110, 250, 0.3);
+    }
+
+    .app-step.done .app-step-dot {
+      background: #006efa;
+      box-shadow: none;
+    }
+
+    /* App Canvas Container */
+    .app-canvas {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      padding: 90px 48px 120px;
+    }
+
+    /* Flashcard (Quiz Card) */
+    .app-flashcard {
+      width: 1040px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 52px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(28px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .app-card-title {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .app-eyebrow {
+      font-size: 15px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .app-question-h1 {
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #ffffff;
+    }
+
+    .app-answers-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .app-answer-btn {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.16);
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+    }
+
+    .app-answer-btn.selected {
+      background: rgba(0, 110, 250, 0.25);
+      box-shadow: inset 0 0 0 1.5px #ffffff, 0 0 24px rgba(0, 110, 250, 0.4);
+    }
+
+    .app-answer-pill {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      min-width: 34px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 0 1px #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .app-answer-btn.selected .app-answer-pill {
+      background: #ffffff;
+      color: #000000;
+      box-shadow: none;
+    }
+
+    .app-answer-label {
+      font-size: 19px;
+      font-weight: 400;
+      color: #ffffff;
+    }
+
+    .app-cta-wrap {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .app-cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 58px;
+      padding: 12px 32px;
+      border-radius: 10px;
+      background: #006efa;
+      font-size: 19px;
+      font-weight: 700;
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 0 32px rgba(0, 110, 250, 0.6);
+      position: relative;
+    }
+
+    /* Outlined pulse animation ring */
+    .app-cta-btn::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border: 2px solid #ffffff;
+      border-radius: 16px;
+      opacity: 0.75;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    }
+
+    /* Avatar Container */
+    .app-avatar-box {
+      width: 440px;
+      height: 600px;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: #f0a296;
+    }
+
+    .app-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .app-hint-button {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      padding: 0 24px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(16px);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Bottom Bar */
+    .app-bottom-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 144px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+      backdrop-filter: blur(20px);
+      z-index: 10;
+    }
+
+    .app-mic-message {
+      padding: 8px 0;
+      font-size: 17px;
+      font-weight: 700;
+      font-style: italic;
+      color: #ffffff;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    }
+
+    .app-controls-row {
+      width: 100%;
+      height: 96px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+    }
+
+    .app-add-context {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 8px 18px;
+      border-radius: 56px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .app-mic-pill-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 58px;
+      padding: 0 24px;
+      border-radius: 56px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 0 2px #006efa, 0 0 50px rgba(0, 110, 250, 0.6);
+    }
+
+    .app-end-pill {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #ca1c2d;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      box-shadow: 0 0 20px rgba(202, 28, 45, 0.4);
+    }
+
+    /* --- SECONDARY FEATURE PANELS SHOWCASING OTHER CORE MODES --- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 2200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .feature-card {
+      background: rgba(15, 20, 32, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    }
+
+    .feature-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .feature-tag {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .tag-blue { background: rgba(0, 110, 250, 0.18); color: #60a5fa; border: 1px solid rgba(0, 110, 250, 0.4); }
+    .tag-purple { background: rgba(168, 85, 247, 0.18); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .tag-emerald { background: rgba(35, 128, 58, 0.25); color: #4ade80; border: 1px solid rgba(35, 128, 58, 0.5); }
+
+    .feature-card-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 10px;
+      line-height: 1.3;
+    }
+
+    .feature-card-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #94a3b8;
+    }
+
+    /* Miniature UI Frame inside feature card */
+    .mini-screen {
+      width: 100%;
+      height: 400px;
+      background: #04060e;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 16px 40px rgba(0, 0, 0, 0.6);
+      font-family: 'Lato', sans-serif;
+    }
+
+    /* Card 1: Read Aloud Mode View */
+    .mini-read-aloud {
+      display: flex;
+      height: 100%;
+      padding: 24px;
+      gap: 18px;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(35, 128, 58, 0.12) 0%, #04060e 100%);
+    }
+
+    .mini-read-card {
+      flex: 1;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mini-story-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+    }
+
+    .mini-story-box {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.95);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .mini-story-box p {
+      margin-bottom: 8px;
+    }
+
+    .mini-read-btn {
+      height: 42px;
+      background: #23803a;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 0 20px;
+      border: none;
+      box-shadow: 0 0 24px rgba(35, 128, 58, 0.5);
+    }
+
+    .mini-avatar-col {
+      width: 190px;
+      height: 100%;
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #f0a296;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .mini-avatar-col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mini-need-help {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Card 2: Synchronized Video Mode View */
+    .mini-video-mode {
+      height: 100%;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, #04060e 100%);
+      position: relative;
+    }
+
+    .mini-video-player {
+      flex: 1;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .mini-video-player img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mini-video-pill {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .mini-video-bottom {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 12px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mini-resume-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #006efa;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 30px;
+      box-shadow: 0 0 24px rgba(0, 110, 250, 0.55);
+    }
+
+    .mini-resume-pill img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+
+    /* Card 3: Milestone & Lesson Celebration View */
+    .mini-celebration {
+      height: 100%;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0, 110, 250, 0.35) 0%, rgba(4, 6, 14, 0.95) 75%),
+        #04060e;
+      position: relative;
+    }
+
+    .mini-celeb-card {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      backdrop-filter: blur(14px);
+    }
+
+    .mini-celeb-tag {
+      font-size: 12px;
+      letter-spacing: 2.2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .mini-celeb-h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(0, 110, 250, 0.5);
+    }
+
+    .mini-timeline-large {
+      display: flex;
+      align-items: center;
+      width: 85%;
+      position: relative;
+    }
+
+    .mini-timeline-node {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #006efa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: 0 0 25px rgba(0, 110, 250, 0.85);
+      z-index: 2;
+    }
+
+    .mini-timeline-node.glow-fire {
+      box-shadow: 0 0 38px 10px rgba(0, 110, 250, 0.95);
+      transform: scale(1.1);
+    }
+
+    .mini-timeline-node.future {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .mini-timeline-connector {
+      flex: 1;
+      height: 6px;
+      background: #006efa;
+      box-shadow: 0 0 14px rgba(0, 110, 250, 0.7);
+    }
+
+    .mini-timeline-connector.inactive {
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: none;
+    }
+
+    .mini-continue-btn {
+      height: 46px;
+      padding: 0 28px;
+      background: #006efa;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 0 32px rgba(0, 110, 250, 0.7);
+      position: relative;
+    }
+
+    .mini-continue-btn::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border: 1.5px solid #ffffff;
+      border-radius: 13px;
+      opacity: 0.8;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Footer Feature Architecture Strip */
+    .architecture-summary {
+      background: rgba(15, 20, 30, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(16px);
+      max-width: 2300px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .arch-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .arch-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(0, 110, 250, 0.15);
+      border: 1px solid rgba(0, 110, 250, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+      box-shadow: 0 0 20px rgba(0, 110, 250, 0.2);
+    }
+
+    .arch-details h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .arch-details p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    .arch-divider {
+      width: 1px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="marketing-canvas">
+    <div class="content-layer">
+
+      <!-- MARKETING HEADER -->
+      <header class="marketing-header">
+        <div class="badge-pill">
+          <span class="pulse-dot"></span>
+          Kaltura Avatar MD • Interactive AI Activity Studio
+        </div>
+        <h1 class="marketing-title">
+          Next-Generation Conversational Learning with <span>Real-Time AI Avatars</span>
+        </h1>
+        <p class="marketing-subtitle">
+          An adaptive, multimodal educational platform combining real-time speech evaluation, responsive avatar coaching with Julia, interactive comprehension quizzes, synchronized video walkthroughs, and milestone celebration ceremonies.
+        </p>
+
+        <!-- Feature Highlighting Strip -->
+        <div class="feature-strip">
+          <div class="feature-chip">
+            <div class="feature-chip-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            Real-Time AI Avatar Julia
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+            </div>
+            Voice Interrupt & Audio Mic Pill
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            </div>
+            Interactive Practice & Read Aloud
+          </div>
+          <div class="feature-chip">
+            <div class="feature-chip-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            Dynamic Timeline & Celebrations
+          </div>
+        </div>
+      </header>
+
+      <!-- HERO CENTERPIECE: PRO STUDIO DISPLAY MOCKUP -->
+      <div class="hero-mockup-wrapper">
+        <div class="display-device">
+          <div class="device-bezel-top">
+            <div class="device-camera"></div>
+          </div>
+          <div class="device-screen">
+
+            <!-- APP UI REPLICA (QUIZ ACTIVITY ACTIVE STATE) -->
+            <div class="app-root">
+
+              <!-- Ambient Mesh Layer -->
+              <div class="app-mesh">
+                <div class="app-blob b1"></div>
+                <div class="app-blob b2"></div>
+                <div class="app-blob b3"></div>
+                <div class="app-blob b4"></div>
+                <div class="app-blob b5"></div>
+                <div class="app-blob b6"></div>
+                <div class="app-blob b7"></div>
+                <div class="app-blob b8"></div>
+              </div>
+
+              <!-- Top Demo Strip -->
+              <header class="app-site-header">
+                <nav class="app-nav">
+                  <a href="#" class="app-nav-item active">Quiz</a>
+                  <a href="#" class="app-nav-item">Reading activity</a>
+                  <a href="#" class="app-nav-item">Watch a video</a>
+                  <a href="#" class="app-nav-item">End of milestone</a>
+                  <a href="#" class="app-nav-item">Lesson completed</a>
+                </nav>
+                <div class="app-show-hidden">Show hidden</div>
+              </header>
+
+              <!-- Progress Steps Header -->
+              <header class="app-product-header">
+                <ol class="app-steps">
+                  <li class="app-step current">
+                    <span class="app-step-dot"></span>
+                  </li>
+                  <li class="app-step">
+                    <span class="app-step-dot"></span>
+                  </li>
+                  <li class="app-step">
+                    <span class="app-step-dot"></span>
+                  </li>
+                  <li class="app-step">
+                    <span class="app-step-dot"></span>
+                  </li>
+                </ol>
+              </header>
+
+              <!-- Main Quiz Activity Canvas -->
+              <div class="app-canvas">
+
+                <!-- Flashcard Practice Box -->
+                <section class="app-flashcard">
+                  <div>
+                    <div class="app-card-title">
+                      <p class="app-eyebrow">Practice</p>
+                      <h2 class="app-question-h1">Look at the book I’m holding. Which sentence is correct?</h2>
+                    </div>
+
+                    <div class="app-answers-group">
+                      <button class="app-answer-btn selected" type="button">
+                        <span class="app-answer-pill">A</span>
+                        <span class="app-answer-label">This is a book.</span>
+                      </button>
+                      <button class="app-answer-btn" type="button">
+                        <span class="app-answer-pill">B</span>
+                        <span class="app-answer-label">That is a book.</span>
+                      </button>
+                      <button class="app-answer-btn" type="button">
+                        <span class="app-answer-pill">C</span>
+                        <span class="app-answer-label">These is a book.</span>
+                      </button>
+                      <button class="app-answer-btn" type="button">
+                        <span class="app-answer-pill">D</span>
+                        <span class="app-answer-label">Those is a book.</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="app-cta-wrap">
+                    <button class="app-cta-btn" type="button">
+                      <span>Confirm answer</span>
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <path d="M13.68 5.27L18.77 11.36C18.92 11.53 19 11.76 19 12C19 12.24 18.92 12.47 18.77 12.64L13.68 18.73C13.32 19.07 12.75 19.09 12.36 18.77C11.97 18.44 11.89 17.88 12.16 17.46L15.86 13L6 13.02C5.45 13.02 5 12.58 5 12.02C5 11.47 5.45 11.02 6 11.02L15.86 11L12.23 6.64C11.88 6.22 11.93 5.59 12.36 5.23C12.75 4.91 13.32 4.93 13.68 5.27Z" fill="white"/>
+                      </svg>
+                    </button>
+                  </div>
+                </section>
+
+                <!-- Avatar Viewport -->
+                <div class="app-avatar-box">
+                  <img src="assets/julia_quiz_still.png" alt="Avatar Julia" class="app-avatar-img" />
+                  <div class="app-hint-button">
+                    <span>Ask for a hint</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Bottom Bar with Ambient Mic Control -->
+              <footer class="app-bottom-bar">
+                <div class="app-mic-message">
+                  <p>Talk to interrupt</p>
+                </div>
+                <div class="app-controls-row">
+                  <button class="app-add-context" type="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="white"/>
+                    </svg>
+                    <span>Add context</span>
+                  </button>
+
+                  <div class="app-mic-pill-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 14C10.34 14 9 12.66 9 11V6C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V11C15 12.66 13.66 14 12 14Z" fill="white"/>
+                      <path d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.45 11 17.93V21H13V17.93C16.39 17.45 19 14.53 19 11H17Z" fill="white"/>
+                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M4.29 6.29C4.68 5.9 5.32 5.9 5.71 6.29L8 8.59L10.29 6.29C10.68 5.9 11.32 5.9 11.71 6.29C12.1 6.68 12.1 7.32 11.71 7.71L8.71 10.71C8.32 11.1 7.68 11.1 7.29 10.71L4.29 7.71C3.9 7.32 3.9 6.68 4.29 6.29Z" fill="white"/>
+                    </svg>
+                  </div>
+
+                  <button class="app-end-pill" type="button">
+                    <span>End</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              </footer>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECONDARY COMPONENT BREAKDOWNS (3 HIGH-FIDELITY CORE FEATURE CARDS) -->
+      <section class="features-grid">
+
+        <!-- CARD 1: GUIDED READ ALOUD ACTIVITY -->
+        <div class="feature-card">
+          <div class="feature-card-header">
+            <div>
+              <span class="feature-tag tag-emerald">Adaptive Practice</span>
+              <h3 class="feature-card-title">Guided Read-Aloud & Speech Coaching</h3>
+            </div>
+          </div>
+          <p class="feature-card-desc">
+            Students practice reading narrative stories out loud. Julia monitors speech rhythm, pronunciation, and accuracy, providing instant contextual assistance via "Need help?" when prompted.
+          </p>
+
+          <div class="mini-screen">
+            <div class="mini-read-aloud">
+              <div class="mini-read-card">
+                <div class="mini-story-title">Practice: Read aloud the following text</div>
+                <div class="mini-story-box">
+                  <p><strong>The Mystery of the Missing Lunch</strong></p>
+                  <p>Mia opened her backpack and noticed something strange.</p>
+                  <p>"My lunch is missing!" she said.</p>
+                  <p>Her friend Noah asked, "Did you check everywhere?"</p>
+                  <p>They looked in the classroom and library...</p>
+                </div>
+                <div>
+                  <button class="mini-read-btn" type="button">
+                    <span>Done reading</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="mini-avatar-col">
+                <img src="assets/julia_reading_still.png" alt="Julia Listening" />
+                <div class="mini-need-help">Need help?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: SYNCHRONIZED VIDEO INSET -->
+        <div class="feature-card">
+          <div class="feature-card-header">
+            <div>
+              <span class="feature-tag tag-purple">Multimodal Media</span>
+              <h3 class="feature-card-title">Synchronized Video Inset & Resumption</h3>
+            </div>
+          </div>
+          <p class="feature-card-desc">
+            Seamless integration of high-definition video walkthroughs and demonstrations via the embedded Kaltura player, transitioning fluidly to avatar reflection once viewing concludes.
+          </p>
+
+          <div class="mini-screen">
+            <div class="mini-video-mode">
+              <div class="mini-video-player">
+                <img src="assets/kaltura_video_thumb.jpg" alt="Video Walkthrough" />
+                <div class="mini-video-pill">Watch clip</div>
+              </div>
+              <div class="mini-video-bottom">
+                <div class="mini-resume-pill">
+                  <img src="assets/raw_image_1.png" alt="Avatar Thumb" />
+                  <span>I’m done watching</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: MILESTONE CELEBRATIONS & TIMELINE -->
+        <div class="feature-card">
+          <div class="feature-card-header">
+            <div>
+              <span class="feature-tag tag-blue">Gamification</span>
+              <h3 class="feature-card-title">Milestone Particles & Line-of-Fire</h3>
+            </div>
+          </div>
+          <p class="feature-card-desc">
+            Milestones and completed lessons trigger dynamic celebration ceremonies: radial particle bursts, audio arpeggios, glowing connectors, and fluid button state escalations.
+          </p>
+
+          <div class="mini-screen">
+            <div class="mini-celebration">
+              <div class="mini-celeb-card">
+                <div class="mini-celeb-tag">Congratulations</div>
+                <div class="mini-celeb-h1">Milestone 2 reached!</div>
+
+                <div class="mini-timeline-large">
+                  <div class="mini-timeline-node">1</div>
+                  <div class="mini-timeline-connector"></div>
+                  <div class="mini-timeline-node glow-fire">2</div>
+                  <div class="mini-timeline-connector inactive"></div>
+                  <div class="mini-timeline-node future">3</div>
+                  <div class="mini-timeline-connector inactive"></div>
+                  <div class="mini-timeline-node future">4</div>
+                </div>
+
+                <button class="mini-continue-btn" type="button">
+                  <span>Continue learning</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ARCHITECTURE & CAPABILITIES STRIP -->
+      <footer class="architecture-summary">
+        <div class="arch-item">
+          <div class="arch-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="arch-details">
+            <h4>Live AI Avatar Engine</h4>
+            <p>Emotion-aware video rendering, realistic facial expressions, and natural speech cadence.</p>
+          </div>
+        </div>
+
+        <div class="arch-divider"></div>
+
+        <div class="arch-item">
+          <div class="arch-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div class="arch-details">
+            <h4>Natural Voice & Hands-Free UI</h4>
+            <p>Zero-latency audio interruption, mic state detection, and automatic ambient background lift.</p>
+          </div>
+        </div>
+
+        <div class="arch-divider"></div>
+
+        <div class="arch-item">
+          <div class="arch-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="arch-details">
+            <h4>Dynamic Progress Mastery</h4>
+            <p>Adaptive progression milestones with synthesized audio chords and spark particle physics.</p>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+</body>
+</html>
