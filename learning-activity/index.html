@@ -16,7 +16,6 @@
       --w-80: rgba(255, 255, 255, 0.8);
       --w-100: #fff;
       --b-20: rgba(0, 0, 0, 0.2);
-      --b-30: rgba(0, 0, 0, 0.3);
       --b-50: rgba(0, 0, 0, 0.5);
       --b-60: rgba(0, 0, 0, 0.6);
       --b-100: #000;
@@ -68,8 +67,8 @@
       width: 100vw;
       height: 100vh;
       min-width: 1440px;
-      /* the avatar view keeps its 900px minimum below the header */
-      min-height: calc(900px + var(--header-h));
+      /* no minimum height: the avatar view follows the viewport, so the activity cards grow and
+         shrink with it */
       background: var(--background);
     }
 
@@ -545,8 +544,9 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
-      /* symmetric block padding (bar height + gap) so content centers on the full viewport */
-      padding: calc(var(--bar-h) + 16px) 48px;
+      /* the activity fills the space between the top bar (progress steps) and the bottom bar, with
+         32px of air on each side, so the left card uses all the available height */
+      padding: calc(var(--product-header-h) + 32px) 48px calc(var(--bar-h) + 32px);
     }
 
     /* Only the current activity is shown (Space advances to the next one) */
@@ -620,66 +620,47 @@
     .reading-card.short { justify-content: space-between; }
     .input-box.short { flex: none; min-height: 0; padding: 24px 32px; }
 
-    /* Large input: the textarea is a fixed 200px and never shrinks. The image wrapper takes everything
-       else and is the one that gives: it shrinks with the card, down to its own minimum height (182px,
-       see .input-image-wrap). The button never shrinks either. */
-    textarea.input-box { flex: 0 0 200px; min-height: 200px; }
+    /* Large input: the image and the textarea sit side by side in one row that takes all the height
+       between the title and the button (never less than 200px, the textarea's minimum). The image is
+       sized by the row's height, 4:3 as the picture is, and never takes more than half the row's width;
+       the textarea gets the rest of the width and the full height. The button never shrinks. */
+    .input-row {
+      flex: 1 1 0;
+      min-height: 200px;
+      width: 100%;
+      display: flex;
+      align-items: stretch;
+      gap: 32px;
+      container-type: size;
+    }
+
+    .input-row .input-image-wrap { flex: none; width: auto; min-height: 0; container-type: normal; align-self: flex-start; }
+    .input-row .input-image { width: min(100cqh * var(--ratio), (100cqw - 32px) / 2); }
+    .input-row textarea.input-box { flex: 1 1 0; min-width: 0; min-height: 0; width: auto; }
     .input-activity .cta-button { flex-shrink: 0; }
 
-    /* Image toggled off (header switch): the image goes away and the textarea fills the card again. */
+    /* Image toggled off (header switch): the image goes away and the textarea fills the row. */
     .images-off .input-image-wrap { display: none; }
-    .images-off textarea.input-box { flex: 1 0 0; }
 
     /* The text block fills the card so the image can take whatever height is left over. */
     .reading-card.short .text { flex: 1 1 0; min-height: 0; }
 
-    /* Image above the field, inside a full-width container that takes all the space left between the
-       title and the field, with the image centered in it and a 16px inset all around.
-       The container's background is the same picture, filled (cover, cropped), with a 48px background
-       blur on top of it (the ::before layer). The sharp image sits above both. The background image is
-       set inline on the container (background-image) because CSS can't read it from the <img>.
-       The inset is subtracted in the image's size (--pad) rather than set as padding: padding would
-       give the container a 32px minimum height and push the field and button out of the card when
-       less than that is left. The image fills the rest as far as its own ratio allows (scaled up or
-       down, never cropped), capped by the available width and by the available height. --ratio is
-       the picture's own width / height (set inline on the <img>), so the box hugs the picture. */
+    /* Image above the field. The wrapper is an invisible box that takes all the space left between the
+       title and the field (never less than 182px tall); the image sits at its top left. The image
+       fills that box as far as its own ratio allows (scaled up or down, never cropped): its width is
+       capped by the available width and by the available height. --ratio is the picture's own
+       width / height (set inline on the <img>), so the box hugs the picture. */
     .input-image-wrap {
-      --pad: 16px;
-      position: relative;
       flex: 1 1 0;
       min-height: 182px;
       width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-radius: var(--roundness-2);
-      /* overflow + radius alone doesn't always clip a backdrop-filter child (Safari, GPU Chrome), which
-         is what squared the corners off; clip-path does, and the blur layer is rounded as well */
-      clip-path: inset(0 round var(--roundness-2));
-      background-color: var(--b-20);
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
       container-type: size;
-    }
-
-    .input-image-wrap::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: var(--b-30); /* dark tint over the blurred picture */
-      -webkit-backdrop-filter: blur(48px);
-      backdrop-filter: blur(48px);
     }
 
     .input-image {
       --ratio: 16 / 9;
-      position: relative; /* paints above the blur layer */
       display: block;
-      flex: none;
-      width: max(0px, min(100cqw - 2 * var(--pad), (100cqh - 2 * var(--pad)) * var(--ratio)));
+      width: min(100cqw, 100cqh * var(--ratio));
       aspect-ratio: var(--ratio);
       object-fit: contain;
       border-radius: var(--roundness-2);
@@ -941,9 +922,9 @@
       object-position: 50% 50%;
     }
 
-    /* Bottom bar */
+    /* Bottom bar: pinned to the bottom of the viewport, whatever the viewport height is */
     .bottom-bar {
-      position: absolute;
+      position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
@@ -983,14 +964,6 @@
       color: var(--tone-1);
       text-box: trim-both cap alphabetic;
     }
-
-    /* Mic muted: message gets a dark chip and loses the italic */
-    .indicators .message.muted {
-      background: var(--b-50);
-      border-radius: var(--roundness-2);
-    }
-
-    .indicators .message.muted p { font-style: normal; }
 
     .controls {
       position: relative;
@@ -1582,11 +1555,13 @@
             <h1 id="input-question">Why do you think Mia’s lunchbox ended up in her brother’s classroom?</h1>
           </div>
 
-          <div class="input-image-wrap" style="background-image: url(assets/mia-lunchbox.png)">
-            <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
-          </div>
+          <div class="input-row">
+            <div class="input-image-wrap">
+              <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
+            </div>
 
-          <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
+            <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
+          </div>
 
           <button class="cta-button" type="button" disabled>
             <span>Confirm answer</span>
@@ -1610,7 +1585,7 @@
               <h1 id="input-short-question">Where did Mia find her lunchbox? Answer in one short sentence.</h1>
             </div>
 
-            <div class="input-image-wrap" style="background-image: url(assets/mia-lunchbox.png)">
+            <div class="input-image-wrap">
               <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
             </div>
 
@@ -1677,10 +1652,11 @@
       micPill.classList.toggle('listening', state === 'listening');
       micPill.setAttribute('aria-pressed', String(muted));
       micIcon.src = muted ? 'assets/microphone-muted.svg' : 'assets/microphone.svg';
-      micMessage.parentElement.classList.toggle('muted', muted);
-      micMessage.textContent = muted
-        ? 'Enable your mic to talk'
-        : state === 'listening' ? 'Listening...' : 'Talk to interrupt';
+      // 'muted' is the system turning the mic off while the student answers by typing or clicking, not
+      // something the student did, so there is nothing to ask of them: the message is hidden (it keeps
+      // its space, so the bar does not change height). The same 'away' class is used by the video activity.
+      micMessage.parentElement.classList.toggle('away', muted);
+      if (!muted) micMessage.textContent = state === 'listening' ? 'Listening...' : 'Talk to interrupt';
     }
 
     // Sounds are synthesized so no audio file is needed
