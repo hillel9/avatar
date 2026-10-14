@@ -620,7 +620,7 @@
     .reading-card.short { justify-content: space-between; }
     .input-box.short { flex: none; min-height: 0; padding: 24px 32px; }
 
-    /* Large input: the image and the textarea sit side by side in one row that takes all the height
+    /* Large input: the textarea (left) and the image (right) sit side by side in one row that takes all the height
        between the title and the button (never less than 200px, the textarea's minimum). The image is
        sized by the row's height, 4:3 as the picture is, and never takes more than half the row's width;
        the textarea gets the rest of the width and the full height. The button never shrinks. */
@@ -1556,11 +1556,11 @@
           </div>
 
           <div class="input-row">
+            <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
+
             <div class="input-image-wrap">
               <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
             </div>
-
-            <textarea class="input-box" aria-labelledby="input-question" placeholder="Type your answer here..." spellcheck="true"></textarea>
           </div>
 
           <button class="cta-button" type="button" disabled>
