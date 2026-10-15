@@ -642,8 +642,10 @@
     /* Image toggled off (header switch): the image goes away and the textarea fills the row. */
     .images-off .input-image-wrap { display: none; }
 
-    /* The text block fills the card so the image can take whatever height is left over. */
-    .reading-card.short .text { flex: 1 1 0; min-height: 0; }
+    /* The text block fills the card so the image can take whatever height is left over (short input
+       and quiz). */
+    .reading-card.short .text,
+    .flashcard .text { flex: 1 1 0; min-height: 0; }
 
     /* Image above the field. The wrapper is an invisible box that takes all the space left between the
        title and the field (never less than 182px tall); the image sits at its top left. The image
@@ -818,6 +820,20 @@
       box-shadow: none;
       color: var(--b-100);
     }
+
+    /* Quiz with an image (header image switch on): the image takes whatever height is left between
+       the title and the answers, sized like the short input's (see .input-image-wrap), and the
+       answers sit in a 2x2 grid whose two columns share the width equally. With the switch off the
+       image goes away and the answers go back to the plain list. */
+    .frame:not(.images-off) .flashcard.with-image .answers {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .frame:not(.images-off) .flashcard.with-image .answer { justify-content: flex-start; min-width: 0; }
+    .frame:not(.images-off) .flashcard.with-image .answer .label { white-space: normal; }
 
     /* CTA */
     .cta {
@@ -1299,6 +1315,41 @@
       line-height: 1.2;
       color: var(--w-100);
     }
+
+    /* Short viewports (small laptop windows): every activity tightens up so the card still fits and
+       the button is never clipped. Smaller titles, answer text and paddings, and the large CTA
+       (48px) instead of the XL one (56px). This block must stay last so it wins over the base rules. */
+    @media (max-height: 900px) {
+      .canvas { padding-block: calc(var(--product-header-h) + 16px) calc(var(--bar-h) + 16px); }
+
+      .title h1 { font-size: 24px; }
+      .milestone-card .title h1 { font-size: 36px; }
+
+      .flashcard { gap: 32px; padding: 32px; }
+      .reading-card { gap: 24px; padding: 24px; }
+      .milestone-card-inner { gap: 32px; padding: 32px; }
+      .text { gap: 24px; }
+
+      .answers { gap: 12px; }
+      .answer { padding: 8px 12px; }
+      .answer .label { font-size: 16px; }
+
+      .reading-text, .input-box { padding: 24px; }
+      .reading-text { gap: 12px; }
+      .reading-text .reading-title { font-size: 20px; }
+      .reading-text .reading-body { font-size: 16px; line-height: 1.4; }
+      .input-box { font-size: 18px; }
+      .input-box.short { padding: 16px 24px; }
+      /* the image gives way before anything overlaps: it shrinks with the room left, and disappears
+         when that room is too small for a picture to be worth showing */
+      .input-image-wrap { min-height: 0; }
+
+      .cta-button { height: 48px; font-size: 16px; }
+    }
+
+    @container (max-height: 79px) {
+      .input-image { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -1362,10 +1413,14 @@
 
       <!-- Activity 1: quiz -->
       <div class="canvas active" data-activity="quiz">
-        <section class="flashcard">
+        <section class="flashcard with-image">
           <div class="text">
             <div class="title">
               <h1 id="question">Look at the book I’m holding. Which sentence is correct?</h1>
+            </div>
+
+            <div class="input-image-wrap">
+              <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
             </div>
 
             <div class="answers" role="radiogroup" aria-labelledby="question">
