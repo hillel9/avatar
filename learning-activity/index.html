@@ -582,11 +582,16 @@
       word-break: break-word;
     }
 
+    .reading-text {
+      overflow: hidden;
+    }
+
     .reading-text .reading-title {
       width: 100%;
       font-size: 24px;
       font-weight: 700;
       line-height: normal;
+      flex-shrink: 0;
     }
 
     .reading-text .reading-body {
@@ -594,6 +599,13 @@
       font-size: 20px;
       font-weight: 400;
       line-height: 1.5;
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+      -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent 100%);
     }
 
     /* Input activity: a textarea that wears the reading box's surface (same fill, padding, radius and
@@ -620,10 +632,10 @@
     .reading-card.short { justify-content: space-between; }
     .input-box.short { flex: none; min-height: 0; padding: 24px 32px; }
 
-    /* Large input: the textarea (left) and the image (right) sit side by side in one row that takes all the height
+    /* Large input and reading activity with image: the text/input (left) and the image (right) sit side by side in one row that takes all the height
        between the title and the button (never less than 200px, the textarea's minimum). The image is
        sized by the row's height, 4:3 as the picture is, and never takes more than half the row's width;
-       the textarea gets the rest of the width and the full height. The button never shrinks. */
+       the text gets the rest of the width and the full height. The button never shrinks. */
     .input-row {
       flex: 1 1 0;
       min-height: 200px;
@@ -636,8 +648,10 @@
 
     .input-row .input-image-wrap { flex: none; width: auto; min-height: 0; container-type: normal; align-self: flex-start; }
     .input-row .input-image { width: min(100cqh * var(--ratio), (100cqw - 32px) / 2); }
-    .input-row textarea.input-box { flex: 1 1 0; min-width: 0; min-height: 0; width: auto; }
-    .input-activity .cta-button { flex-shrink: 0; }
+    .input-row textarea.input-box,
+    .input-row .reading-text { flex: 1 1 0; min-width: 0; min-height: 0; width: auto; }
+    .input-activity .cta-button,
+    .read-aloud .read-button { flex-shrink: 0; }
 
     /* Image toggled off (header switch): the image goes away and the textarea fills the row. */
     .images-off .input-image-wrap { display: none; }
@@ -1464,18 +1478,24 @@
             <h1>Read aloud the following text</h1>
           </div>
 
-          <div class="reading-text">
-            <p class="reading-title">The Mystery of the Missing Lunch</p>
-            <div class="reading-body">
-              <p>Mia opened her backpack and noticed something strange.</p>
-              <p>"My lunch is missing!" she said.</p>
-              <p>Her friend Noah asked, "Did you check everywhere?"</p>
-              <p>They looked in the classroom, the library, and the playground.</p>
-              <p>Suddenly, Mia remembered something.</p>
-              <p>"I visited my brother's classroom this morning!"</p>
-              <p>They went there and found her lunchbox on a table.</p>
-              <p>Mia smiled and said, "The mystery is solved!"</p>
-              <p>Noah laughed. "Sometimes the answer is closer than you think."</p>
+          <div class="input-row">
+            <div class="reading-text">
+              <p class="reading-title">The Mystery of the Missing Lunch</p>
+              <div class="reading-body">
+                <p>Mia opened her backpack and noticed something strange.</p>
+                <p>"My lunch is missing!" she said.</p>
+                <p>Her friend Noah asked, "Did you check everywhere?"</p>
+                <p>They looked in the classroom, the library, and the playground.</p>
+                <p>Suddenly, Mia remembered something.</p>
+                <p>"I visited my brother's classroom this morning!"</p>
+                <p>They went there and found her lunchbox on a table.</p>
+                <p>Mia smiled and said, "The mystery is solved!"</p>
+                <p>Noah laughed. "Sometimes the answer is closer than you think."</p>
+              </div>
+            </div>
+
+            <div class="input-image-wrap">
+              <img class="input-image" src="assets/mia-lunchbox.png" style="--ratio: 1448 / 1086" alt="" />
             </div>
           </div>
 
